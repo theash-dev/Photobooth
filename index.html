@@ -5,646 +5,487 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Whimsy Booth 🎀</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
-
-:root {
-  --pink: #e8a7bb;
-  --dark-pink: #c97d98;
-  --cream: #fffaf7;
-  --soft: #f9eef2;
-  --text: #55434b;
-  --muted: #9b858d;
-  --border: #ead9de;
-  --white: #ffffff;
+*{
+  box-sizing:border-box;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:"DM Sans",sans-serif;
   background:
-    radial-gradient(circle at 10% 10%, #fff 0, transparent 25%),
-    radial-gradient(circle at 90% 90%, #fcecf2 0, transparent 30%),
-    #fff8fa;
-  color: var(--text);
-  font-family: "DM Sans", sans-serif;
-  min-height: 100vh;
+    radial-gradient(circle at top left,#ffe5f0,transparent 35%),
+    radial-gradient(circle at bottom right,#e9ddff,transparent 35%),
+    #fff8fb;
+  color:#493b45;
 }
 
 button,
 input,
-select {
-  font: inherit;
+select{
+  font:inherit;
 }
 
-button {
-  cursor: pointer;
+button{
+  cursor:pointer;
 }
 
-.app {
-  max-width: 1500px;
-  margin: auto;
-  padding: 18px;
+.app{
+  width:min(1450px,96%);
+  margin:auto;
+  padding:22px;
 }
 
-/* HEADER */
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-  padding: 10px 8px;
+header{
+  text-align:center;
+  margin-bottom:20px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+header h1{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:clamp(32px,5vw,58px);
+  color:#6d5263;
 }
 
-.logo-bow {
-  font-size: 34px;
+header p{
+  margin:5px 0 0;
+  color:#a47d91;
 }
 
-.logo h1 {
-  font-family: "Playfair Display", serif;
-  font-size: 25px;
-  margin: 0;
-  color: #694f59;
+.layout{
+  display:grid;
+  grid-template-columns:370px 1fr;
+  gap:20px;
 }
 
-.logo small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 2px;
+.panel,
+.editor-card{
+  background:rgba(255,255,255,.84);
+  border:1px solid #f0dce6;
+  border-radius:28px;
+  box-shadow:0 15px 45px rgba(110,75,95,.10);
+  backdrop-filter:blur(12px);
 }
 
-.header-actions {
-  display: flex;
-  gap: 8px;
+.panel{
+  padding:18px;
+  max-height:calc(100vh - 150px);
+  overflow:auto;
 }
 
-.icon-btn,
-.small-btn {
-  border: 1px solid var(--border);
-  background: white;
-  color: var(--text);
-  border-radius: 12px;
-  padding: 9px 12px;
+.section{
+  margin-bottom:18px;
+  padding-bottom:17px;
+  border-bottom:1px solid #f2e4eb;
 }
 
-.icon-btn:hover,
-.small-btn:hover {
-  background: var(--soft);
+.section:last-child{
+  border-bottom:0;
 }
 
-/* MAIN GRID */
-
-.main {
-  display: grid;
-  grid-template-columns: minmax(340px, 1fr) 390px;
-  gap: 18px;
+.section-title{
+  font-weight:700;
+  margin-bottom:10px;
+  color:#76586a;
 }
 
-/* CAMERA */
-
-.camera-card {
-  background: rgba(255,255,255,.86);
-  border: 1px solid var(--border);
-  border-radius: 25px;
-  padding: 15px;
-  box-shadow: 0 15px 45px rgba(133, 88, 104, .08);
+.camera{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  background:#241f22;
+  aspect-ratio:4/3;
 }
 
-.camera-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px 5px 12px;
+video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
-.camera-title strong {
-  font-size: 14px;
+video.mirror{
+  transform:scaleX(-1);
 }
 
-.status {
-  color: var(--muted);
-  font-size: 11px;
+.camera-flash{
+  position:absolute;
+  inset:0;
+  background:white;
+  opacity:0;
+  pointer-events:none;
 }
 
-.camera-wrap {
-  position: relative;
-  overflow: hidden;
-  background: #282126;
-  border-radius: 20px;
-  aspect-ratio: 4/3;
+.camera-flash.active{
+  animation:flash .25s ease;
 }
 
-#video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+@keyframes flash{
+  0%{opacity:.95}
+  100%{opacity:0}
 }
 
-.camera-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg,#3d3035,#181417);
+.countdown{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:90px;
+  font-weight:700;
+  text-shadow:0 4px 20px #0008;
+  pointer-events:none;
 }
 
-#countdown {
-  position: absolute;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 110px;
-  font-weight: 700;
-  text-shadow: 0 5px 30px #000;
-  z-index: 5;
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
 }
 
-.flash {
-  position: absolute;
-  inset: 0;
-  background: white;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10;
+.btn{
+  border:0;
+  border-radius:14px;
+  padding:10px 12px;
+  background:#f6e6ee;
+  color:#694f5f;
+  font-weight:600;
+  transition:.18s;
 }
 
-.flash.active {
-  animation: flash .35s ease;
+.btn:hover{
+  transform:translateY(-2px);
+  background:#eed5e1;
 }
 
-@keyframes flash {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+.btn.primary{
+  background:#c989a7;
+  color:white;
 }
 
-.camera-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+.btn.dark{
+  background:#695260;
+  color:white;
 }
 
-.primary {
-  flex: 1;
-  min-width: 130px;
-  border: 0;
-  border-radius: 14px;
-  background: var(--pink);
-  color: white;
-  padding: 12px 15px;
-  font-weight: 700;
+.btn.danger{
+  background:#f5d9df;
+  color:#8d5361;
 }
 
-.primary:hover {
-  background: var(--dark-pink);
+.btn.full{
+  grid-column:1/-1;
 }
 
-.secondary {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: white;
-  padding: 11px 14px;
-  color: var(--text);
-}
-
-/* EDITOR */
-
-.editor-card {
-  background: rgba(255,255,255,.9);
-  border: 1px solid var(--border);
-  border-radius: 25px;
-  padding: 15px;
-  box-shadow: 0 15px 45px rgba(133, 88, 104, .08);
-  min-width: 0;
-}
-
-.editor-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.editor-head strong {
-  font-size: 14px;
-}
-
-.zoom-area {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.zoom-area input {
-  width: 85px;
-}
-
-.editor-stage {
-  min-height: 620px;
-  max-height: 760px;
-  overflow: auto;
-  border-radius: 18px;
-  padding: 35px;
-  background:
-    linear-gradient(45deg,#f5e9ed 25%,transparent 25%),
-    linear-gradient(-45deg,#f5e9ed 25%,transparent 25%),
-    linear-gradient(45deg,transparent 75%,#f5e9ed 75%),
-    linear-gradient(-45deg,transparent 75%,#f5e9ed 75%);
-  background-size: 24px 24px;
-  background-position: 0 0,0 12px,12px -12px,-12px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#filmstrip {
-  position: relative;
-  flex: none;
-  background: white;
-  box-shadow: 0 12px 40px rgba(60,40,45,.2);
-  transform-origin: center;
-  user-select: none;
-  overflow: visible;
-}
-
-/* ELEMENTS */
-
-.editor-element {
-  position: absolute;
-  user-select: none;
-  touch-action: none;
-}
-
-.editor-element.selected {
-  outline: 2px dashed var(--pink);
-  outline-offset: 3px;
-  z-index: 1000 !important;
-}
-
-.photo-element {
-  overflow: hidden;
-  background: #eee;
-  border: 3px solid white;
-  box-shadow: 0 3px 12px rgba(0,0,0,.12);
-}
-
-.photo-element img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  pointer-events: none;
-}
-
-.text-element {
-  min-width: 50px;
-  min-height: 20px;
-  padding: 3px;
-  color: #654e57;
-  white-space: nowrap;
-}
-
-.text-content {
-  pointer-events: none;
-}
-
-.sticker-element {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 35px;
-}
-
-.handle {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  background: white;
-  border: 2px solid var(--pink);
-  border-radius: 50%;
-  display: none;
-}
-
-.selected .handle {
-  display: block;
-}
-
-.handle.br {
-  right: -7px;
-  bottom: -7px;
-  cursor: nwse-resize;
-}
-
-.handle.tr {
-  right: -7px;
-  top: -7px;
-  cursor: nesw-resize;
-}
-
-.rotate-handle {
-  position: absolute;
-  top: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  border: 2px solid var(--pink);
-  display: none;
-  cursor: grab;
-  font-size: 11px;
-  align-items: center;
-  justify-content: center;
-}
-
-.selected .rotate-handle {
-  display: flex;
-}
-
-/* SIDEBAR */
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: calc(100vh - 105px);
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
-.panel {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.panel-title {
-  padding: 12px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  background: #fff9fb;
-  border-bottom: 1px solid #f0e2e6;
-}
-
-.panel-body {
-  padding: 12px;
-}
-
-.row {
-  display: flex;
-  gap: 8px;
-}
-
-.row > * {
-  flex: 1;
-}
-
-.field {
-  margin-bottom: 10px;
-}
-
-.field:last-child {
-  margin-bottom: 0;
-}
-
-.field label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: var(--muted);
-  margin-bottom: 5px;
+label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin:9px 0 5px;
+  color:#866b79;
 }
 
 input[type="text"],
 input[type="number"],
-select {
-  width: 100%;
-  border: 1px solid var(--border);
-  background: #fff;
-  border-radius: 9px;
-  padding: 8px 9px;
-  color: var(--text);
-  outline: none;
+select{
+  width:100%;
+  border:1px solid #ead8e1;
+  background:#fff;
+  border-radius:11px;
+  padding:8px 10px;
+  color:#5c4954;
+  outline:none;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus {
-  border-color: var(--pink);
+input[type="color"]{
+  width:100%;
+  height:38px;
+  border:1px solid #ead8e1;
+  border-radius:11px;
+  background:white;
+  padding:3px;
 }
 
-input[type="range"] {
-  width: 100%;
-  accent-color: var(--pink);
+input[type="range"]{
+  width:100%;
+  accent-color:#bd7f9e;
 }
 
-input[type="color"] {
-  width: 100%;
-  height: 37px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: white;
-  padding: 3px;
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-.choice-grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 6px;
+.triple{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:7px;
 }
 
-.choice {
-  padding: 8px 6px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: white;
-  color: var(--text);
-  font-size: 11px;
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
-.choice.active {
-  background: var(--soft);
-  border-color: var(--pink);
+.chip{
+  border:1px solid #ead6df;
+  background:#fff;
+  color:#775c6b;
+  padding:7px 9px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:600;
 }
 
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 6px;
+.chip.active{
+  background:#efd5e1;
+  border-color:#d69ab4;
 }
 
-.preset {
-  padding: 9px 4px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: white;
-  font-size: 10px;
-  color: var(--text);
+.stickers{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
 }
 
-.action-grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 7px;
+.sticker-btn{
+  border:1px solid #eadbe2;
+  background:#fffafd;
+  border-radius:14px;
+  height:52px;
+  font-size:25px;
 }
 
-.action {
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 10px;
-  padding: 9px;
-  font-size: 11px;
-  color: var(--text);
+.sticker-btn:hover{
+  background:#fbeaf1;
+  transform:scale(1.04);
 }
 
-.action:hover {
-  background: var(--soft);
+.template-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-.download {
-  width: 100%;
-  border: 0;
-  border-radius: 14px;
-  background: #725865;
-  color: white;
-  padding: 13px;
-  font-weight: 700;
-  margin-bottom: 5px;
+.template{
+  border:1px solid #eadbe2;
+  background:#fff;
+  border-radius:15px;
+  padding:10px 7px;
+  color:#6e5262;
+  font-weight:700;
+  font-size:12px;
 }
 
-.download:hover {
-  background: #5d4652;
+.template span{
+  display:block;
+  font-size:23px;
+  margin-bottom:3px;
 }
 
-.empty {
-  color: var(--muted);
-  text-align: center;
-  font-size: 11px;
-  padding: 8px;
+.editor-card{
+  padding:18px;
+  min-width:0;
 }
 
-/* CAPTURE SETTINGS */
-
-.capture-count {
-  display: flex;
-  gap: 7px;
+.editor-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
 }
 
-.capture-count button {
-  flex: 1;
+.editor-top h2{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  color:#6d5263;
 }
 
-/* FILTERS */
-
-.filter-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 5px;
+.editor-tools{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
 }
 
-.filter-btn {
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 8px;
-  padding: 7px 3px;
-  font-size: 9px;
-  color: var(--text);
+.editor-wrap{
+  min-height:720px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+  border-radius:24px;
+  background:
+    linear-gradient(45deg,#f6eef2 25%,transparent 25%),
+    linear-gradient(-45deg,#f6eef2 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#f6eef2 75%),
+    linear-gradient(-45deg,transparent 75%,#f6eef2 75%);
+  background-size:28px 28px;
+  background-position:0 0,0 14px,14px -14px,-14px 0;
+  padding:35px;
 }
 
-.filter-btn.active {
-  border-color: var(--pink);
-  background: var(--soft);
+#canvas{
+  position:relative;
+  width:480px;
+  height:720px;
+  flex:none;
+  overflow:hidden;
+  box-shadow:0 15px 45px rgba(60,40,50,.22);
+  transform-origin:center;
 }
 
-/* HELP */
-
-.tip {
-  background: #fff5f8;
-  border: 1px solid #f2dce3;
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 10px;
-  color: #896f79;
-  line-height: 1.5;
+.element{
+  position:absolute;
+  user-select:none;
+  touch-action:none;
+  cursor:move;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #b49da6;
-  font-size: 10px;
+.element.selected{
+  outline:2px dashed #bd7f9e;
+  outline-offset:3px;
 }
 
-/* RESPONSIVE */
+.photo-element{
+  object-fit:cover;
+  border-style:solid;
+  display:block;
+}
 
-@media (max-width: 1050px) {
-  .main {
-    grid-template-columns: 1fr;
+.text-element{
+  white-space:nowrap;
+  font-weight:700;
+  color:#59424f;
+}
+
+.sticker-element{
+  font-size:55px;
+  line-height:1;
+}
+
+.handle{
+  position:absolute;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:#bd7f9e;
+  border:2px solid white;
+  box-shadow:0 2px 5px #0002;
+}
+
+.handle.resize{
+  right:-8px;
+  bottom:-8px;
+  cursor:nwse-resize;
+}
+
+.handle.rotate{
+  left:50%;
+  top:-28px;
+  transform:translateX(-50%);
+  cursor:grab;
+}
+
+.selection-toolbar{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.selection-toolbar button{
+  border:1px solid #ead8e1;
+  background:white;
+  border-radius:10px;
+  padding:7px 9px;
+  font-size:12px;
+}
+
+.empty{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#b696a7;
+  pointer-events:none;
+  padding:40px;
+}
+
+.empty strong{
+  display:block;
+  color:#886a79;
+  font-size:20px;
+  margin-bottom:5px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(20px);
+  background:#604b58;
+  color:white;
+  padding:11px 17px;
+  border-radius:999px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:1000;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:1000px){
+  .layout{
+    grid-template-columns:1fr;
   }
 
-  .sidebar {
-    max-height: none;
-    overflow: visible;
+  .panel{
+    max-height:none;
   }
 
-  .editor-stage {
-    min-height: 550px;
+  .editor-wrap{
+    min-height:600px;
   }
 }
 
-@media (max-width: 600px) {
-  .app {
-    padding: 9px;
+@media(max-width:600px){
+  .app{
+    width:100%;
+    padding:10px;
   }
 
-  header {
-    padding: 5px;
+  .panel,
+  .editor-card{
+    border-radius:20px;
   }
 
-  .logo h1 {
-    font-size: 20px;
+  .editor-wrap{
+    padding:20px;
+    min-height:520px;
   }
 
-  .main {
-    gap: 10px;
+  #canvas{
+    transform:scale(.72);
   }
 
-  .camera-card,
-  .editor-card {
-    padding: 10px;
-    border-radius: 18px;
-  }
-
-  .editor-stage {
-    padding: 25px;
-    min-height: 500px;
-  }
-
-  .filter-grid {
-    grid-template-columns: repeat(4,1fr);
+  .triple{
+    grid-template-columns:1fr 1fr;
   }
 }
 </style>
@@ -655,455 +496,315 @@ footer {
 <div class="app">
 
 <header>
-  <div class="logo">
-    <div class="logo-bow">🎀</div>
-    <div>
-      <h1>Whimsy Booth</h1>
-      <small>cute memories, made your way ♡</small>
-    </div>
-  </div>
-
-  <div class="header-actions">
-    <button class="icon-btn" onclick="resetLayout()">↺ Reset</button>
-  </div>
+  <h1>Whimsy Booth 🎀</h1>
+  <p>your tiny dreamy photobooth ♡</p>
 </header>
 
-<div class="main">
+<div class="layout">
 
-<!-- CAMERA -->
-<section class="camera-card">
+<!-- ================= CAMERA / CONTROLS ================= -->
 
-  <div class="camera-title">
-    <strong>📷 Camera</strong>
-    <span class="status" id="cameraStatus">Starting camera...</span>
+<aside class="panel">
+
+<div class="section">
+
+<div class="section-title">📸 Camera</div>
+
+<div class="camera">
+  <video id="video" autoplay playsinline></video>
+  <div id="countdown" class="countdown"></div>
+  <div id="flash" class="camera-flash"></div>
+</div>
+
+<div class="controls">
+  <button class="btn primary" id="captureBtn">♡ Take Photos</button>
+  <button class="btn" id="flipBtn">↔ Flip</button>
+</div>
+
+<div class="row">
+  <div>
+    <label>Photos</label>
+    <select id="photoCount">
+      <option value="3">3 Photos</option>
+      <option value="4" selected>4 Photos</option>
+    </select>
   </div>
 
-  <div class="camera-wrap">
-    <video id="video" autoplay playsinline muted></video>
-
-    <div class="camera-placeholder" id="placeholder">
-      <div>
-        <div style="font-size:40px;">🎀</div>
-        <div>Allow camera access to start</div>
-      </div>
-    </div>
-
-    <div id="countdown">3</div>
-    <div class="flash" id="flash"></div>
+  <div>
+    <label>Countdown</label>
+    <select id="countdownTime">
+      <option value="0">Off</option>
+      <option value="3" selected>3 sec</option>
+      <option value="5">5 sec</option>
+      <option value="10">10 sec</option>
+    </select>
   </div>
+</div>
 
-  <div class="camera-controls">
-    <button class="primary" id="captureBtn">📸 Take Photos</button>
-    <button class="secondary" id="flipBtn">↔ Flip</button>
-  </div>
-
-  <div style="margin-top:10px;">
-    <div class="field">
-      <label>
-        <span>Photos</span>
-        <span id="photoCountLabel">4</span>
-      </label>
-
-      <div class="capture-count">
-        <button class="choice" id="threeBtn" onclick="setPhotoCount(3)">3 photos</button>
-        <button class="choice active" id="fourBtn" onclick="setPhotoCount(4)">4 photos</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>
-        <span>Countdown</span>
-        <span id="countdownLabel">3 sec</span>
-      </label>
-
-      <input
-        type="range"
-        id="countdownRange"
-        min="1"
-        max="5"
-        value="3"
-        oninput="updateCountdown(this.value)"
-      >
-    </div>
-  </div>
-
-</section>
-
-
-<!-- EDITOR -->
-<section class="editor-card">
-
-  <div class="editor-head">
-    <strong>🎨 Filmstrip Editor</strong>
-
-    <div class="zoom-area">
-      <span>Zoom</span>
-      <input
-        type="range"
-        id="zoom"
-        min="35"
-        max="130"
-        value="70"
-        oninput="updateZoom(this.value)"
-      >
-      <span id="zoomLabel">70%</span>
-    </div>
-  </div>
-
-  <div class="editor-stage" id="editorStage">
-    <div id="filmstrip"></div>
-  </div>
-
-</section>
-
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-
-  <!-- SIZE -->
-  <section class="panel">
-    <div class="panel-title">📐 Filmstrip Size</div>
-
-    <div class="panel-body">
-
-      <div class="choice-grid">
-        <button class="choice active" onclick="setSize('2x6')">2 × 6</button>
-        <button class="choice" onclick="setSize('4x6')">4 × 6</button>
-        <button class="choice" onclick="setSize('landscape')">4 × 6 Landscape</button>
-        <button class="choice" onclick="setSize('square')">Square</button>
-      </div>
-
-      <div class="row" style="margin-top:9px;">
-        <div class="field">
-          <label>Width</label>
-          <input type="number" id="stripWidth" value="400" min="150" max="1600" onchange="updateStripSize()">
-        </div>
-
-        <div class="field">
-          <label>Height</label>
-          <input type="number" id="stripHeight" value="1200" min="150" max="2000" onchange="updateStripSize()">
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- PRESETS -->
-  <section class="panel">
-    <div class="panel-title">✨ Layout Presets</div>
-
-    <div class="panel-body">
-      <div class="preset-grid">
-        <button class="preset" onclick="applyPreset('classic')">Classic</button>
-        <button class="preset" onclick="applyPreset('coquette')">Coquette</button>
-        <button class="preset" onclick="applyPreset('minimal')">Minimal</button>
-        <button class="preset" onclick="applyPreset('polaroid')">Polaroid</button>
-        <button class="preset" onclick="applyPreset('dreamy')">Dreamy</button>
-        <button class="preset" onclick="applyPreset('heart')">Sweet ♡</button>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- APPEARANCE -->
-  <section class="panel">
-    <div class="panel-title">🎀 Appearance</div>
-
-    <div class="panel-body">
-
-      <div class="row">
-        <div class="field">
-          <label>Background</label>
-          <input type="color" id="bgColor" value="#fff8fa" onchange="updateAppearance()">
-        </div>
-
-        <div class="field">
-          <label>Photo Border</label>
-          <input type="color" id="borderColor" value="#ffffff" onchange="updateAppearance()">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <label>Border Width</label>
-          <input type="number" id="borderWidth" value="3" min="0" max="30" onchange="updateAppearance()">
-        </div>
-
-        <div class="field">
-          <label>Corner Radius</label>
-          <input type="number" id="radius" value="8" min="0" max="100" onchange="updateAppearance()">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Photo Spacing</label>
-        <input
-          type="range"
-          id="photoSpacing"
-          min="0"
-          max="100"
-          value="20"
-          oninput="updateAppearance()"
-        >
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- PHOTOS -->
-  <section class="panel">
-    <div class="panel-title">📸 Photo Arrangement</div>
-
-    <div class="panel-body">
-
-      <div class="choice-grid">
-        <button class="choice active" onclick="arrangePhotos('vertical')">Vertical</button>
-        <button class="choice" onclick="arrangePhotos('horizontal')">Horizontal</button>
-        <button class="choice" onclick="arrangePhotos('grid')">2 × 2 Grid</button>
-      </div>
-
-      <div class="tip" style="margin-top:9px;">
-        💡 You can also drag each photo directly on the filmstrip and resize it using the corner handle.
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- TEXT -->
-  <section class="panel">
-    <div class="panel-title">📝 Text</div>
-
-    <div class="panel-body">
-
-      <div class="field">
-        <label>Title</label>
-        <input
-          type="text"
-          id="titleText"
-          value="sweet memories ♡"
-          oninput="updateText('title', this.value)"
-        >
-      </div>
-
-      <div class="field">
-        <label>Caption</label>
-        <input
-          type="text"
-          id="captionText"
-          value="whimsy booth"
-          oninput="updateText('caption', this.value)"
-        >
-      </div>
-
-      <div class="row">
-        <button class="action" onclick="addText('New text')">＋ Add Text</button>
-        <button class="action" onclick="addDate()">＋ Add Date</button>
-      </div>
-
-      <div class="row" style="margin-top:7px;">
-        <div class="field">
-          <label>Text Color</label>
-          <input type="color" id="textColor" value="#654e57" onchange="updateTextStyle()">
-        </div>
-
-        <div class="field">
-          <label>Text Size</label>
-          <input type="number" id="textSize" value="28" min="8" max="100" onchange="updateTextStyle()">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Font</label>
-
-        <select id="fontSelect" onchange="updateTextStyle()">
-          <option value="Playfair Display">Playfair Display</option>
-          <option value="DM Sans">DM Sans</option>
-          <option value="serif">Serif</option>
-          <option value="cursive">Cursive</option>
-          <option value="Georgia">Georgia</option>
-        </select>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- STICKERS -->
-  <section class="panel">
-    <div class="panel-title">✨ Stickers & Decorations</div>
-
-    <div class="panel-body">
-
-      <div class="choice-grid">
-        <button class="action" onclick="addSticker('🎀')">🎀 Bow</button>
-        <button class="action" onclick="addSticker('♡')">♡ Heart</button>
-        <button class="action" onclick="addSticker('✧')">✧ Sparkle</button>
-        <button class="action" onclick="addSticker('✿')">✿ Flower</button>
-        <button class="action" onclick="addSticker('☆')">☆ Star</button>
-        <button class="action" onclick="addSticker('⋆')">⋆ Tiny Star</button>
-      </div>
-
-      <div class="field" style="margin-top:9px;">
-        <label>Sticker Size</label>
-        <input
-          type="range"
-          id="stickerSize"
-          min="15"
-          max="120"
-          value="45"
-          oninput="updateSelectedSticker()"
-        >
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- FILTERS -->
-  <section class="panel">
-    <div class="panel-title">🎞️ Photo Filters</div>
-
-    <div class="panel-body">
-
-      <div class="filter-grid">
-
-        <button class="filter-btn active" onclick="setFilter('normal',this)">Original</button>
-        <button class="filter-btn" onclick="setFilter('soft',this)">Soft</button>
-        <button class="filter-btn" onclick="setFilter('coquette',this)">Coquette</button>
-        <button class="filter-btn" onclick="setFilter('film',this)">Film</button>
-        <button class="filter-btn" onclick="setFilter('vintage',this)">Vintage</button>
-        <button class="filter-btn" onclick="setFilter('dreamy',this)">Dreamy</button>
-        <button class="filter-btn" onclick="setFilter('bw',this)">B&W</button>
-        <button class="filter-btn" onclick="setFilter('warm',this)">Warm</button>
-
-      </div>
-
-      <div class="field" style="margin-top:10px;">
-        <label>Brightness</label>
-        <input type="range" id="brightness" min="70" max="140" value="100" oninput="updateImageFilters()">
-      </div>
-
-      <div class="field">
-        <label>Saturation</label>
-        <input type="range" id="saturation" min="0" max="180" value="100" oninput="updateImageFilters()">
-      </div>
-
-      <div class="field">
-        <label>Grain</label>
-        <input type="range" id="grain" min="0" max="35" value="0" oninput="updateImageFilters()">
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- SELECTED ELEMENT -->
-  <section class="panel">
-    <div class="panel-title">🖱️ Selected Element</div>
-
-    <div class="panel-body">
-
-      <div id="selectionEmpty" class="empty">
-        Select a photo, text, or sticker on the editor ♡
-      </div>
-
-      <div id="selectionControls" style="display:none;">
-
-        <div class="row">
-          <button class="action" onclick="bringForward()">↑ Forward</button>
-          <button class="action" onclick="sendBackward()">↓ Backward</button>
-        </div>
-
-        <div class="row" style="margin-top:7px;">
-          <button class="action" onclick="duplicateSelected()">＋ Duplicate</button>
-          <button class="action" onclick="deleteSelected()">🗑 Delete</button>
-        </div>
-
-        <div class="row" style="margin-top:9px;">
-
-          <div class="field">
-            <label>X</label>
-            <input type="number" id="selectedX" onchange="updateSelectedPosition()">
-          </div>
-
-          <div class="field">
-            <label>Y</label>
-            <input type="number" id="selectedY" onchange="updateSelectedPosition()">
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="field">
-            <label>Width</label>
-            <input type="number" id="selectedW" onchange="updateSelectedSize()">
-          </div>
-
-          <div class="field">
-            <label>Height</label>
-            <input type="number" id="selectedH" onchange="updateSelectedSize()">
-          </div>
-
-        </div>
-
-        <div class="field">
-          <label>
-            Rotation
-            <span id="rotationLabel">0°</span>
-          </label>
-
-          <input
-            type="range"
-            id="rotation"
-            min="-180"
-            max="180"
-            value="0"
-            oninput="updateSelectedRotation()"
-          >
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ACTIONS -->
-  <section class="panel">
-
-    <div class="panel-body">
-
-      <button class="download" onclick="downloadDesign()">
-        💾 Download My Filmstrip
-      </button>
-
-      <div class="action-grid">
-        <button class="action" onclick="clearPhotos()">Clear Photos</button>
-        <button class="action" onclick="resetLayout()">Reset Layout</button>
-      </div>
-
-    </div>
-
-  </section>
+</div>
+
+<!-- ================= TEMPLATES ================= -->
+
+<div class="section">
+
+<div class="section-title">🎀 Templates</div>
+
+<div class="template-grid">
+
+<button class="template" onclick="applyTemplate('coquette')">
+<span>🎀</span>Coquette
+</button>
+
+<button class="template" onclick="applyTemplate('kpop')">
+<span>💗</span>K-pop
+</button>
+
+<button class="template" onclick="applyTemplate('y2k')">
+<span>💿</span>Y2K
+</button>
+
+<button class="template" onclick="applyTemplate('korean')">
+<span>🇰🇷</span>Korean
+</button>
+
+<button class="template" onclick="applyTemplate('vintage')">
+<span>🎞️</span>Vintage
+</button>
+
+<button class="template" onclick="applyTemplate('minimal')">
+<span>🤍</span>Minimal
+</button>
+
+<button class="template" onclick="applyTemplate('pink')">
+<span>🩷</span>Pink Cute
+</button>
+
+<button class="template" onclick="applyTemplate('polaroid')">
+<span>📸</span>Polaroid
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= FILTERS ================= -->
+
+<div class="section">
+
+<div class="section-title">✨ Filters</div>
+
+<div class="chips" id="filters">
+
+<button class="chip active" data-filter="original">Original</button>
+<button class="chip" data-filter="soft">Soft</button>
+<button class="chip" data-filter="coquette">Coquette</button>
+<button class="chip" data-filter="film">Film</button>
+<button class="chip" data-filter="vintage">Vintage</button>
+<button class="chip" data-filter="dreamy">Dreamy</button>
+<button class="chip" data-filter="bw">B&W</button>
+<button class="chip" data-filter="warm">Warm</button>
+
+</div>
+
+<label>Brightness</label>
+<input id="brightness" type="range" min="50" max="150" value="100">
+
+<label>Saturation</label>
+<input id="saturation" type="range" min="0" max="180" value="100">
+
+<label>Grain</label>
+<input id="grain" type="range" min="0" max="30" value="0">
+
+</div>
+
+<!-- ================= FILMSTRIP ================= -->
+
+<div class="section">
+
+<div class="section-title">🎞️ Filmstrip</div>
+
+<div class="row">
+
+<div>
+<label>Size</label>
+<select id="stripSize">
+<option value="portrait">4 × 6 Portrait</option>
+<option value="long">2 × 6 Strip</option>
+<option value="landscape">4 × 6 Landscape</option>
+<option value="square">Square</option>
+</select>
+</div>
+
+<div>
+<label>Arrangement</label>
+<select id="arrangement">
+<option value="vertical">Vertical</option>
+<option value="horizontal">Horizontal</option>
+<option value="grid">2 × 2 Grid</option>
+</select>
+</div>
+
+</div>
+
+<label>Background</label>
+<input id="bgColor" type="color" value="#fff7fa">
+
+<label>Photo Border</label>
+<input id="borderColor" type="color" value="#ffffff">
+
+<div class="row">
+
+<div>
+<label>Border Width</label>
+<input id="borderWidth" type="number" min="0" max="30" value="5">
+</div>
+
+<div>
+<label>Corner Radius</label>
+<input id="radius" type="number" min="0" max="80" value="12">
+</div>
+
+</div>
+
+<label>Photo Spacing</label>
+<input id="spacing" type="number" min="0" max="100" value="15">
+
+</div>
+
+<!-- ================= STICKERS ================= -->
+
+<div class="section">
+
+<div class="section-title">💗 Stickers</div>
+
+<div class="stickers">
+
+<button class="sticker-btn" onclick="addSticker('🎀')">🎀</button>
+<button class="sticker-btn" onclick="addSticker('♡')">♡</button>
+<button class="sticker-btn" onclick="addSticker('♥')">♥</button>
+<button class="sticker-btn" onclick="addSticker('✿')">✿</button>
+<button class="sticker-btn" onclick="addSticker('🌸')">🌸</button>
+<button class="sticker-btn" onclick="addSticker('☆')">☆</button>
+<button class="sticker-btn" onclick="addSticker('★')">★</button>
+<button class="sticker-btn" onclick="addSticker('✨')">✨</button>
+<button class="sticker-btn" onclick="addSticker('🦋')">🦋</button>
+<button class="sticker-btn" onclick="addSticker('🎀')">🎀</button>
+<button class="sticker-btn" onclick="addSticker('☁️')">☁️</button>
+<button class="sticker-btn" onclick="addSticker('˚₊‧')">˚₊‧</button>
+
+</div>
+
+</div>
+
+<!-- ================= TEXT ================= -->
+
+<div class="section">
+
+<div class="section-title">✍️ Text</div>
+
+<label>Title</label>
+<input id="titleInput" type="text" value="WHIMSY BOOTH">
+
+<label>Caption</label>
+<input id="captionInput" type="text" value="a little memory ♡">
+
+<div class="row">
+<div>
+<label>Font</label>
+<select id="fontSelect">
+<option value="DM Sans">DM Sans</option>
+<option value="Playfair Display">Playfair Display</option>
+</select>
+</div>
+
+<div>
+<label>Text Size</label>
+<input id="textSize" type="number" value="24" min="8" max="100">
+</div>
+</div>
+
+<label>Text Color</label>
+<input id="textColor" type="color" value="#5d4652">
+
+<div class="controls">
+<button class="btn" onclick="addTitle()">+ Title</button>
+<button class="btn" onclick="addCaption()">+ Caption</button>
+<button class="btn" onclick="addDate()">+ Date</button>
+</div>
+
+</div>
+
+<!-- ================= PRESETS ================= -->
+
+<div class="section">
+
+<div class="section-title">♡ Quick Presets</div>
+
+<div class="chips">
+
+<button class="chip" onclick="applyTemplate('coquette')">Coquette</button>
+<button class="chip" onclick="applyTemplate('minimal')">Minimal</button>
+<button class="chip" onclick="applyTemplate('pink')">Sweet</button>
+<button class="chip" onclick="applyTemplate('vintage')">Film</button>
+
+</div>
+
+</div>
 
 </aside>
 
+<!-- ================= EDITOR ================= -->
+
+<main class="editor-card">
+
+<div class="editor-top">
+
+<div>
+<h2>Filmstrip Editor ✨</h2>
+<small>Drag, resize and rotate anything ♡</small>
 </div>
 
-<footer>
-  made with love ♡ Whimsy Booth 🎀
-</footer>
+<div class="editor-tools">
+<button class="btn" onclick="zoomOut()">−</button>
+<button class="btn" id="zoomLabel">100%</button>
+<button class="btn" onclick="zoomIn()">+</button>
+<button class="btn" onclick="resetLayout()">Reset</button>
+<button class="btn dark" onclick="downloadDesign()">Download PNG</button>
+</div>
 
 </div>
 
+<div class="editor-wrap" id="editorWrap">
 
-<!-- HIDDEN CANVAS -->
-<canvas id="captureCanvas" style="display:none;"></canvas>
+<div id="canvas">
 
+<div class="empty" id="emptyMessage">
+<div>
+<strong>Your filmstrip will appear here ♡</strong>
+Take your photos or choose a template.
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="selection-toolbar">
+
+<button onclick="duplicateSelected()">Duplicate</button>
+<button onclick="bringForward()">Bring Forward</button>
+<button onclick="sendBackward()">Send Backward</button>
+<button onclick="deleteSelected()">Delete</button>
+
+</div>
+
+</main>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 
@@ -1111,747 +812,547 @@ footer {
    STATE
 ========================================================= */
 
-const state = {
-
-  strip: {
-    width: 400,
-    height: 1200
-  },
-
-  photos: [],
-
-  photoCount: 4,
-
-  countdown: 3,
-
-  filter: "normal",
-
-  brightness: 100,
-
-  saturation: 100,
-
-  grain: 0,
-
-  elements: [],
-
-  selectedId: null,
-
-  nextId: 1,
-
-  zoom: 0.70,
-
-  cameraFlipped: false,
-
-  colors: {
-    background: "#fff8fa",
-    border: "#ffffff",
-    text: "#654e57"
-  },
-
-  borderWidth: 3,
-
-  radius: 8,
-
-  spacing: 20
-
-};
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
 const video = document.getElementById("video");
-const filmstrip = document.getElementById("filmstrip");
-const captureCanvas = document.getElementById("captureCanvas");
-const ctx = captureCanvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const emptyMessage = document.getElementById("emptyMessage");
+const flash = document.getElementById("flash");
+const countdownDisplay = document.getElementById("countdown");
 
 let stream = null;
+let facingMode = "user";
+let capturedPhotos = [];
+let selectedElement = null;
+let elementId = 0;
+let zoom = 1;
+
+let settings = {
+  filter:"original",
+  brightness:100,
+  saturation:100,
+  grain:0,
+  bg:"#fff7fa",
+  border:"#ffffff",
+  borderWidth:5,
+  radius:12,
+  spacing:15,
+  arrangement:"vertical"
+};
+
+const filters = {
+  original:"none",
+  soft:"brightness(1.05) saturate(.9) contrast(.95)",
+  coquette:"brightness(1.05) saturate(.85) contrast(.95) sepia(.05)",
+  film:"contrast(1.08) saturate(.9) sepia(.12)",
+  vintage:"contrast(1.05) saturate(.75) sepia(.28)",
+  dreamy:"brightness(1.1) saturate(.8) blur(.1px)",
+  bw:"grayscale(1) contrast(1.08)",
+  warm:"sepia(.18) saturate(1.15) brightness(1.03)"
+};
 
 
 /* =========================================================
    CAMERA
 ========================================================= */
 
-async function startCamera() {
+async function startCamera(){
 
-  try {
+  try{
 
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
+    if(stream){
+      stream.getTracks().forEach(track=>track.stop());
     }
 
     stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: state.cameraFlipped ? "environment" : "user",
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
+      video:{
+        facingMode:facingMode,
+        width:{ideal:1280},
+        height:{ideal:720}
       },
-      audio: false
+      audio:false
     });
 
     video.srcObject = stream;
 
-    document.getElementById("placeholder").style.display = "none";
+  }catch(error){
 
-    document.getElementById("cameraStatus").textContent =
-      "Camera ready ♡";
-
-    video.style.transform =
-      state.cameraFlipped ? "scaleX(1)" : "scaleX(-1)";
-
-  } catch (error) {
-
-    document.getElementById("cameraStatus").textContent =
-      "Camera unavailable";
-
-    document.getElementById("placeholder").style.display = "flex";
-
-    console.error(error);
+    alert(
+      "Camera access could not be started. Please allow camera permission and reload the page."
+    );
 
   }
 
 }
 
+startCamera();
 
-document.getElementById("flipBtn").onclick = async function() {
 
-  state.cameraFlipped = !state.cameraFlipped;
+document.getElementById("flipBtn").onclick = async()=>{
+
+  facingMode = facingMode === "user" ? "environment" : "user";
+
+  video.classList.toggle("mirror",facingMode==="user");
 
   await startCamera();
 
 };
 
 
-/* =========================================================
-   PHOTO COUNT
-========================================================= */
+async function wait(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
 
-function setPhotoCount(count) {
 
-  state.photoCount = count;
+async function runCountdown(seconds){
 
-  document.getElementById("photoCountLabel").textContent = count;
+  if(seconds <= 0) return;
 
-  document.getElementById("threeBtn").classList.toggle(
-    "active",
-    count === 3
-  );
+  for(let i=seconds;i>0;i--){
 
-  document.getElementById("fourBtn").classList.toggle(
-    "active",
-    count === 4
-  );
+    countdownDisplay.textContent=i;
 
-  resetPhotos();
+    await wait(1000);
+
+  }
+
+  countdownDisplay.textContent="";
 
 }
 
 
-/* =========================================================
-   COUNTDOWN
-========================================================= */
+async function captureSingle(){
 
-function updateCountdown(value) {
+  const temp = document.createElement("canvas");
 
-  state.countdown = Number(value);
+  temp.width = video.videoWidth || 1280;
+  temp.height = video.videoHeight || 720;
 
-  document.getElementById("countdownLabel").textContent =
-    value + " sec";
+  const ctx = temp.getContext("2d");
+
+  if(facingMode==="user"){
+    ctx.translate(temp.width,0);
+    ctx.scale(-1,1);
+  }
+
+  ctx.filter =
+    filters[settings.filter] +
+    ` brightness(${settings.brightness/100}) saturate(${settings.saturation/100})`;
+
+  ctx.drawImage(video,0,0,temp.width,temp.height);
+
+  const image = new Image();
+
+  image.src = temp.toDataURL("image/jpeg",.92);
+
+  await new Promise(resolve=>image.onload=resolve);
+
+  capturedPhotos.push(image);
+
+  flash.classList.remove("active");
+  void flash.offsetWidth;
+  flash.classList.add("active");
 
 }
 
 
-/* =========================================================
-   CAPTURE
-========================================================= */
+document.getElementById("captureBtn").onclick = async()=>{
 
-document.getElementById("captureBtn").onclick = async function() {
+  capturedPhotos=[];
 
-  if (!stream) {
-    alert("Please allow camera access first ♡");
-    return;
-  }
+  const count = Number(document.getElementById("photoCount").value);
+  const seconds = Number(document.getElementById("countdownTime").value);
 
-  resetPhotos();
+  for(let i=0;i<count;i++){
 
-  for (let i = 0; i < state.photoCount; i++) {
+    await runCountdown(seconds);
+    await captureSingle();
 
-    await countdown();
-
-    capturePhoto();
-
-    await wait(450);
+    if(i<count-1){
+      await wait(700);
+    }
 
   }
 
-  createPhotoElements();
+  buildPhotoLayout();
+
+  toast("Photos captured ♡");
 
 };
 
 
-function countdown() {
+/* =========================================================
+   FILTER CONTROLS
+========================================================= */
 
-  return new Promise(resolve => {
+document.querySelectorAll("[data-filter]").forEach(button=>{
 
-    const box = document.getElementById("countdown");
+  button.onclick=()=>{
 
-    let number = state.countdown;
+    document.querySelectorAll("[data-filter]")
+      .forEach(b=>b.classList.remove("active"));
 
-    box.style.display = "flex";
-    box.textContent = number;
+    button.classList.add("active");
 
-    const timer = setInterval(() => {
+    settings.filter=button.dataset.filter;
 
-      number--;
+  };
 
-      if (number <= 0) {
-
-        clearInterval(timer);
-
-        box.style.display = "none";
-
-        resolve();
-
-      } else {
-
-        box.textContent = number;
-
-      }
-
-    }, 1000);
-
-  });
-
-}
+});
 
 
-function capturePhoto() {
+document.getElementById("brightness").oninput=e=>{
+  settings.brightness=Number(e.target.value);
+};
 
-  const width = video.videoWidth || 1280;
-  const height = video.videoHeight || 720;
+document.getElementById("saturation").oninput=e=>{
+  settings.saturation=Number(e.target.value);
+};
 
-  captureCanvas.width = width;
-  captureCanvas.height = height;
+document.getElementById("grain").oninput=e=>{
+  settings.grain=Number(e.target.value);
+};
 
-  ctx.save();
 
-  if (!state.cameraFlipped) {
+/* =========================================================
+   FILMSTRIP SETTINGS
+========================================================= */
 
-    ctx.translate(width, 0);
-    ctx.scale(-1, 1);
+document.getElementById("stripSize").onchange=changeCanvasSize;
 
+document.getElementById("bgColor").oninput=e=>{
+  settings.bg=e.target.value;
+  canvas.style.background=settings.bg;
+};
+
+document.getElementById("borderColor").oninput=e=>{
+  settings.border=e.target.value;
+  updatePhotoStyles();
+};
+
+document.getElementById("borderWidth").oninput=e=>{
+  settings.borderWidth=Number(e.target.value);
+  updatePhotoStyles();
+};
+
+document.getElementById("radius").oninput=e=>{
+  settings.radius=Number(e.target.value);
+  updatePhotoStyles();
+};
+
+document.getElementById("spacing").oninput=e=>{
+  settings.spacing=Number(e.target.value);
+  buildPhotoLayout();
+};
+
+document.getElementById("arrangement").onchange=e=>{
+  settings.arrangement=e.target.value;
+  buildPhotoLayout();
+};
+
+
+function changeCanvasSize(){
+
+  const value=document.getElementById("stripSize").value;
+
+  if(value==="portrait"){
+    canvas.style.width="480px";
+    canvas.style.height="720px";
   }
 
-  ctx.drawImage(
-    video,
-    0,
-    0,
-    width,
-    height
-  );
+  if(value==="long"){
+    canvas.style.width="240px";
+    canvas.style.height="720px";
+  }
 
-  ctx.restore();
+  if(value==="landscape"){
+    canvas.style.width="720px";
+    canvas.style.height="480px";
+  }
 
-  const data = captureCanvas.toDataURL("image/jpeg", .92);
+  if(value==="square"){
+    canvas.style.width="650px";
+    canvas.style.height="650px";
+  }
 
-  state.photos.push(data);
-
-  document.getElementById("flash").classList.remove("active");
-
-  void document.getElementById("flash").offsetWidth;
-
-  document.getElementById("flash").classList.add("active");
-
-}
-
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-
-function resetPhotos() {
-
-  state.photos = [];
-
-  state.elements = state.elements.filter(
-    e => e.type !== "photo"
-  );
-
-  state.selectedId = null;
-
-  render();
+  buildPhotoLayout();
 
 }
 
 
 /* =========================================================
-   CREATE PHOTOS
+   PHOTO LAYOUT
 ========================================================= */
 
-function createPhotoElements() {
+function buildPhotoLayout(){
 
-  state.elements =
-    state.elements.filter(e => e.type !== "photo");
+  document.querySelectorAll(".photo-element").forEach(el=>el.remove());
 
-  const count = state.photos.length;
+  if(!capturedPhotos.length){
 
-  if (!count) {
-    render();
+    emptyMessage.style.display="grid";
     return;
+
   }
 
-  const gap = state.spacing;
+  emptyMessage.style.display="none";
 
-  const margin = 35;
+  const W=canvas.clientWidth;
+  const H=canvas.clientHeight;
+  const photos=capturedPhotos;
 
-  if (state.strip.height > state.strip.width) {
+  let positions=[];
 
-    const photoW =
-      state.strip.width - margin * 2;
+  if(settings.arrangement==="vertical"){
 
-    const available =
-      state.strip.height -
-      margin * 2 -
-      gap * (count - 1) -
-      180;
+    const gap=settings.spacing;
+    const totalGap=gap*(photos.length+1);
+    const h=(H-totalGap)/photos.length;
 
-    const photoH =
-      Math.max(
-        100,
-        available / count
-      );
+    photos.forEach((_,i)=>{
 
-    state.photos.forEach((photo, index) => {
-
-      state.elements.push({
-
-        id: state.nextId++,
-
-        type: "photo",
-
-        photoIndex: index,
-
-        x: margin,
-
-        y: margin + index * (photoH + gap),
-
-        width: photoW,
-
-        height: photoH,
-
-        rotation: 0,
-
-        z: 1
-
-      });
-
-    });
-
-  } else {
-
-    const photoW =
-      (state.strip.width -
-       margin * 2 -
-       gap * (count - 1)) / count;
-
-    const photoH =
-      state.strip.height -
-      margin * 2 -
-      180;
-
-    state.photos.forEach((photo, index) => {
-
-      state.elements.push({
-
-        id: state.nextId++,
-
-        type: "photo",
-
-        photoIndex: index,
-
-        x: margin + index * (photoW + gap),
-
-        y: margin,
-
-        width: photoW,
-
-        height: photoH,
-
-        rotation: 0,
-
-        z: 1
-
+      positions.push({
+        x:gap,
+        y:gap+i*(h+gap),
+        w:W-gap*2,
+        h:h
       });
 
     });
 
   }
 
-  addDefaultText();
+  else if(settings.arrangement==="horizontal"){
 
-  render();
+    const gap=settings.spacing;
+    const totalGap=gap*(photos.length+1);
+    const w=(W-totalGap)/photos.length;
+
+    photos.forEach((_,i)=>{
+
+      positions.push({
+        x:gap+i*(w+gap),
+        y:gap,
+        w:w,
+        h:H-gap*2
+      });
+
+    });
+
+  }
+
+  else{
+
+    const gap=settings.spacing;
+
+    const cols=2;
+    const rows=Math.ceil(photos.length/2);
+
+    const w=(W-gap*(cols+1))/cols;
+    const h=(H-gap*(rows+1))/rows;
+
+    photos.forEach((_,i)=>{
+
+      const col=i%2;
+      const row=Math.floor(i/2);
+
+      positions.push({
+        x:gap+col*(w+gap),
+        y:gap+row*(h+gap),
+        w:w,
+        h:h
+      });
+
+    });
+
+  }
+
+
+  photos.forEach((photo,i)=>{
+
+    const img=document.createElement("img");
+
+    img.src=photo.src;
+
+    img.className="element photo-element";
+
+    img.dataset.type="photo";
+
+    img.dataset.id=++elementId;
+
+    const p=positions[i];
+
+    img.style.left=p.x+"px";
+    img.style.top=p.y+"px";
+    img.style.width=p.w+"px";
+    img.style.height=p.h+"px";
+
+    img.style.borderColor=settings.border;
+    img.style.borderWidth=settings.borderWidth+"px";
+    img.style.borderRadius=settings.radius+"px";
+
+    img.style.filter=
+      filters[settings.filter]+
+      ` brightness(${settings.brightness/100}) saturate(${settings.saturation/100})`;
+
+    addInteractions(img);
+
+    canvas.appendChild(img);
+
+  });
+
+}
+
+
+function updatePhotoStyles(){
+
+  document.querySelectorAll(".photo-element").forEach(img=>{
+
+    img.style.borderColor=settings.border;
+    img.style.borderWidth=settings.borderWidth+"px";
+    img.style.borderRadius=settings.radius+"px";
+
+  });
 
 }
 
 
 /* =========================================================
-   DEFAULT TEXT
+   ELEMENT SYSTEM
 ========================================================= */
 
-function addDefaultText() {
+function addInteractions(el){
 
-  state.elements =
-    state.elements.filter(
-      e => e.type !== "text"
-    );
+  el.addEventListener("pointerdown",startDrag);
 
-  state.elements.push({
+  el.addEventListener("click",e=>{
 
-    id: state.nextId++,
+    e.stopPropagation();
 
-    type: "text",
-
-    role: "title",
-
-    text: document.getElementById("titleText").value,
-
-    x: state.strip.width / 2 - 100,
-
-    y: state.strip.height - 125,
-
-    width: 200,
-
-    height: 45,
-
-    rotation: 0,
-
-    z: 10,
-
-    fontSize: 28,
-
-    fontFamily: "Playfair Display",
-
-    color: state.colors.text
-
-  });
-
-  state.elements.push({
-
-    id: state.nextId++,
-
-    type: "text",
-
-    role: "caption",
-
-    text: document.getElementById("captionText").value,
-
-    x: state.strip.width / 2 - 70,
-
-    y: state.strip.height - 75,
-
-    width: 140,
-
-    height: 25,
-
-    rotation: 0,
-
-    z: 10,
-
-    fontSize: 14,
-
-    fontFamily: "DM Sans",
-
-    color: state.colors.text
+    selectElement(el);
 
   });
 
 }
 
 
-/* =========================================================
-   RENDER
-========================================================= */
+canvas.addEventListener("pointerdown",e=>{
 
-function render() {
-
-  filmstrip.innerHTML = "";
-
-  filmstrip.style.width =
-    state.strip.width + "px";
-
-  filmstrip.style.height =
-    state.strip.height + "px";
-
-  filmstrip.style.background =
-    state.colors.background;
-
-  filmstrip.style.transform =
-    `scale(${state.zoom})`;
-
-  state.elements
-    .sort((a,b) => a.z - b.z)
-    .forEach(createElement);
-
-}
-
-
-function createElement(element) {
-
-  const div = document.createElement("div");
-
-  div.className =
-    "editor-element " +
-    (
-      element.type === "photo"
-      ? "photo-element"
-      : element.type === "text"
-      ? "text-element"
-      : "sticker-element"
-    );
-
-  div.dataset.id = element.id;
-
-  div.style.left = element.x + "px";
-  div.style.top = element.y + "px";
-  div.style.width = element.width + "px";
-  div.style.height = element.height + "px";
-  div.style.zIndex = element.z;
-
-  div.style.transform =
-    `rotate(${element.rotation}deg)`;
-
-  if (element.type === "photo") {
-
-    div.style.borderColor =
-      state.colors.border;
-
-    div.style.borderWidth =
-      state.borderWidth + "px";
-
-    div.style.borderRadius =
-      state.radius + "px";
-
-    const img = document.createElement("img");
-
-    img.src = state.photos[element.photoIndex] || "";
-
-    img.style.filter =
-      getFilterCSS();
-
-    div.appendChild(img);
-
-  }
-
-
-  if (element.type === "text") {
-
-    div.style.color = element.color;
-    div.style.fontSize = element.fontSize + "px";
-    div.style.fontFamily = `"${element.fontFamily}", serif`;
-
-    div.style.textAlign = "center";
-
-    const text = document.createElement("div");
-
-    text.className = "text-content";
-
-    text.textContent = element.text;
-
-    div.appendChild(text);
-
-  }
-
-
-  if (element.type === "sticker") {
-
-    div.textContent = element.text;
-
-    div.style.fontSize =
-      element.fontSize + "px";
-
-  }
-
-
-  if (state.selectedId === element.id) {
-
-    div.classList.add("selected");
-
-    addHandles(div);
-
-    updateSelectionPanel(element);
-
-  }
-
-
-  div.addEventListener("pointerdown", function(e) {
-
-    if (
-      e.target.classList.contains("handle") ||
-      e.target.classList.contains("rotate-handle")
-    ) {
-      return;
-    }
-
-    selectElement(element.id);
-
-    startDrag(e, element);
-
-  });
-
-  filmstrip.appendChild(div);
-
-}
-
-
-function addHandles(div) {
-
-  const resizeBR = document.createElement("div");
-
-  resizeBR.className = "handle br";
-
-  resizeBR.addEventListener(
-    "pointerdown",
-    startResize
-  );
-
-  div.appendChild(resizeBR);
-
-
-  const resizeTR = document.createElement("div");
-
-  resizeTR.className = "handle tr";
-
-  resizeTR.addEventListener(
-    "pointerdown",
-    startResizeTop
-  );
-
-  div.appendChild(resizeTR);
-
-
-  const rotate = document.createElement("div");
-
-  rotate.className = "rotate-handle";
-
-  rotate.textContent = "↻";
-
-  rotate.addEventListener(
-    "pointerdown",
-    startRotate
-  );
-
-  div.appendChild(rotate);
-
-}
-
-
-/* =========================================================
-   SELECTION
-========================================================= */
-
-function selectElement(id) {
-
-  state.selectedId = id;
-
-  render();
-
-}
-
-
-filmstrip.addEventListener("pointerdown", function(e) {
-
-  if (e.target === filmstrip) {
-
-    state.selectedId = null;
-
-    render();
-
+  if(e.target===canvas){
+    deselect();
   }
 
 });
 
 
-function getSelected() {
+function selectElement(el){
 
-  return state.elements.find(
-    e => e.id === state.selectedId
-  );
+  if(selectedElement){
+    removeHandles(selectedElement);
+  }
+
+  selectedElement=el;
+
+  el.classList.add("selected");
+
+  addHandles(el);
+
+}
+
+
+function deselect(){
+
+  if(selectedElement){
+
+    removeHandles(selectedElement);
+    selectedElement.classList.remove("selected");
+
+  }
+
+  selectedElement=null;
+
+}
+
+
+function addHandles(el){
+
+  if(el.dataset.type==="photo" || el.dataset.type==="sticker"){
+
+    const resize=document.createElement("div");
+    resize.className="handle resize";
+
+    const rotate=document.createElement("div");
+    rotate.className="handle rotate";
+
+    resize.addEventListener("pointerdown",startResize);
+    rotate.addEventListener("pointerdown",startRotate);
+
+    el.appendChild(resize);
+    el.appendChild(rotate);
+
+  }
+
+}
+
+
+function removeHandles(el){
+
+  el.querySelectorAll(".handle").forEach(h=>h.remove());
 
 }
 
 
 /* =========================================================
-   DRAG
+   DRAGGING
 ========================================================= */
 
-let dragData = null;
+let dragData=null;
 
+function startDrag(e){
 
-function startDrag(e, element) {
+  if(e.target.classList.contains("handle")) return;
 
   e.preventDefault();
+  e.stopPropagation();
 
-  dragData = {
+  selectElement(e.currentTarget);
 
-    element,
+  const el=e.currentTarget;
 
-    startX: e.clientX,
-
-    startY: e.clientY,
-
-    originalX: element.x,
-
-    originalY: element.y
-
+  dragData={
+    el:el,
+    startX:e.clientX,
+    startY:e.clientY,
+    left:parseFloat(el.style.left)||0,
+    top:parseFloat(el.style.top)||0
   };
 
-  document.addEventListener(
-    "pointermove",
-    dragMove
-  );
+  el.setPointerCapture(e.pointerId);
 
-  document.addEventListener(
-    "pointerup",
-    stopDrag,
-    { once:true }
-  );
+  el.addEventListener("pointermove",dragMove);
+  el.addEventListener("pointerup",dragEnd,{once:true});
 
 }
 
 
-function dragMove(e) {
+function dragMove(e){
 
-  if (!dragData) return;
+  if(!dragData) return;
 
-  const dx =
-    (e.clientX - dragData.startX) /
-    state.zoom;
+  const dx=(e.clientX-dragData.startX)/zoom;
+  const dy=(e.clientY-dragData.startY)/zoom;
 
-  const dy =
-    (e.clientY - dragData.startY) /
-    state.zoom;
-
-  dragData.element.x =
-    dragData.originalX + dx;
-
-  dragData.element.y =
-    dragData.originalY + dy;
-
-  render();
+  dragData.el.style.left=(dragData.left+dx)+"px";
+  dragData.el.style.top=(dragData.top+dy)+"px";
 
 }
 
 
-function stopDrag() {
+function dragEnd(){
 
-  document.removeEventListener(
-    "pointermove",
-    dragMove
-  );
+  if(!dragData) return;
 
-  dragData = null;
+  dragData.el.removeEventListener("pointermove",dragMove);
+
+  dragData=null;
 
 }
 
@@ -1860,162 +1361,48 @@ function stopDrag() {
    RESIZE
 ========================================================= */
 
-let resizeData = null;
+let resizeData=null;
 
+function startResize(e){
 
-function startResize(e) {
-
-  e.stopPropagation();
   e.preventDefault();
+  e.stopPropagation();
 
-  const element =
-    getSelected();
+  const el=e.currentTarget.parentElement;
 
-  if (!element) return;
+  selectElement(el);
 
-  resizeData = {
-
-    element,
-
-    startX: e.clientX,
-
-    startY: e.clientY,
-
-    width: element.width,
-
-    height: element.height
-
+  resizeData={
+    el:el,
+    startX:e.clientX,
+    startY:e.clientY,
+    width:parseFloat(el.style.width)||100,
+    height:parseFloat(el.style.height)||100
   };
 
-  document.addEventListener(
-    "pointermove",
-    resizeMove
-  );
-
-  document.addEventListener(
-    "pointerup",
-    stopResize,
-    {once:true}
-  );
+  window.addEventListener("pointermove",resizeMove);
+  window.addEventListener("pointerup",resizeEnd,{once:true});
 
 }
 
 
-function resizeMove(e) {
+function resizeMove(e){
 
-  if (!resizeData) return;
+  if(!resizeData)return;
 
-  const dx =
-    (e.clientX - resizeData.startX) /
-    state.zoom;
+  const dx=(e.clientX-resizeData.startX)/zoom;
+  const dy=(e.clientY-resizeData.startY)/zoom;
 
-  const dy =
-    (e.clientY - resizeData.startY) /
-    state.zoom;
-
-  resizeData.element.width =
-    Math.max(
-      30,
-      resizeData.width + dx
-    );
-
-  resizeData.element.height =
-    Math.max(
-      20,
-      resizeData.height + dy
-    );
-
-  render();
+  resizeData.el.style.width=Math.max(20,resizeData.width+dx)+"px";
+  resizeData.el.style.height=Math.max(20,resizeData.height+dy)+"px";
 
 }
 
 
-function startResizeTop(e) {
+function resizeEnd(){
 
-  e.stopPropagation();
-  e.preventDefault();
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  resizeData = {
-
-    element,
-
-    startX: e.clientX,
-
-    startY: e.clientY,
-
-    width: element.width,
-
-    height: element.height,
-
-    originalX: element.x,
-
-    originalY: element.y
-
-  };
-
-  document.addEventListener(
-    "pointermove",
-    resizeTopMove
-  );
-
-  document.addEventListener(
-    "pointerup",
-    stopResize,
-    {once:true}
-  );
-
-}
-
-
-function resizeTopMove(e) {
-
-  if (!resizeData) return;
-
-  const dx =
-    (e.clientX - resizeData.startX) /
-    state.zoom;
-
-  const dy =
-    (e.clientY - resizeData.startY) /
-    state.zoom;
-
-  resizeData.element.width =
-    Math.max(
-      30,
-      resizeData.width + dx
-    );
-
-  resizeData.element.height =
-    Math.max(
-      20,
-      resizeData.height - dy
-    );
-
-  resizeData.element.y =
-    resizeData.originalY + dy;
-
-  render();
-
-}
-
-
-function stopResize() {
-
-  document.removeEventListener(
-    "pointermove",
-    resizeMove
-  );
-
-  document.removeEventListener(
-    "pointermove",
-    resizeTopMove
-  );
-
-  resizeData = null;
+  window.removeEventListener("pointermove",resizeMove);
+  resizeData=null;
 
 }
 
@@ -2024,353 +1411,66 @@ function stopResize() {
    ROTATE
 ========================================================= */
 
-let rotateData = null;
+let rotateData=null;
 
+function startRotate(e){
 
-function startRotate(e) {
-
-  e.stopPropagation();
   e.preventDefault();
+  e.stopPropagation();
 
-  const element = getSelected();
+  const el=e.currentTarget.parentElement;
 
-  if (!element) return;
+  const rect=el.getBoundingClientRect();
 
-  const rect =
-    e.currentTarget.parentElement.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
 
-  rotateData = {
+  const startAngle=Math.atan2(
+    e.clientY-cy,
+    e.clientX-cx
+  )*180/Math.PI;
 
-    element,
+  const currentRotation=parseFloat(el.dataset.rotation||0);
 
-    centerX:
-      rect.left + rect.width / 2,
-
-    centerY:
-      rect.top + rect.height / 2
-
+  rotateData={
+    el:el,
+    cx:cx,
+    cy:cy,
+    startAngle:startAngle,
+    currentRotation:currentRotation
   };
 
-  document.addEventListener(
-    "pointermove",
-    rotateMove
-  );
-
-  document.addEventListener(
-    "pointerup",
-    stopRotate,
-    {once:true}
-  );
+  window.addEventListener("pointermove",rotateMove);
+  window.addEventListener("pointerup",rotateEnd,{once:true});
 
 }
 
 
-function rotateMove(e) {
+function rotateMove(e){
 
-  if (!rotateData) return;
+  if(!rotateData)return;
 
-  const angle =
-    Math.atan2(
-      e.clientY - rotateData.centerY,
-      e.clientX - rotateData.centerX
-    ) *
-    180 / Math.PI;
+  const angle=Math.atan2(
+    e.clientY-rotateData.cy,
+    e.clientX-rotateData.cx
+  )*180/Math.PI;
 
-  rotateData.element.rotation =
-    Math.round(angle + 90);
+  const rotation=
+    rotateData.currentRotation+
+    angle-
+    rotateData.startAngle;
 
-  render();
+  rotateData.el.dataset.rotation=rotation;
 
-}
-
-
-function stopRotate() {
-
-  document.removeEventListener(
-    "pointermove",
-    rotateMove
-  );
-
-  rotateData = null;
+  rotateData.el.style.transform=
+    `rotate(${rotation}deg)`;
 
 }
 
 
-/* =========================================================
-   SELECTION CONTROLS
-========================================================= */
+function rotateEnd(){
 
-function updateSelectionPanel(element) {
-
-  document.getElementById(
-    "selectionEmpty"
-  ).style.display = "none";
-
-  document.getElementById(
-    "selectionControls"
-  ).style.display = "block";
-
-  document.getElementById(
-    "selectedX"
-  ).value = Math.round(element.x);
-
-  document.getElementById(
-    "selectedY"
-  ).value = Math.round(element.y);
-
-  document.getElementById(
-    "selectedW"
-  ).value = Math.round(element.width);
-
-  document.getElementById(
-    "selectedH"
-  ).value = Math.round(element.height);
-
-  document.getElementById(
-    "rotation"
-  ).value = element.rotation;
-
-  document.getElementById(
-    "rotationLabel"
-  ).textContent =
-    Math.round(element.rotation) + "°";
-
-}
-
-
-function updateSelectedPosition() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  element.x =
-    Number(document.getElementById("selectedX").value);
-
-  element.y =
-    Number(document.getElementById("selectedY").value);
-
-  render();
-
-}
-
-
-function updateSelectedSize() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  element.width =
-    Number(document.getElementById("selectedW").value);
-
-  element.height =
-    Number(document.getElementById("selectedH").value);
-
-  render();
-
-}
-
-
-function updateSelectedRotation() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  element.rotation =
-    Number(document.getElementById("rotation").value);
-
-  document.getElementById(
-    "rotationLabel"
-  ).textContent =
-    element.rotation + "°";
-
-  render();
-
-}
-
-
-/* =========================================================
-   LAYERS
-========================================================= */
-
-function bringForward() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  const max =
-    Math.max(
-      ...state.elements.map(e => e.z)
-    );
-
-  element.z = max + 1;
-
-  render();
-
-}
-
-
-function sendBackward() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  const min =
-    Math.min(
-      ...state.elements.map(e => e.z)
-    );
-
-  element.z = min - 1;
-
-  render();
-
-}
-
-
-function deleteSelected() {
-
-  if (!state.selectedId) return;
-
-  state.elements =
-    state.elements.filter(
-      e => e.id !== state.selectedId
-    );
-
-  state.selectedId = null;
-
-  render();
-
-}
-
-
-function duplicateSelected() {
-
-  const element = getSelected();
-
-  if (!element) return;
-
-  const copy =
-    JSON.parse(JSON.stringify(element));
-
-  copy.id = state.nextId++;
-
-  copy.x += 20;
-  copy.y += 20;
-  copy.z += 1;
-
-  state.elements.push(copy);
-
-  state.selectedId = copy.id;
-
-  render();
-
-}
-
-
-/* =========================================================
-   TEXT
-========================================================= */
-
-function addText(text = "new text") {
-
-  const element = {
-
-    id: state.nextId++,
-
-    type: "text",
-
-    role: "custom",
-
-    text,
-
-    x: state.strip.width / 2 - 70,
-
-    y: state.strip.height / 2,
-
-    width: 140,
-
-    height: 35,
-
-    rotation: 0,
-
-    z: 50,
-
-    fontSize: 22,
-
-    fontFamily:
-      document.getElementById("fontSelect").value,
-
-    color:
-      document.getElementById("textColor").value
-
-  };
-
-  state.elements.push(element);
-
-  state.selectedId = element.id;
-
-  render();
-
-}
-
-
-function addDate() {
-
-  const date =
-    new Date().toLocaleDateString(
-      undefined,
-      {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      }
-    );
-
-  addText(date);
-
-}
-
-
-function updateText(role, value) {
-
-  const element =
-    state.elements.find(
-      e =>
-        e.type === "text" &&
-        e.role === role
-    );
-
-  if (!element) return;
-
-  element.text = value;
-
-  render();
-
-}
-
-
-function updateTextStyle() {
-
-  const element = getSelected();
-
-  if (!element || element.type !== "text") {
-    return;
-  }
-
-  element.color =
-    document.getElementById("textColor").value;
-
-  element.fontSize =
-    Number(document.getElementById("textSize").value);
-
-  element.fontFamily =
-    document.getElementById("fontSelect").value;
-
-  render();
+  window.removeEventListener("pointermove",rotateMove);
 
 }
 
@@ -2379,537 +1479,376 @@ function updateTextStyle() {
    STICKERS
 ========================================================= */
 
-function addSticker(symbol) {
+function addSticker(symbol){
 
-  const size =
-    Number(
-      document.getElementById("stickerSize").value
-    );
+  const el=document.createElement("div");
 
-  const element = {
+  el.className="element sticker-element";
+  el.dataset.type="sticker";
+  el.dataset.id=++elementId;
 
-    id: state.nextId++,
+  el.textContent=symbol;
 
-    type: "sticker",
+  el.style.left=(canvas.clientWidth/2-30)+"px";
+  el.style.top=(canvas.clientHeight/2-30)+"px";
+  el.style.width="70px";
+  el.style.height="70px";
 
-    text: symbol,
+  addInteractions(el);
 
-    x: state.strip.width / 2 - size / 2,
+  canvas.appendChild(el);
 
-    y: 30,
-
-    width: size,
-
-    height: size,
-
-    rotation: 0,
-
-    z: 60,
-
-    fontSize: size
-
-  };
-
-  state.elements.push(element);
-
-  state.selectedId = element.id;
-
-  render();
+  selectElement(el);
 
 }
 
 
-function updateSelectedSticker() {
+function addText(text){
 
-  const element = getSelected();
+  const el=document.createElement("div");
 
-  if (!element || element.type !== "sticker") {
-    return;
-  }
+  el.className="element text-element";
+  el.dataset.type="text";
+  el.dataset.id=++elementId;
 
-  const size =
-    Number(
-      document.getElementById("stickerSize").value
-    );
+  el.textContent=text;
 
-  element.width = size;
-  element.height = size;
-  element.fontSize = size;
+  el.style.left="50px";
+  el.style.top="40px";
+  el.style.fontFamily=document.getElementById("fontSelect").value;
+  el.style.fontSize=document.getElementById("textSize").value+"px";
+  el.style.color=document.getElementById("textColor").value;
 
-  render();
+  addInteractions(el);
 
-}
+  canvas.appendChild(el);
 
-
-/* =========================================================
-   COLORS
-========================================================= */
-
-function updateAppearance() {
-
-  state.colors.background =
-    document.getElementById("bgColor").value;
-
-  state.colors.border =
-    document.getElementById("borderColor").value;
-
-  state.borderWidth =
-    Number(
-      document.getElementById("borderWidth").value
-    );
-
-  state.radius =
-    Number(
-      document.getElementById("radius").value
-    );
-
-  state.spacing =
-    Number(
-      document.getElementById("photoSpacing").value
-    );
-
-  render();
+  selectElement(el);
 
 }
 
 
-/* =========================================================
-   SIZE
-========================================================= */
+function addTitle(){
 
-function setSize(type) {
+  addText(document.getElementById("titleInput").value || "WHIMSY BOOTH");
 
-  const buttons =
-    document.querySelectorAll(
-      ".panel:first-child .choice"
-    );
+}
 
-  buttons.forEach(
-    b => b.classList.remove("active")
+
+function addCaption(){
+
+  addText(document.getElementById("captionInput").value || "a little memory ♡");
+
+}
+
+
+function addDate(){
+
+  addText(
+    new Date().toLocaleDateString(
+      undefined,
+      {
+        year:"numeric",
+        month:"short",
+        day:"numeric"
+      }
+    )
   );
 
-  if (type === "2x6") {
-
-    state.strip.width = 400;
-    state.strip.height = 1200;
-
-  }
-
-  if (type === "4x6") {
-
-    state.strip.width = 800;
-    state.strip.height = 1200;
-
-  }
-
-  if (type === "landscape") {
-
-    state.strip.width = 1200;
-    state.strip.height = 800;
-
-  }
-
-  if (type === "square") {
-
-    state.strip.width = 1000;
-    state.strip.height = 1000;
-
-  }
-
-  document.getElementById("stripWidth").value =
-    state.strip.width;
-
-  document.getElementById("stripHeight").value =
-    state.strip.height;
-
-  createPhotoElementsIfNeeded();
-
-}
-
-
-function updateStripSize() {
-
-  state.strip.width =
-    Number(
-      document.getElementById("stripWidth").value
-    );
-
-  state.strip.height =
-    Number(
-      document.getElementById("stripHeight").value
-    );
-
-  render();
-
-}
-
-
-function createPhotoElementsIfNeeded() {
-
-  if (state.photos.length) {
-
-    createPhotoElements();
-
-  } else {
-
-    render();
-
-  }
-
 }
 
 
 /* =========================================================
-   ARRANGEMENTS
+   SELECTION ACTIONS
 ========================================================= */
 
-function arrangePhotos(type) {
+function deleteSelected(){
 
-  const photos =
-    state.elements.filter(
-      e => e.type === "photo"
-    );
+  if(!selectedElement)return;
 
-  if (!photos.length) return;
+  selectedElement.remove();
 
-  const margin = 35;
-  const gap = state.spacing;
-
-  if (type === "vertical") {
-
-    const w =
-      state.strip.width - margin * 2;
-
-    const h =
-      (
-        state.strip.height -
-        margin * 2 -
-        gap * (photos.length - 1) -
-        180
-      ) / photos.length;
-
-    photos.forEach((p,i) => {
-
-      p.x = margin;
-      p.y = margin + i * (h + gap);
-      p.width = w;
-      p.height = h;
-      p.rotation = 0;
-
-    });
-
-  }
-
-
-  if (type === "horizontal") {
-
-    const w =
-      (
-        state.strip.width -
-        margin * 2 -
-        gap * (photos.length - 1)
-      ) / photos.length;
-
-    const h =
-      state.strip.height -
-      margin * 2 -
-      180;
-
-    photos.forEach((p,i) => {
-
-      p.x = margin + i * (w + gap);
-      p.y = margin;
-      p.width = w;
-      p.height = h;
-      p.rotation = 0;
-
-    });
-
-  }
-
-
-  if (type === "grid") {
-
-    const cols = 2;
-    const rows = Math.ceil(photos.length / 2);
-
-    const w =
-      (
-        state.strip.width -
-        margin * 2 -
-        gap
-      ) / cols;
-
-    const h =
-      (
-        state.strip.height -
-        margin * 2 -
-        gap * (rows - 1) -
-        180
-      ) / rows;
-
-    photos.forEach((p,i) => {
-
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-
-      p.x = margin + col * (w + gap);
-      p.y = margin + row * (h + gap);
-
-      p.width = w;
-      p.height = h;
-      p.rotation = 0;
-
-    });
-
-  }
-
-  render();
+  selectedElement=null;
 
 }
 
 
-/* =========================================================
-   PRESETS
-========================================================= */
+function duplicateSelected(){
 
-function applyPreset(name) {
+  if(!selectedElement)return;
 
-  state.colors.background = "#fff8fa";
-  state.colors.border = "#ffffff";
-  state.borderWidth = 3;
-  state.radius = 8;
-  state.spacing = 20;
+  const clone=selectedElement.cloneNode(true);
 
-  document.getElementById("bgColor").value =
-    state.colors.background;
+  clone.dataset.id=++elementId;
 
-  document.getElementById("borderColor").value =
-    state.colors.border;
+  clone.style.left=
+    (parseFloat(selectedElement.style.left)+20)+"px";
 
-  document.getElementById("borderWidth").value =
-    state.borderWidth;
+  clone.style.top=
+    (parseFloat(selectedElement.style.top)+20)+"px";
 
-  document.getElementById("radius").value =
-    state.radius;
+  clone.classList.remove("selected");
 
-  document.getElementById("photoSpacing").value =
-    state.spacing;
+  addInteractions(clone);
 
+  canvas.appendChild(clone);
 
-  if (name === "classic") {
-
-    arrangePhotos("vertical");
-
-  }
-
-
-  if (name === "coquette") {
-
-    state.colors.background = "#fff0f5";
-    state.colors.border = "#ffffff";
-    state.radius = 18;
-    state.spacing = 25;
-
-    arrangePhotos("vertical");
-
-    addSticker("🎀");
-
-  }
-
-
-  if (name === "minimal") {
-
-    state.colors.background = "#ffffff";
-    state.radius = 0;
-    state.spacing = 12;
-
-    arrangePhotos("vertical");
-
-  }
-
-
-  if (name === "polaroid") {
-
-    state.colors.background = "#f8f5f0";
-    state.borderWidth = 9;
-    state.radius = 0;
-    state.spacing = 35;
-
-    arrangePhotos("vertical");
-
-  }
-
-
-  if (name === "dreamy") {
-
-    state.colors.background = "#f4edf8";
-    state.colors.border = "#ffffff";
-    state.radius = 25;
-    state.spacing = 30;
-
-    arrangePhotos("vertical");
-
-    addSticker("✧");
-    addSticker("♡");
-
-  }
-
-
-  if (name === "heart") {
-
-    state.colors.background = "#fff1f5";
-    state.radius = 20;
-    state.spacing = 25;
-
-    arrangePhotos("grid");
-
-    addSticker("♡");
-    addSticker("♡");
-
-  }
-
-
-  document.getElementById("bgColor").value =
-    state.colors.background;
-
-  document.getElementById("borderColor").value =
-    state.colors.border;
-
-  document.getElementById("borderWidth").value =
-    state.borderWidth;
-
-  document.getElementById("radius").value =
-    state.radius;
-
-  document.getElementById("photoSpacing").value =
-    state.spacing;
-
-  render();
+  selectElement(clone);
 
 }
 
 
-/* =========================================================
-   FILTERS
-========================================================= */
+function bringForward(){
 
-function setFilter(filter, button) {
+  if(!selectedElement)return;
 
-  state.filter = filter;
-
-  document
-    .querySelectorAll(".filter-btn")
-    .forEach(
-      b => b.classList.remove("active")
-    );
-
-  button.classList.add("active");
-
-  render();
+  selectedElement.style.zIndex=
+    (Number(selectedElement.style.zIndex)||1)+1;
 
 }
 
 
-function getFilterCSS() {
+function sendBackward(){
 
-  let filters = [];
+  if(!selectedElement)return;
 
-  switch(state.filter) {
-
-    case "soft":
-      filters.push("brightness(108%)");
-      filters.push("saturate(90%)");
-      filters.push("contrast(92%)");
-      break;
-
-    case "coquette":
-      filters.push("brightness(108%)");
-      filters.push("saturate(90%)");
-      filters.push("contrast(90%)");
-      filters.push("sepia(8%)");
-      break;
-
-    case "film":
-      filters.push("contrast(112%)");
-      filters.push("saturate(88%)");
-      filters.push("sepia(10%)");
-      break;
-
-    case "vintage":
-      filters.push("sepia(35%)");
-      filters.push("contrast(92%)");
-      filters.push("saturate(75%)");
-      break;
-
-    case "dreamy":
-      filters.push("brightness(112%)");
-      filters.push("contrast(88%)");
-      filters.push("saturate(85%)");
-      break;
-
-    case "bw":
-      filters.push("grayscale(100%)");
-      filters.push("contrast(110%)");
-      break;
-
-    case "warm":
-      filters.push("sepia(18%)");
-      filters.push("saturate(115%)");
-      filters.push("brightness(103%)");
-      break;
-
-  }
-
-  filters.push(
-    `brightness(${state.brightness}%)`
-  );
-
-  filters.push(
-    `saturate(${state.saturation}%)`
-  );
-
-  return filters.join(" ");
+  selectedElement.style.zIndex=
+    Math.max(0,(Number(selectedElement.style.zIndex)||1)-1);
 
 }
 
 
-function updateImageFilters() {
+document.addEventListener("keydown",e=>{
 
-  state.brightness =
-    Number(
-      document.getElementById("brightness").value
-    );
+  if(!selectedElement)return;
 
-  state.saturation =
-    Number(
-      document.getElementById("saturation").value
-    );
+  const amount=e.shiftKey?10:2;
 
-  state.grain =
-    Number(
-      document.getElementById("grain").value
-    );
+  if(e.key==="ArrowLeft")
+    selectedElement.style.left=
+      (parseFloat(selectedElement.style.left)-amount)+"px";
 
-  render();
+  if(e.key==="ArrowRight")
+    selectedElement.style.left=
+      (parseFloat(selectedElement.style.left)+amount)+"px";
 
-}
+  if(e.key==="ArrowUp")
+    selectedElement.style.top=
+      (parseFloat(selectedElement.style.top)-amount)+"px";
+
+  if(e.key==="ArrowDown")
+    selectedElement.style.top=
+      (parseFloat(selectedElement.style.top)+amount)+"px";
+
+  if(e.key==="Delete")
+    deleteSelected();
+
+});
 
 
 /* =========================================================
    ZOOM
 ========================================================= */
 
-function updateZoom(value) {
+function updateZoom(){
 
-  state.zoom =
-    Number(value) / 100;
+  canvas.style.transform=`scale(${zoom})`;
 
-  document.getElementById("zoomLabel").textContent =
-    value + "%";
+  document.getElementById("zoomLabel").textContent=
+    Math.round(zoom*100)+"%";
 
-  filmstrip.style.transform =
-    `scale(${state.zoom})`;
+}
+
+function zoomIn(){
+
+  zoom=Math.min(1.5,zoom+.1);
+  updateZoom();
+
+}
+
+function zoomOut(){
+
+  zoom=Math.max(.5,zoom-.1);
+  updateZoom();
+
+}
+
+
+/* =========================================================
+   TEMPLATES
+========================================================= */
+
+const templates={
+
+  coquette:{
+    bg:"#fff0f6",
+    border:"#ffffff",
+    filter:"coquette",
+    arrangement:"vertical",
+    spacing:18,
+    radius:18,
+    title:"LOVE NOTES",
+    caption:"xoxo ♡",
+    stickers:["🎀","♡","✿"]
+  },
+
+  kpop:{
+    bg:"#f4edff",
+    border:"#ffffff",
+    filter:"dreamy",
+    arrangement:"grid",
+    spacing:15,
+    radius:8,
+    title:"MY ERA",
+    caption:"♡ 2026 ♡",
+    stickers:["★","✨","♥"]
+  },
+
+  y2k:{
+    bg:"#e8f5ff",
+    border:"#ffffff",
+    filter:"warm",
+    arrangement:"grid",
+    spacing:10,
+    radius:5,
+    title:"CUTIE",
+    caption:"☆ ☆ ☆",
+    stickers:["💿","★","♡"]
+  },
+
+  korean:{
+    bg:"#fffaf5",
+    border:"#ffffff",
+    filter:"soft",
+    arrangement:"vertical",
+    spacing:12,
+    radius:6,
+    title:"오늘의 기억",
+    caption:"좋은 하루 ♡",
+    stickers:["♡","🌸","✨"]
+  },
+
+  vintage:{
+    bg:"#eadfce",
+    border:"#fffaf1",
+    filter:"vintage",
+    arrangement:"vertical",
+    spacing:20,
+    radius:2,
+    title:"MEMORIES",
+    caption:"FILM 01",
+    stickers:["☆","✿"]
+  },
+
+  minimal:{
+    bg:"#ffffff",
+    border:"#eeeeee",
+    filter:"original",
+    arrangement:"vertical",
+    spacing:14,
+    radius:0,
+    title:"MEMORIES",
+    caption:"2026",
+    stickers:[]
+  },
+
+  pink:{
+    bg:"#ffe3ef",
+    border:"#ffffff",
+    filter:"soft",
+    arrangement:"grid",
+    spacing:12,
+    radius:20,
+    title:"SWEET DAY",
+    caption:"made with love ♡",
+    stickers:["🎀","🌸","♡","✨"]
+  },
+
+  polaroid:{
+    bg:"#f8f4ed",
+    border:"#ffffff",
+    filter:"film",
+    arrangement:"vertical",
+    spacing:25,
+    radius:0,
+    title:"POLAROID",
+    caption:"a little moment",
+    stickers:["✿"]
+  }
+
+};
+
+
+function applyTemplate(name){
+
+  const t=templates[name];
+
+  if(!t)return;
+
+  settings.bg=t.bg;
+  settings.border=t.border;
+  settings.filter=t.filter;
+  settings.arrangement=t.arrangement;
+  settings.spacing=t.spacing;
+  settings.radius=t.radius;
+
+  document.getElementById("bgColor").value=t.bg;
+  document.getElementById("borderColor").value=t.border;
+  document.getElementById("arrangement").value=t.arrangement;
+  document.getElementById("spacing").value=t.spacing;
+  document.getElementById("radius").value=t.radius;
+
+  document.getElementById("titleInput").value=t.title;
+  document.getElementById("captionInput").value=t.caption;
+
+  document.querySelectorAll("[data-filter]")
+    .forEach(b=>{
+      b.classList.toggle(
+        "active",
+        b.dataset.filter===t.filter
+      );
+    });
+
+  canvas.style.background=t.bg;
+
+  document.querySelectorAll(".sticker-element,.text-element")
+    .forEach(el=>el.remove());
+
+  buildPhotoLayout();
+
+  addText(t.title);
+
+  const title=selectedElement;
+
+  title.style.left=
+    (canvas.clientWidth/2-title.offsetWidth/2)+"px";
+
+  title.style.top="15px";
+
+  addText(t.caption);
+
+  const caption=selectedElement;
+
+  caption.style.left=
+    (canvas.clientWidth/2-caption.offsetWidth/2)+"px";
+
+  caption.style.top=
+    (canvas.clientHeight-55)+"px";
+
+  t.stickers.forEach((sticker,i)=>{
+
+    addSticker(sticker);
+
+    const el=selectedElement;
+
+    el.style.left=(20+i*65)+"px";
+    el.style.top="25px";
+
+  });
+
+  deselect();
+
+  toast(name.charAt(0).toUpperCase()+name.slice(1)+" template applied ♡");
 
 }
 
@@ -2918,64 +1857,23 @@ function updateZoom(value) {
    RESET
 ========================================================= */
 
-function resetLayout() {
+function resetLayout(){
 
-  state.elements = [];
-  state.selectedId = null;
+  document.querySelectorAll(
+    ".sticker-element,.text-element"
+  ).forEach(el=>el.remove());
 
-  state.colors.background = "#fff8fa";
-  state.colors.border = "#ffffff";
-  state.borderWidth = 3;
-  state.radius = 8;
-  state.spacing = 20;
+  settings.arrangement="vertical";
+  settings.spacing=15;
+  settings.radius=12;
 
-  state.filter = "normal";
-  state.brightness = 100;
-  state.saturation = 100;
-  state.grain = 0;
+  document.getElementById("arrangement").value="vertical";
+  document.getElementById("spacing").value=15;
+  document.getElementById("radius").value=12;
 
-  document.getElementById("bgColor").value =
-    state.colors.background;
+  buildPhotoLayout();
 
-  document.getElementById("borderColor").value =
-    state.colors.border;
-
-  document.getElementById("borderWidth").value = 3;
-  document.getElementById("radius").value = 8;
-  document.getElementById("photoSpacing").value = 20;
-
-  document.getElementById("brightness").value = 100;
-  document.getElementById("saturation").value = 100;
-  document.getElementById("grain").value = 0;
-
-  if (state.photos.length) {
-
-    createPhotoElements();
-
-  } else {
-
-    addDefaultText();
-    render();
-
-  }
-
-}
-
-
-/* =========================================================
-   CLEAR PHOTOS
-========================================================= */
-
-function clearPhotos() {
-
-  state.photos = [];
-
-  state.elements =
-    state.elements.filter(
-      e => e.type !== "photo"
-    );
-
-  render();
+  deselect();
 
 }
 
@@ -2984,402 +1882,204 @@ function clearPhotos() {
    DOWNLOAD
 ========================================================= */
 
-async function downloadDesign() {
+async function downloadDesign(){
 
-  const canvas =
-    document.createElement("canvas");
+  const scale=2;
 
-  canvas.width =
-    state.strip.width * 2;
+  const W=canvas.clientWidth;
+  const H=canvas.clientHeight;
 
-  canvas.height =
-    state.strip.height * 2;
+  const out=document.createElement("canvas");
 
-  const c =
-    canvas.getContext("2d");
+  out.width=W*scale;
+  out.height=H*scale;
 
-  const scale = 2;
+  const ctx=out.getContext("2d");
 
-  /* background */
+  ctx.scale(scale,scale);
 
-  c.fillStyle =
-    state.colors.background;
+  ctx.fillStyle=settings.bg;
+  ctx.fillRect(0,0,W,H);
 
-  c.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
+  const elements=[
+    ...canvas.querySelectorAll(".element")
+  ].sort(
+    (a,b)=>
+      (Number(a.style.zIndex)||0)-
+      (Number(b.style.zIndex)||0)
   );
 
+  for(const el of elements){
 
-  const elements =
-    [...state.elements]
-      .sort((a,b) => a.z - b.z);
+    const x=parseFloat(el.style.left)||0;
+    const y=parseFloat(el.style.top)||0;
+    const w=parseFloat(el.style.width)||100;
+    const h=parseFloat(el.style.height)||100;
 
+    const rotation=parseFloat(el.dataset.rotation||0);
 
-  for (const element of elements) {
+    ctx.save();
 
-    c.save();
+    ctx.translate(x+w/2,y+h/2);
 
-    const centerX =
-      (element.x + element.width / 2) * scale;
+    ctx.rotate(rotation*Math.PI/180);
 
-    const centerY =
-      (element.y + element.height / 2) * scale;
+    ctx.translate(-w/2,-h/2);
 
-    c.translate(
-      centerX,
-      centerY
-    );
+    if(el.dataset.type==="photo"){
 
-    c.rotate(
-      element.rotation *
-      Math.PI / 180
-    );
+      const img=new Image();
 
+      img.src=el.src;
 
-    if (element.type === "photo") {
+      await new Promise(resolve=>{
 
-      const img =
-        await loadImage(
-          state.photos[element.photoIndex]
+        if(img.complete) resolve();
+        else img.onload=resolve;
+
+      });
+
+      ctx.filter=
+        filters[settings.filter]+
+        ` brightness(${settings.brightness/100}) saturate(${settings.saturation/100})`;
+
+      roundRect(
+        ctx,
+        0,
+        0,
+        w,
+        h,
+        settings.radius
+      );
+
+      ctx.clip();
+
+      ctx.drawImage(img,0,0,w,h);
+
+      ctx.filter="none";
+
+      if(settings.borderWidth>0){
+
+        ctx.strokeStyle=settings.border;
+        ctx.lineWidth=settings.borderWidth;
+
+        roundRect(
+          ctx,
+          settings.borderWidth/2,
+          settings.borderWidth/2,
+          w-settings.borderWidth,
+          h-settings.borderWidth,
+          Math.max(0,settings.radius-settings.borderWidth)
         );
 
-      c.beginPath();
-
-      roundedRect(
-        c,
-        -element.width * scale / 2,
-        -element.height * scale / 2,
-        element.width * scale,
-        element.height * scale,
-        state.radius * scale
-      );
-
-      c.clip();
-
-      /* cover image */
-
-      const iw = img.width;
-      const ih = img.height;
-
-      const targetW =
-        element.width * scale;
-
-      const targetH =
-        element.height * scale;
-
-      const imageRatio =
-        iw / ih;
-
-      const targetRatio =
-        targetW / targetH;
-
-      let dw;
-      let dh;
-
-      if (imageRatio > targetRatio) {
-
-        dh = targetH;
-        dw = dh * imageRatio;
-
-      } else {
-
-        dw = targetW;
-        dh = dw / imageRatio;
-
-      }
-
-      c.filter =
-        getFilterCSS();
-
-      c.drawImage(
-        img,
-        -dw / 2,
-        -dh / 2,
-        dw,
-        dh
-      );
-
-      c.filter = "none";
-
-      /* border */
-
-      if (state.borderWidth > 0) {
-
-        c.lineWidth =
-          state.borderWidth * scale;
-
-        c.strokeStyle =
-          state.colors.border;
-
-        c.stroke();
+        ctx.stroke();
 
       }
 
     }
 
+    else if(el.dataset.type==="text"){
 
-    if (element.type === "text") {
+      const style=getComputedStyle(el);
 
-      c.fillStyle =
-        element.color;
+      ctx.font=
+        `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
 
-      c.font =
-        `${element.fontSize * scale}px "${element.fontFamily}"`;
+      ctx.fillStyle=style.color;
 
-      c.textAlign = "center";
-      c.textBaseline = "middle";
+      ctx.textBaseline="top";
 
-      c.fillText(
-        element.text,
+      ctx.fillText(
+        el.textContent,
         0,
         0
       );
 
     }
 
+    else if(el.dataset.type==="sticker"){
 
-    if (element.type === "sticker") {
+      const style=getComputedStyle(el);
 
-      c.font =
-        `${element.fontSize * scale}px Arial`;
+      ctx.font=
+        `${Math.min(w,h)}px sans-serif`;
 
-      c.textAlign = "center";
-      c.textBaseline = "middle";
+      ctx.textBaseline="top";
 
-      c.fillText(
-        element.text,
+      ctx.fillText(
+        el.textContent,
         0,
         0
       );
 
     }
 
-    c.restore();
+    ctx.restore();
 
   }
 
 
-  /* grain */
+  const link=document.createElement("a");
 
-  if (state.grain > 0) {
+  link.download=
+    "whimsy-booth-"+Date.now()+".png";
 
-    addGrain(
-      c,
-      canvas.width,
-      canvas.height,
-      state.grain
-    );
-
-  }
-
-
-  const link =
-    document.createElement("a");
-
-  link.download =
-    "whimsy-booth-filmstrip.png";
-
-  link.href =
-    canvas.toDataURL("image/png");
+  link.href=out.toDataURL("image/png");
 
   link.click();
+
+  toast("Your filmstrip is ready! 🎀");
 
 }
 
 
-function roundedRect(
-  ctx,
-  x,
-  y,
-  width,
-  height,
-  radius
-) {
+function roundRect(ctx,x,y,w,h,r){
 
-  radius =
-    Math.min(
-      radius,
-      width / 2,
-      height / 2
-    );
+  r=Math.min(r,w/2,h/2);
 
-  ctx.moveTo(
-    x + radius,
-    y
-  );
+  ctx.beginPath();
 
-  ctx.arcTo(
-    x + width,
-    y,
-    x + width,
-    y + height,
-    radius
-  );
+  ctx.moveTo(x+r,y);
 
-  ctx.arcTo(
-    x + width,
-    y + height,
-    x,
-    y + height,
-    radius
-  );
-
-  ctx.arcTo(
-    x,
-    y + height,
-    x,
-    y,
-    radius
-  );
-
-  ctx.arcTo(
-    x,
-    y,
-    x + width,
-    y,
-    radius
-  );
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
 
   ctx.closePath();
 
 }
 
 
-function loadImage(src) {
+/* =========================================================
+   TOAST
+========================================================= */
 
-  return new Promise(resolve => {
+function toast(message){
 
-    const img =
-      new Image();
+  const el=document.getElementById("toast");
 
-    img.onload =
-      () => resolve(img);
+  el.textContent=message;
 
-    img.src = src;
+  el.classList.add("show");
 
-  });
+  clearTimeout(window.toastTimer);
 
-}
-
-
-function addGrain(
-  ctx,
-  width,
-  height,
-  amount
-) {
-
-  const imageData =
-    ctx.getImageData(
-      0,
-      0,
-      width,
-      height
-    );
-
-  const data =
-    imageData.data;
-
-  for (
-    let i = 0;
-    i < data.length;
-    i += 4
-  ) {
-
-    const noise =
-      (Math.random() - .5) *
-      amount;
-
-    data[i] += noise;
-    data[i+1] += noise;
-    data[i+2] += noise;
-
-  }
-
-  ctx.putImageData(
-    imageData,
-    0,
-    0
+  window.toastTimer=setTimeout(
+    ()=>el.classList.remove("show"),
+    2200
   );
 
 }
 
 
 /* =========================================================
-   KEYBOARD SHORTCUTS
+   INITIALIZE
 ========================================================= */
 
-document.addEventListener(
-  "keydown",
-  function(e) {
+canvas.style.background=settings.bg;
 
-    const element = getSelected();
-
-    if (!element) return;
-
-    const amount =
-      e.shiftKey ? 10 : 2;
-
-    if (e.key === "ArrowLeft") {
-      element.x -= amount;
-      render();
-    }
-
-    if (e.key === "ArrowRight") {
-      element.x += amount;
-      render();
-    }
-
-    if (e.key === "ArrowUp") {
-      element.y -= amount;
-      render();
-    }
-
-    if (e.key === "ArrowDown") {
-      element.y += amount;
-      render();
-    }
-
-    if (
-      e.key === "Delete" ||
-      e.key === "Backspace"
-    ) {
-
-      deleteSelected();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-function initialize() {
-
-  document.getElementById("stripWidth").value =
-    state.strip.width;
-
-  document.getElementById("stripHeight").value =
-    state.strip.height;
-
-  document.getElementById("photoSpacing").value =
-    state.spacing;
-
-  addDefaultText();
-
-  render();
-
-  startCamera();
-
-}
-
-initialize();
+document.getElementById("stripSize").value="portrait";
 
 </script>
 
