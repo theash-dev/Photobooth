@@ -3,408 +3,649 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Whimsy Photobooth 🎀</title>
+<title>Whimsy Booth 🎀</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
 
-:root{
-    --pink:#e6a5bb;
-    --pink-dark:#c77d99;
-    --cream:#fff9f7;
-    --text:#59434c;
-    --muted:#9d8089;
-    --line:#ead8de;
+:root {
+  --pink: #e8a7bb;
+  --dark-pink: #c97d98;
+  --cream: #fffaf7;
+  --soft: #f9eef2;
+  --text: #55434b;
+  --muted: #9b858d;
+  --border: #ead9de;
+  --white: #ffffff;
 }
 
-*{
-    box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-    margin:0;
-    background:
-        radial-gradient(circle at 10% 10%,#ffe5ee,transparent 25%),
-        radial-gradient(circle at 90% 90%,#f5dce5,transparent 25%),
-        #fff9f7;
-    color:var(--text);
-    font-family:"DM Sans",sans-serif;
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 10% 10%, #fff 0, transparent 25%),
+    radial-gradient(circle at 90% 90%, #fcecf2 0, transparent 30%),
+    #fff8fa;
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+  min-height: 100vh;
 }
 
-button,input,select{
-    font:inherit;
+button,
+input,
+select {
+  font: inherit;
 }
 
-button{
-    cursor:pointer;
+button {
+  cursor: pointer;
 }
 
-.app{
-    width:min(1450px,95%);
-    margin:auto;
-    padding:25px 0 50px;
+.app {
+  max-width: 1500px;
+  margin: auto;
+  padding: 18px;
 }
 
-header{
-    text-align:center;
-    margin-bottom:25px;
+/* HEADER */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 10px 8px;
 }
 
-.logo{
-    font-family:"Playfair Display",serif;
-    font-size:clamp(2rem,5vw,3.4rem);
-    margin:0;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.subtitle{
-    color:var(--muted);
-    margin:5px 0 0;
+.logo-bow {
+  font-size: 34px;
 }
 
-.main{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) 430px;
-    gap:25px;
+.logo h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 25px;
+  margin: 0;
+  color: #694f59;
 }
 
-@media(max-width:1000px){
-    .main{
-        grid-template-columns:1fr;
-    }
+.logo small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn,
+.small-btn {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 9px 12px;
+}
+
+.icon-btn:hover,
+.small-btn:hover {
+  background: var(--soft);
+}
+
+/* MAIN GRID */
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(340px, 1fr) 390px;
+  gap: 18px;
 }
 
 /* CAMERA */
 
-.card{
-    background:rgba(255,255,255,.84);
-    border:1px solid var(--line);
-    border-radius:28px;
-    box-shadow:0 18px 50px rgba(90,50,65,.12);
-    backdrop-filter:blur(15px);
+.camera-card {
+  background: rgba(255,255,255,.86);
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  padding: 15px;
+  box-shadow: 0 15px 45px rgba(133, 88, 104, .08);
 }
 
-.camera-card{
-    padding:18px;
+.camera-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 5px 12px;
 }
 
-.camera{
-    position:relative;
-    background:#241c1e;
-    border-radius:22px;
-    overflow:hidden;
-    aspect-ratio:4/3;
+.camera-title strong {
+  font-size: 14px;
 }
 
-#video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transform:scaleX(-1);
+.status {
+  color: var(--muted);
+  font-size: 11px;
 }
 
-#flash{
-    position:absolute;
-    inset:0;
-    background:white;
-    opacity:0;
-    pointer-events:none;
+.camera-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #282126;
+  border-radius: 20px;
+  aspect-ratio: 4/3;
 }
 
-.countdown{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:100px;
-    font-family:"Playfair Display",serif;
-    text-shadow:0 4px 20px #0008;
-    opacity:0;
+#video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.status{
-    position:absolute;
-    top:15px;
-    left:15px;
-    padding:7px 12px;
-    border-radius:999px;
-    background:#ffffffdd;
-    font-size:12px;
+.camera-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg,#3d3035,#181417);
 }
 
-.controls{
-    display:flex;
-    flex-wrap:wrap;
-    gap:9px;
-    margin-top:14px;
+#countdown {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 110px;
+  font-weight: 700;
+  text-shadow: 0 5px 30px #000;
+  z-index: 5;
 }
 
-.btn{
-    border:1px solid var(--line);
-    background:white;
-    color:var(--text);
-    padding:11px 15px;
-    border-radius:999px;
+.flash {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
 }
 
-.btn:hover{
-    transform:translateY(-1px);
+.flash.active {
+  animation: flash .35s ease;
 }
 
-.btn.primary{
-    background:var(--pink);
-    border-color:var(--pink);
-    color:white;
+@keyframes flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
-.btn.dark{
-    background:#59434c;
-    color:white;
+.camera-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-.photo-count{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    margin-top:12px;
+.primary {
+  flex: 1;
+  min-width: 130px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--pink);
+  color: white;
+  padding: 12px 15px;
+  font-weight: 700;
 }
 
-.photo-count button{
-    border:0;
-    padding:13px;
-    border-radius:14px;
-    background:#f5dce3;
-    color:#694a55;
+.primary:hover {
+  background: var(--dark-pink);
+}
+
+.secondary {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  padding: 11px 14px;
+  color: var(--text);
 }
 
 /* EDITOR */
 
-.editor{
-    padding:18px;
-    max-height:900px;
-    overflow-y:auto;
+.editor-card {
+  background: rgba(255,255,255,.9);
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  padding: 15px;
+  box-shadow: 0 15px 45px rgba(133, 88, 104, .08);
+  min-width: 0;
 }
 
-.editor::-webkit-scrollbar{
-    width:6px;
+.editor-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
-.editor::-webkit-scrollbar-thumb{
-    background:#e7c4ce;
-    border-radius:20px;
+.editor-head strong {
+  font-size: 14px;
 }
 
-.tabs{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:6px;
-    margin-bottom:20px;
+.zoom-area {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
 }
 
-.tab{
-    padding:10px 5px;
-    border:1px solid var(--line);
-    background:white;
-    border-radius:12px;
-    font-size:11px;
-    color:var(--muted);
+.zoom-area input {
+  width: 85px;
 }
 
-.tab.active{
-    background:#f5d9e1;
-    color:#704c58;
-    border-color:#e0afbf;
-    font-weight:bold;
+.editor-stage {
+  min-height: 620px;
+  max-height: 760px;
+  overflow: auto;
+  border-radius: 18px;
+  padding: 35px;
+  background:
+    linear-gradient(45deg,#f5e9ed 25%,transparent 25%),
+    linear-gradient(-45deg,#f5e9ed 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#f5e9ed 75%),
+    linear-gradient(-45deg,transparent 75%,#f5e9ed 75%);
+  background-size: 24px 24px;
+  background-position: 0 0,0 12px,12px -12px,-12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.panel{
-    display:none;
+#filmstrip {
+  position: relative;
+  flex: none;
+  background: white;
+  box-shadow: 0 12px 40px rgba(60,40,45,.2);
+  transform-origin: center;
+  user-select: none;
+  overflow: visible;
 }
 
-.panel.active{
-    display:block;
+/* ELEMENTS */
+
+.editor-element {
+  position: absolute;
+  user-select: none;
+  touch-action: none;
 }
 
-h2{
-    font-family:"Playfair Display",serif;
-    margin:0 0 5px;
+.editor-element.selected {
+  outline: 2px dashed var(--pink);
+  outline-offset: 3px;
+  z-index: 1000 !important;
 }
 
-.help{
-    color:var(--muted);
-    font-size:11px;
-    margin:0 0 18px;
+.photo-element {
+  overflow: hidden;
+  background: #eee;
+  border: 3px solid white;
+  box-shadow: 0 3px 12px rgba(0,0,0,.12);
 }
 
-/* PRESETS */
-
-.presets{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:8px;
-    margin-bottom:20px;
+.photo-element img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
 }
 
-.preset{
-    border:1px solid var(--line);
-    background:white;
-    border-radius:14px;
-    padding:12px;
-    text-align:left;
+.text-element {
+  min-width: 50px;
+  min-height: 20px;
+  padding: 3px;
+  color: #654e57;
+  white-space: nowrap;
 }
 
-.preset.selected{
-    border-color:var(--pink-dark);
-    background:#fff0f4;
+.text-content {
+  pointer-events: none;
 }
 
-.preset strong{
-    display:block;
-    font-size:13px;
+.sticker-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
 }
 
-.preset span{
-    font-size:10px;
-    color:var(--muted);
+.handle {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: white;
+  border: 2px solid var(--pink);
+  border-radius: 50%;
+  display: none;
 }
 
-/* FIELD */
-
-.field{
-    margin-bottom:16px;
+.selected .handle {
+  display: block;
 }
 
-.field label{
-    display:block;
-    font-size:12px;
-    font-weight:700;
-    margin-bottom:6px;
+.handle.br {
+  right: -7px;
+  bottom: -7px;
+  cursor: nwse-resize;
 }
 
-.field input[type=text],
-.field select{
-    width:100%;
-    border:1px solid var(--line);
-    background:white;
-    padding:11px;
-    border-radius:12px;
-    color:var(--text);
-    outline:none;
+.handle.tr {
+  right: -7px;
+  top: -7px;
+  cursor: nesw-resize;
 }
 
-.row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+.rotate-handle {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--pink);
+  display: none;
+  cursor: grab;
+  font-size: 11px;
+  align-items: center;
+  justify-content: center;
 }
 
-.color-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #f0e4e7;
-    padding:10px 0;
-    font-size:13px;
+.selected .rotate-handle {
+  display: flex;
 }
 
-input[type=color]{
-    width:45px;
-    height:35px;
-    border:0;
-    background:none;
+/* SIDEBAR */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 105px);
+  overflow-y: auto;
+  padding-right: 2px;
 }
 
-/* SLIDERS */
-
-.slider{
-    margin-bottom:18px;
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
 }
 
-.slider-head{
-    display:flex;
-    justify-content:space-between;
-    font-size:12px;
-    margin-bottom:6px;
+.panel-title {
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff9fb;
+  border-bottom: 1px solid #f0e2e6;
 }
 
-input[type=range]{
-    width:100%;
-    accent-color:var(--pink-dark);
+.panel-body {
+  padding: 12px;
 }
 
-/* STICKERS */
-
-.stickers{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
+.row {
+  display: flex;
+  gap: 8px;
 }
 
-.sticker{
-    min-height:65px;
-    border:1px solid var(--line);
-    border-radius:14px;
-    background:white;
-    font-size:25px;
+.row > * {
+  flex: 1;
 }
 
-.sticker.selected{
-    background:#fff0f4;
-    border-color:var(--pink-dark);
+.field {
+  margin-bottom: 10px;
 }
 
-/* RESULT */
-
-.result{
-    margin-top:22px;
-    display:none;
+.field:last-child {
+  margin-bottom: 0;
 }
 
-.result.show{
-    display:block;
+.field label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 5px;
 }
 
-.result h2{
-    margin-bottom:12px;
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 9px;
+  padding: 8px 9px;
+  color: var(--text);
+  outline: none;
 }
 
-#resultCanvas{
-    width:100%;
-    max-height:700px;
-    object-fit:contain;
-    border-radius:18px;
-    background:white;
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--pink);
 }
 
-.result-actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:12px;
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--pink);
 }
 
-#canvas{
-    display:none;
+input[type="color"] {
+  width: 100%;
+  height: 37px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  padding: 3px;
 }
 
-.toast{
-    position:fixed;
-    bottom:25px;
-    left:50%;
-    transform:translate(-50%,100px);
-    background:#59434c;
-    color:white;
-    padding:12px 18px;
-    border-radius:999px;
-    font-size:13px;
-    transition:.3s;
-    z-index:100;
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 6px;
 }
 
-.toast.show{
-    transform:translate(-50%,0);
+.choice {
+  padding: 8px 6px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  color: var(--text);
+  font-size: 11px;
+}
+
+.choice.active {
+  background: var(--soft);
+  border-color: var(--pink);
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 6px;
+}
+
+.preset {
+  padding: 9px 4px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  font-size: 10px;
+  color: var(--text);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 7px;
+}
+
+.action {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 10px;
+  padding: 9px;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.action:hover {
+  background: var(--soft);
+}
+
+.download {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  background: #725865;
+  color: white;
+  padding: 13px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.download:hover {
+  background: #5d4652;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  font-size: 11px;
+  padding: 8px;
+}
+
+/* CAPTURE SETTINGS */
+
+.capture-count {
+  display: flex;
+  gap: 7px;
+}
+
+.capture-count button {
+  flex: 1;
+}
+
+/* FILTERS */
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 5px;
+}
+
+.filter-btn {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  padding: 7px 3px;
+  font-size: 9px;
+  color: var(--text);
+}
+
+.filter-btn.active {
+  border-color: var(--pink);
+  background: var(--soft);
+}
+
+/* HELP */
+
+.tip {
+  background: #fff5f8;
+  border: 1px solid #f2dce3;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  color: #896f79;
+  line-height: 1.5;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #b49da6;
+  font-size: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1050px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .editor-stage {
+    min-height: 550px;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 9px;
+  }
+
+  header {
+    padding: 5px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .main {
+    gap: 10px;
+  }
+
+  .camera-card,
+  .editor-card {
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .editor-stage {
+    padding: 25px;
+    min-height: 500px;
+  }
+
+  .filter-grid {
+    grid-template-columns: repeat(4,1fr);
+  }
 }
 </style>
 </head>
@@ -414,2227 +655,2731 @@ input[type=range]{
 <div class="app">
 
 <header>
-    <h1 class="logo">🎀 Whimsy Photobooth 🎀</h1>
-    <p class="subtitle">make your own little memory ♡</p>
+  <div class="logo">
+    <div class="logo-bow">🎀</div>
+    <div>
+      <h1>Whimsy Booth</h1>
+      <small>cute memories, made your way ♡</small>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="icon-btn" onclick="resetLayout()">↺ Reset</button>
+  </div>
 </header>
 
 <div class="main">
 
 <!-- CAMERA -->
+<section class="camera-card">
 
-<section>
+  <div class="camera-title">
+    <strong>📷 Camera</strong>
+    <span class="status" id="cameraStatus">Starting camera...</span>
+  </div>
 
-<div class="card camera-card">
+  <div class="camera-wrap">
+    <video id="video" autoplay playsinline muted></video>
 
-    <div class="camera">
-
-        <video id="video" autoplay playsinline></video>
-
-        <div id="flash"></div>
-
-        <div class="countdown" id="countdown"></div>
-
-        <div class="status" id="status">
-            ● Camera ready
-        </div>
-
+    <div class="camera-placeholder" id="placeholder">
+      <div>
+        <div style="font-size:40px;">🎀</div>
+        <div>Allow camera access to start</div>
+      </div>
     </div>
 
-    <div class="controls">
+    <div id="countdown">3</div>
+    <div class="flash" id="flash"></div>
+  </div>
 
-        <button class="btn primary" onclick="takePhotos()">
-            📸 Take Photos
-        </button>
+  <div class="camera-controls">
+    <button class="primary" id="captureBtn">📸 Take Photos</button>
+    <button class="secondary" id="flipBtn">↔ Flip</button>
+  </div>
 
-        <button class="btn" onclick="flipCamera()">
-            🔄 Flip
-        </button>
+  <div style="margin-top:10px;">
+    <div class="field">
+      <label>
+        <span>Photos</span>
+        <span id="photoCountLabel">4</span>
+      </label>
 
-        <button class="btn" onclick="changeCountdown()">
-            ⏱️ <span id="countdownText">3s</span>
-        </button>
-
-        <button class="btn" onclick="surpriseMe()">
-            🎲 Surprise Me
-        </button>
-
+      <div class="capture-count">
+        <button class="choice" id="threeBtn" onclick="setPhotoCount(3)">3 photos</button>
+        <button class="choice active" id="fourBtn" onclick="setPhotoCount(4)">4 photos</button>
+      </div>
     </div>
 
-    <div class="photo-count">
+    <div class="field">
+      <label>
+        <span>Countdown</span>
+        <span id="countdownLabel">3 sec</span>
+      </label>
 
-        <button onclick="setPhotoCount(3)">
-            3 Photos
-        </button>
-
-        <button onclick="setPhotoCount(4)">
-            4 Photos
-        </button>
-
+      <input
+        type="range"
+        id="countdownRange"
+        min="1"
+        max="5"
+        value="3"
+        oninput="updateCountdown(this.value)"
+      >
     </div>
-
-    <p style="text-align:center;color:#9d8089;font-size:11px">
-        Current: <span id="photoCountText">4 photos</span>
-    </p>
-
-</div>
-
-
-<!-- RESULT -->
-
-<div class="result card" id="result">
-
-    <div style="padding:18px">
-
-        <h2>Your filmstrip ♡</h2>
-
-        <canvas id="resultCanvas"></canvas>
-
-        <div class="result-actions">
-
-            <button class="btn primary" onclick="downloadImage()">
-                💾 Download PNG
-            </button>
-
-            <button class="btn" onclick="clearResult()">
-                ✨ Take Again
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
+  </div>
 
 </section>
 
 
 <!-- EDITOR -->
+<section class="editor-card">
 
-<aside class="card editor">
+  <div class="editor-head">
+    <strong>🎨 Filmstrip Editor</strong>
 
-<div class="tabs">
+    <div class="zoom-area">
+      <span>Zoom</span>
+      <input
+        type="range"
+        id="zoom"
+        min="35"
+        max="130"
+        value="70"
+        oninput="updateZoom(this.value)"
+      >
+      <span id="zoomLabel">70%</span>
+    </div>
+  </div>
 
-    <button class="tab active" data-tab="filmstrip">
-        🎞️ FILMSTRIP
-    </button>
+  <div class="editor-stage" id="editorStage">
+    <div id="filmstrip"></div>
+  </div>
 
-    <button class="tab" data-tab="photos">
-        🖼️ PHOTOS
-    </button>
-
-    <button class="tab" data-tab="colors">
-        🎨 COLORS
-    </button>
-
-    <button class="tab" data-tab="text">
-        ✍️ TEXT
-    </button>
-
-    <button class="tab" data-tab="decor">
-        🎀 DECOR
-    </button>
-
-    <button class="tab" data-tab="filters">
-        ✨ FILTERS
-    </button>
-
-</div>
+</section>
 
 
-<!-- FILMSTRIP -->
+<!-- SIDEBAR -->
+<aside class="sidebar">
 
-<div class="panel active" id="filmstrip">
+  <!-- SIZE -->
+  <section class="panel">
+    <div class="panel-title">📐 Filmstrip Size</div>
 
-<h2>Customize your strip 🎞️</h2>
+    <div class="panel-body">
 
-<p class="help">
-    Start with a size, then customize everything below.
-</p>
+      <div class="choice-grid">
+        <button class="choice active" onclick="setSize('2x6')">2 × 6</button>
+        <button class="choice" onclick="setSize('4x6')">4 × 6</button>
+        <button class="choice" onclick="setSize('landscape')">4 × 6 Landscape</button>
+        <button class="choice" onclick="setSize('square')">Square</button>
+      </div>
 
-<div class="presets">
+      <div class="row" style="margin-top:9px;">
+        <div class="field">
+          <label>Width</label>
+          <input type="number" id="stripWidth" value="400" min="150" max="1600" onchange="updateStripSize()">
+        </div>
 
-    <button class="preset selected" data-preset="classic">
-        <strong>2 × 6</strong>
-        <span>classic photobooth</span>
-    </button>
+        <div class="field">
+          <label>Height</label>
+          <input type="number" id="stripHeight" value="1200" min="150" max="2000" onchange="updateStripSize()">
+        </div>
+      </div>
 
-    <button class="preset" data-preset="polaroid">
-        <strong>4 × 6</strong>
-        <span>polaroid style</span>
-    </button>
+    </div>
+  </section>
 
-    <button class="preset" data-preset="square">
-        <strong>Square</strong>
-        <span>cute social style</span>
-    </button>
 
-    <button class="preset" data-preset="wide">
-        <strong>4 × 6 Wide</strong>
-        <span>horizontal strip</span>
-    </button>
+  <!-- PRESETS -->
+  <section class="panel">
+    <div class="panel-title">✨ Layout Presets</div>
 
-</div>
+    <div class="panel-body">
+      <div class="preset-grid">
+        <button class="preset" onclick="applyPreset('classic')">Classic</button>
+        <button class="preset" onclick="applyPreset('coquette')">Coquette</button>
+        <button class="preset" onclick="applyPreset('minimal')">Minimal</button>
+        <button class="preset" onclick="applyPreset('polaroid')">Polaroid</button>
+        <button class="preset" onclick="applyPreset('dreamy')">Dreamy</button>
+        <button class="preset" onclick="applyPreset('heart')">Sweet ♡</button>
+      </div>
+    </div>
+  </section>
 
-<div class="slider">
 
-    <div class="slider-head">
-        <span>Strip Width</span>
-        <span id="stripWidthValue">600px</span>
+  <!-- APPEARANCE -->
+  <section class="panel">
+    <div class="panel-title">🎀 Appearance</div>
+
+    <div class="panel-body">
+
+      <div class="row">
+        <div class="field">
+          <label>Background</label>
+          <input type="color" id="bgColor" value="#fff8fa" onchange="updateAppearance()">
+        </div>
+
+        <div class="field">
+          <label>Photo Border</label>
+          <input type="color" id="borderColor" value="#ffffff" onchange="updateAppearance()">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Border Width</label>
+          <input type="number" id="borderWidth" value="3" min="0" max="30" onchange="updateAppearance()">
+        </div>
+
+        <div class="field">
+          <label>Corner Radius</label>
+          <input type="number" id="radius" value="8" min="0" max="100" onchange="updateAppearance()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Photo Spacing</label>
+        <input
+          type="range"
+          id="photoSpacing"
+          min="0"
+          max="100"
+          value="20"
+          oninput="updateAppearance()"
+        >
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- PHOTOS -->
+  <section class="panel">
+    <div class="panel-title">📸 Photo Arrangement</div>
+
+    <div class="panel-body">
+
+      <div class="choice-grid">
+        <button class="choice active" onclick="arrangePhotos('vertical')">Vertical</button>
+        <button class="choice" onclick="arrangePhotos('horizontal')">Horizontal</button>
+        <button class="choice" onclick="arrangePhotos('grid')">2 × 2 Grid</button>
+      </div>
+
+      <div class="tip" style="margin-top:9px;">
+        💡 You can also drag each photo directly on the filmstrip and resize it using the corner handle.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- TEXT -->
+  <section class="panel">
+    <div class="panel-title">📝 Text</div>
+
+    <div class="panel-body">
+
+      <div class="field">
+        <label>Title</label>
+        <input
+          type="text"
+          id="titleText"
+          value="sweet memories ♡"
+          oninput="updateText('title', this.value)"
+        >
+      </div>
+
+      <div class="field">
+        <label>Caption</label>
+        <input
+          type="text"
+          id="captionText"
+          value="whimsy booth"
+          oninput="updateText('caption', this.value)"
+        >
+      </div>
+
+      <div class="row">
+        <button class="action" onclick="addText('New text')">＋ Add Text</button>
+        <button class="action" onclick="addDate()">＋ Add Date</button>
+      </div>
+
+      <div class="row" style="margin-top:7px;">
+        <div class="field">
+          <label>Text Color</label>
+          <input type="color" id="textColor" value="#654e57" onchange="updateTextStyle()">
+        </div>
+
+        <div class="field">
+          <label>Text Size</label>
+          <input type="number" id="textSize" value="28" min="8" max="100" onchange="updateTextStyle()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Font</label>
+
+        <select id="fontSelect" onchange="updateTextStyle()">
+          <option value="Playfair Display">Playfair Display</option>
+          <option value="DM Sans">DM Sans</option>
+          <option value="serif">Serif</option>
+          <option value="cursive">Cursive</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- STICKERS -->
+  <section class="panel">
+    <div class="panel-title">✨ Stickers & Decorations</div>
+
+    <div class="panel-body">
+
+      <div class="choice-grid">
+        <button class="action" onclick="addSticker('🎀')">🎀 Bow</button>
+        <button class="action" onclick="addSticker('♡')">♡ Heart</button>
+        <button class="action" onclick="addSticker('✧')">✧ Sparkle</button>
+        <button class="action" onclick="addSticker('✿')">✿ Flower</button>
+        <button class="action" onclick="addSticker('☆')">☆ Star</button>
+        <button class="action" onclick="addSticker('⋆')">⋆ Tiny Star</button>
+      </div>
+
+      <div class="field" style="margin-top:9px;">
+        <label>Sticker Size</label>
+        <input
+          type="range"
+          id="stickerSize"
+          min="15"
+          max="120"
+          value="45"
+          oninput="updateSelectedSticker()"
+        >
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FILTERS -->
+  <section class="panel">
+    <div class="panel-title">🎞️ Photo Filters</div>
+
+    <div class="panel-body">
+
+      <div class="filter-grid">
+
+        <button class="filter-btn active" onclick="setFilter('normal',this)">Original</button>
+        <button class="filter-btn" onclick="setFilter('soft',this)">Soft</button>
+        <button class="filter-btn" onclick="setFilter('coquette',this)">Coquette</button>
+        <button class="filter-btn" onclick="setFilter('film',this)">Film</button>
+        <button class="filter-btn" onclick="setFilter('vintage',this)">Vintage</button>
+        <button class="filter-btn" onclick="setFilter('dreamy',this)">Dreamy</button>
+        <button class="filter-btn" onclick="setFilter('bw',this)">B&W</button>
+        <button class="filter-btn" onclick="setFilter('warm',this)">Warm</button>
+
+      </div>
+
+      <div class="field" style="margin-top:10px;">
+        <label>Brightness</label>
+        <input type="range" id="brightness" min="70" max="140" value="100" oninput="updateImageFilters()">
+      </div>
+
+      <div class="field">
+        <label>Saturation</label>
+        <input type="range" id="saturation" min="0" max="180" value="100" oninput="updateImageFilters()">
+      </div>
+
+      <div class="field">
+        <label>Grain</label>
+        <input type="range" id="grain" min="0" max="35" value="0" oninput="updateImageFilters()">
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- SELECTED ELEMENT -->
+  <section class="panel">
+    <div class="panel-title">🖱️ Selected Element</div>
+
+    <div class="panel-body">
+
+      <div id="selectionEmpty" class="empty">
+        Select a photo, text, or sticker on the editor ♡
+      </div>
+
+      <div id="selectionControls" style="display:none;">
+
+        <div class="row">
+          <button class="action" onclick="bringForward()">↑ Forward</button>
+          <button class="action" onclick="sendBackward()">↓ Backward</button>
+        </div>
+
+        <div class="row" style="margin-top:7px;">
+          <button class="action" onclick="duplicateSelected()">＋ Duplicate</button>
+          <button class="action" onclick="deleteSelected()">🗑 Delete</button>
+        </div>
+
+        <div class="row" style="margin-top:9px;">
+
+          <div class="field">
+            <label>X</label>
+            <input type="number" id="selectedX" onchange="updateSelectedPosition()">
+          </div>
+
+          <div class="field">
+            <label>Y</label>
+            <input type="number" id="selectedY" onchange="updateSelectedPosition()">
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="field">
+            <label>Width</label>
+            <input type="number" id="selectedW" onchange="updateSelectedSize()">
+          </div>
+
+          <div class="field">
+            <label>Height</label>
+            <input type="number" id="selectedH" onchange="updateSelectedSize()">
+          </div>
+
+        </div>
+
+        <div class="field">
+          <label>
+            Rotation
+            <span id="rotationLabel">0°</span>
+          </label>
+
+          <input
+            type="range"
+            id="rotation"
+            min="-180"
+            max="180"
+            value="0"
+            oninput="updateSelectedRotation()"
+          >
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ACTIONS -->
+  <section class="panel">
+
+    <div class="panel-body">
+
+      <button class="download" onclick="downloadDesign()">
+        💾 Download My Filmstrip
+      </button>
+
+      <div class="action-grid">
+        <button class="action" onclick="clearPhotos()">Clear Photos</button>
+        <button class="action" onclick="resetLayout()">Reset Layout</button>
+      </div>
+
     </div>
 
-    <input
-        type="range"
-        id="stripWidth"
-        min="450"
-        max="1000"
-        value="600"
-    >
-
-</div>
-
-<div class="slider">
-
-    <div class="slider-head">
-        <span>Strip Height</span>
-        <span id="stripHeightValue">1400px</span>
-    </div>
-
-    <input
-        type="range"
-        id="stripHeight"
-        min="600"
-        max="1800"
-        value="1400"
-    >
-
-</div>
-
-<div class="slider">
-
-    <div class="slider-head">
-        <span>Outer Margin</span>
-        <span id="marginValue">35px</span>
-    </div>
-
-    <input
-        type="range"
-        id="margin"
-        min="5"
-        max="100"
-        value="35"
-    >
-
-</div>
-
-<div class="slider">
-
-    <div class="slider-head">
-        <span>Photo Spacing</span>
-        <span id="spacingValue">18px</span>
-    </div>
-
-    <input
-        type="range"
-        id="spacing"
-        min="0"
-        max="70"
-        value="18"
-    >
-
-</div>
-
-<div class="slider">
-
-    <div class="slider-head">
-        <span>Photo Corner Radius</span>
-        <span id="radiusValue">18px</span>
-    </div>
-
-    <input
-        type="range"
-        id="radius"
-        min="0"
-        max="60"
-        value="18"
-    >
-
-</div>
-
-</div>
-
-
-<!-- PHOTOS -->
-
-<div class="panel" id="photos">
-
-<h2>Photo arrangement 🖼️</h2>
-
-<p class="help">
-    Control how your photos sit inside the strip.
-</p>
-
-<div class="field">
-
-<label>Photo arrangement</label>
-
-<select id="photoArrangement">
-
-    <option value="vertical">Vertical</option>
-    <option value="grid">2 × 2 Grid</option>
-    <option value="horizontal">Horizontal</option>
-
-</select>
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Photo Width</span>
-<span id="photoWidthValue">90%</span>
-</div>
-
-<input
-type="range"
-id="photoWidth"
-min="50"
-max="100"
-value="90"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Photo Height</span>
-<span id="photoHeightValue">22%</span>
-</div>
-
-<input
-type="range"
-id="photoHeight"
-min="10"
-max="35"
-value="22"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Photo Rotation</span>
-<span id="rotationValue">0°</span>
-</div>
-
-<input
-type="range"
-id="rotation"
-min="-8"
-max="8"
-value="0"
->
-
-</div>
-
-</div>
-
-
-<!-- COLORS -->
-
-<div class="panel" id="colors">
-
-<h2>Make it yours 🎨</h2>
-
-<p class="help">
-    Choose your own filmstrip colors.
-</p>
-
-<div class="color-row">
-<span>Background</span>
-<input type="color" id="backgroundColor" value="#fff8f6">
-</div>
-
-<div class="color-row">
-<span>Photo Frame</span>
-<input type="color" id="frameColor" value="#ffffff">
-</div>
-
-<div class="color-row">
-<span>Text</span>
-<input type="color" id="textColor" value="#59434c">
-</div>
-
-<div class="color-row">
-<span>Accent</span>
-<input type="color" id="accentColor" value="#e6a5bb">
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Frame Thickness</span>
-<span id="frameValue">15px</span>
-</div>
-
-<input
-type="range"
-id="frameThickness"
-min="0"
-max="50"
-value="15"
->
-
-</div>
-
-</div>
-
-
-<!-- TEXT -->
-
-<div class="panel" id="text">
-
-<h2>Add your words ✍️</h2>
-
-<p class="help">
-    Personalize the top and bottom of your strip.
-</p>
-
-<div class="field">
-
-<label>Title</label>
-
-<input
-type="text"
-id="title"
-value="whimsy memories"
-maxlength="30"
->
-
-</div>
-
-<div class="field">
-
-<label>Caption</label>
-
-<input
-type="text"
-id="caption"
-value="♡ made with love ♡"
-maxlength="40"
->
-
-</div>
-
-<div class="field">
-
-<label>Font</label>
-
-<select id="font">
-
-<option value="playfair">
-Elegant — Playfair Display
-</option>
-
-<option value="sans">
-Minimal — DM Sans
-</option>
-
-</select>
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Title Size</span>
-<span id="titleSizeValue">35px</span>
-</div>
-
-<input
-type="range"
-id="titleSize"
-min="18"
-max="65"
-value="35"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Text Position</span>
-<span id="textPositionValue">center</span>
-</div>
-
-<input
-type="range"
-id="textPosition"
-min="0"
-max="100"
-value="50"
->
-
-</div>
-
-<label style="font-size:13px">
-
-<input
-type="checkbox"
-id="showDate"
-checked
->
-
- Show date
-
-</label>
-
-</div>
-
-
-<!-- DECOR -->
-
-<div class="panel" id="decor">
-
-<h2>Decorate it 🎀</h2>
-
-<p class="help">
-    Choose your favorite little decoration.
-</p>
-
-<div class="stickers">
-
-<button class="sticker selected" data-decor="none">
-✕
-</button>
-
-<button class="sticker" data-decor="🎀">
-🎀
-</button>
-
-<button class="sticker" data-decor="♡">
-♡
-</button>
-
-<button class="sticker" data-decor="💕">
-💕
-</button>
-
-<button class="sticker" data-decor="☆">
-☆
-</button>
-
-<button class="sticker" data-decor="✨">
-✨
-</button>
-
-<button class="sticker" data-decor="🌷">
-🌷
-</button>
-
-<button class="sticker" data-decor="🎗️">
-🎗️
-</button>
-
-</div>
-
-<div class="slider" style="margin-top:20px">
-
-<div class="slider-head">
-<span>Decoration Size</span>
-<span id="decorSizeValue">40px</span>
-</div>
-
-<input
-type="range"
-id="decorSize"
-min="20"
-max="80"
-value="40"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Decoration Position</span>
-<span id="decorPositionValue">50%</span>
-</div>
-
-<input
-type="range"
-id="decorPosition"
-min="0"
-max="100"
-value="50"
->
-
-</div>
-
-</div>
-
-
-<!-- FILTERS -->
-
-<div class="panel" id="filters">
-
-<h2>Choose your film ✨</h2>
-
-<p class="help">
-    Your chosen filter is applied to every captured photo.
-</p>
-
-<div class="presets">
-
-<button class="preset selected" data-filter="none">
-<strong>Original</strong>
-<span>natural</span>
-</button>
-
-<button class="preset" data-filter="coquette">
-<strong>Coquette</strong>
-<span>pink & romantic</span>
-</button>
-
-<button class="preset" data-filter="soft">
-<strong>Soft Pink</strong>
-<span>delicate</span>
-</button>
-
-<button class="preset" data-filter="dreamy">
-<strong>Dreamy</strong>
-<span>soft glow</span>
-</button>
-
-<button class="preset" data-filter="film">
-<strong>Film</strong>
-<span>analog</span>
-</button>
-
-<button class="preset" data-filter="vintage">
-<strong>Vintage</strong>
-<span>nostalgic</span>
-</button>
-
-<button class="preset" data-filter="warm">
-<strong>Warm</strong>
-<span>golden</span>
-</button>
-
-<button class="preset" data-filter="bw">
-<strong>B&W</strong>
-<span>classic</span>
-</button>
-
-<button class="preset" data-filter="flash">
-<strong>Flash</strong>
-<span>party camera</span>
-</button>
-
-<button class="preset" data-filter="faded">
-<strong>Faded</strong>
-<span>old film</span>
-</button>
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Brightness</span>
-<span id="brightnessValue">100%</span>
-</div>
-
-<input
-type="range"
-id="brightness"
-min="70"
-max="130"
-value="100"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Saturation</span>
-<span id="saturationValue">100%</span>
-</div>
-
-<input
-type="range"
-id="saturation"
-min="0"
-max="160"
-value="100"
->
-
-</div>
-
-<div class="slider">
-
-<div class="slider-head">
-<span>Film Grain</span>
-<span id="grainValue">10%</span>
-</div>
-
-<input
-type="range"
-id="grain"
-min="0"
-max="30"
-value="10"
->
-
-</div>
-
-</div>
+  </section>
 
 </aside>
 
 </div>
+
+<footer>
+  made with love ♡ Whimsy Booth 🎀
+</footer>
+
 </div>
 
-<div class="toast" id="toast"></div>
 
-<canvas id="canvas"></canvas>
+<!-- HIDDEN CANVAS -->
+<canvas id="captureCanvas" style="display:none;"></canvas>
 
 
 <script>
 
-/* ==============================
+/* =========================================================
    STATE
-============================== */
+========================================================= */
 
-const state={
+const state = {
 
-    width:600,
+  strip: {
+    width: 400,
+    height: 1200
+  },
 
-    height:1400,
+  photos: [],
 
-    margin:35,
+  photoCount: 4,
 
-    spacing:18,
+  countdown: 3,
 
-    radius:18,
+  filter: "normal",
 
-    frame:15,
+  brightness: 100,
 
-    background:"#fff8f6",
+  saturation: 100,
 
-    frameColor:"#ffffff",
+  grain: 0,
 
-    textColor:"#59434c",
+  elements: [],
 
-    accent:"#e6a5bb",
+  selectedId: null,
 
-    arrangement:"vertical",
+  nextId: 1,
 
-    photoWidth:90,
+  zoom: 0.70,
 
-    photoHeight:22,
+  cameraFlipped: false,
 
-    rotation:0,
+  colors: {
+    background: "#fff8fa",
+    border: "#ffffff",
+    text: "#654e57"
+  },
 
-    title:"whimsy memories",
+  borderWidth: 3,
 
-    caption:"♡ made with love ♡",
+  radius: 8,
 
-    font:"playfair",
-
-    titleSize:35,
-
-    textPosition:50,
-
-    showDate:true,
-
-    decor:"none",
-
-    decorSize:40,
-
-    decorPosition:50,
-
-    filter:"none",
-
-    brightness:100,
-
-    saturation:100,
-
-    grain:10,
-
-    countdown:3,
-
-    photoCount:4,
-
-    facingMode:"user"
+  spacing: 20
 
 };
 
-let stream=null;
 
-let photos=[];
+/* =========================================================
+   DOM
+========================================================= */
 
+const video = document.getElementById("video");
+const filmstrip = document.getElementById("filmstrip");
+const captureCanvas = document.getElementById("captureCanvas");
+const ctx = captureCanvas.getContext("2d");
 
-/* ==============================
-   ELEMENTS
-============================== */
-
-const video=document.getElementById("video");
-
-const canvas=document.getElementById("canvas");
-
-const resultCanvas=document.getElementById("resultCanvas");
-
-const flash=document.getElementById("flash");
-
-const countdownEl=document.getElementById("countdown");
-
-const toast=document.getElementById("toast");
+let stream = null;
 
 
-/* ==============================
+/* =========================================================
    CAMERA
-============================== */
+========================================================= */
 
-async function startCamera(){
+async function startCamera() {
 
-    try{
+  try {
 
-        if(stream){
-
-            stream.getTracks().forEach(
-                track=>track.stop()
-            );
-
-        }
-
-        stream=
-            await navigator.mediaDevices.getUserMedia({
-
-                video:{
-                    facingMode:state.facingMode,
-                    width:{ideal:1920},
-                    height:{ideal:1080}
-                },
-
-                audio:false
-
-            });
-
-        video.srcObject=stream;
-
-        document.getElementById("status")
-            .textContent="● Camera ready";
-
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
     }
 
-    catch(error){
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: state.cameraFlipped ? "environment" : "user",
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    });
 
-        document.getElementById("status")
-            .textContent="♡ Allow camera access";
+    video.srcObject = stream;
 
-    }
+    document.getElementById("placeholder").style.display = "none";
 
-}
+    document.getElementById("cameraStatus").textContent =
+      "Camera ready ♡";
 
+    video.style.transform =
+      state.cameraFlipped ? "scaleX(1)" : "scaleX(-1)";
 
-async function flipCamera(){
+  } catch (error) {
 
-    state.facingMode=
-        state.facingMode==="user"
-        ?"environment"
-        :"user";
+    document.getElementById("cameraStatus").textContent =
+      "Camera unavailable";
 
-    startCamera();
+    document.getElementById("placeholder").style.display = "flex";
 
-}
+    console.error(error);
 
-
-/* ==============================
-   TABS
-============================== */
-
-document.querySelectorAll(".tab")
-.forEach(tab=>{
-
-    tab.onclick=()=>{
-
-        document
-        .querySelectorAll(".tab")
-        .forEach(t=>t.classList.remove("active"));
-
-        document
-        .querySelectorAll(".panel")
-        .forEach(p=>p.classList.remove("active"));
-
-        tab.classList.add("active");
-
-        document
-        .getElementById(tab.dataset.tab)
-        .classList.add("active");
-
-    };
-
-});
-
-
-/* ==============================
-   FILMSTRIP PRESETS
-============================== */
-
-const presets={
-
-    classic:{
-        width:600,
-        height:1400,
-        margin:35,
-        spacing:18
-    },
-
-    polaroid:{
-        width:850,
-        height:1500,
-        margin:55,
-        spacing:28
-    },
-
-    square:{
-        width:1000,
-        height:1000,
-        margin:45,
-        spacing:20
-    },
-
-    wide:{
-        width:1500,
-        height:850,
-        margin:40,
-        spacing:25
-    }
-
-};
-
-
-document
-.querySelectorAll("[data-preset]")
-.forEach(button=>{
-
-    button.onclick=()=>{
-
-        document
-        .querySelectorAll("[data-preset]")
-        .forEach(b=>b.classList.remove("selected"));
-
-        button.classList.add("selected");
-
-        const p=presets[button.dataset.preset];
-
-        Object.assign(state,p);
-
-        updateAllControls();
-
-    };
-
-});
-
-
-/* ==============================
-   FILTERS
-============================== */
-
-document
-.querySelectorAll("[data-filter]")
-.forEach(button=>{
-
-    button.onclick=()=>{
-
-        document
-        .querySelectorAll("[data-filter]")
-        .forEach(b=>b.classList.remove("selected"));
-
-        button.classList.add("selected");
-
-        state.filter=button.dataset.filter;
-
-        applyVideoFilter();
-
-    };
-
-});
-
-
-function getFilterCSS(){
-
-    let base=
-        `brightness(${state.brightness}%)
-         saturate(${state.saturation}%)`;
-
-    const filters={
-
-        none:base,
-
-        coquette:
-            `${base} sepia(5%) hue-rotate(330deg) saturate(125%)`,
-
-        soft:
-            `${base} brightness(108%) saturate(85%)`,
-
-        dreamy:
-            `${base} brightness(108%) contrast(88%) saturate(90%)`,
-
-        film:
-            `${base} contrast(112%) saturate(90%) sepia(10%)`,
-
-        vintage:
-            `${base} sepia(30%) contrast(90%) saturate(80%)`,
-
-        warm:
-            `${base} sepia(18%) saturate(125%)`,
-
-        bw:
-            `${base} grayscale(100%) contrast(110%)`,
-
-        flash:
-            `${base} brightness(120%) contrast(110%)`,
-
-        faded:
-            `${base} brightness(110%) contrast(82%) saturate(75%)`
-
-    };
-
-    return filters[state.filter];
+  }
 
 }
 
 
-function applyVideoFilter(){
+document.getElementById("flipBtn").onclick = async function() {
 
-    video.style.filter=getFilterCSS();
+  state.cameraFlipped = !state.cameraFlipped;
 
-}
-
-
-/* ==============================
-   GENERIC INPUTS
-============================== */
-
-function range(id,property,valueId,suffix){
-
-    const el=document.getElementById(id);
-
-    el.oninput=()=>{
-
-        state[property]=Number(el.value);
-
-        document.getElementById(valueId)
-        .textContent=
-            el.value+suffix;
-
-        if(
-            property==="brightness" ||
-            property==="saturation"
-        ){
-
-            applyVideoFilter();
-
-        }
-
-    };
-
-}
-
-
-range(
-    "stripWidth",
-    "width",
-    "stripWidthValue",
-    "px"
-);
-
-range(
-    "stripHeight",
-    "height",
-    "stripHeightValue",
-    "px"
-);
-
-range(
-    "margin",
-    "margin",
-    "marginValue",
-    "px"
-);
-
-range(
-    "spacing",
-    "spacing",
-    "spacingValue",
-    "px"
-);
-
-range(
-    "radius",
-    "radius",
-    "radiusValue",
-    "px"
-);
-
-range(
-    "frameThickness",
-    "frame",
-    "frameValue",
-    "px"
-);
-
-range(
-    "photoWidth",
-    "photoWidth",
-    "photoWidthValue",
-    "%"
-);
-
-range(
-    "photoHeight",
-    "photoHeight",
-    "photoHeightValue",
-    "%"
-);
-
-range(
-    "rotation",
-    "rotation",
-    "rotationValue",
-    "°"
-);
-
-range(
-    "titleSize",
-    "titleSize",
-    "titleSizeValue",
-    "px"
-);
-
-range(
-    "textPosition",
-    "textPosition",
-    "textPositionValue",
-    "%"
-);
-
-range(
-    "decorSize",
-    "decorSize",
-    "decorSizeValue",
-    "px"
-);
-
-range(
-    "decorPosition",
-    "decorPosition",
-    "decorPositionValue",
-    "%"
-);
-
-range(
-    "brightness",
-    "brightness",
-    "brightnessValue",
-    "%"
-);
-
-range(
-    "saturation",
-    "saturation",
-    "saturationValue",
-    "%"
-);
-
-range(
-    "grain",
-    "grain",
-    "grainValue",
-    "%"
-);
-
-
-/* ==============================
-   SELECTS / TEXT
-============================== */
-
-document.getElementById("photoArrangement")
-.onchange=e=>{
-
-    state.arrangement=e.target.value;
+  await startCamera();
 
 };
 
 
-document.getElementById("font")
-.onchange=e=>{
-
-    state.font=e.target.value;
-
-};
-
-
-document.getElementById("title")
-.oninput=e=>{
-
-    state.title=e.target.value;
-
-};
-
-
-document.getElementById("caption")
-.oninput=e=>{
-
-    state.caption=e.target.value;
-
-};
-
-
-document.getElementById("showDate")
-.onchange=e=>{
-
-    state.showDate=e.target.checked;
-
-};
-
-
-/* ==============================
-   COLORS
-============================== */
-
-document.getElementById("backgroundColor")
-.oninput=e=>state.background=e.target.value;
-
-document.getElementById("frameColor")
-.oninput=e=>state.frameColor=e.target.value;
-
-document.getElementById("textColor")
-.oninput=e=>state.textColor=e.target.value;
-
-document.getElementById("accentColor")
-.oninput=e=>{
-
-    state.accent=e.target.value;
-
-    document.documentElement
-    .style.setProperty(
-        "--pink",
-        state.accent
-    );
-
-};
-
-
-/* ==============================
-   DECOR
-============================== */
-
-document
-.querySelectorAll("[data-decor]")
-.forEach(button=>{
-
-    button.onclick=()=>{
-
-        document
-        .querySelectorAll("[data-decor]")
-        .forEach(b=>b.classList.remove("selected"));
-
-        button.classList.add("selected");
-
-        state.decor=button.dataset.decor;
-
-    };
-
-});
-
-
-/* ==============================
+/* =========================================================
    PHOTO COUNT
-============================== */
+========================================================= */
 
-function setPhotoCount(number){
+function setPhotoCount(count) {
 
-    state.photoCount=number;
+  state.photoCount = count;
 
-    document.getElementById("photoCountText")
-    .textContent=number+" photos";
+  document.getElementById("photoCountLabel").textContent = count;
+
+  document.getElementById("threeBtn").classList.toggle(
+    "active",
+    count === 3
+  );
+
+  document.getElementById("fourBtn").classList.toggle(
+    "active",
+    count === 4
+  );
+
+  resetPhotos();
 
 }
 
 
-/* ==============================
+/* =========================================================
    COUNTDOWN
-============================== */
+========================================================= */
 
-function changeCountdown(){
+function updateCountdown(value) {
 
-    state.countdown=
-        state.countdown===3
-        ?5
-        :state.countdown===5
-        ?0
-        :3;
+  state.countdown = Number(value);
 
-    document.getElementById("countdownText")
-    .textContent=
-        state.countdown===0
-        ?"Off"
-        :state.countdown+"s";
+  document.getElementById("countdownLabel").textContent =
+    value + " sec";
 
 }
 
 
-function wait(ms){
-
-    return new Promise(
-        resolve=>setTimeout(resolve,ms)
-    );
-
-}
-
-
-async function countdown(){
-
-    if(state.countdown===0)return;
-
-    countdownEl.style.opacity=1;
-
-    for(
-        let i=state.countdown;
-        i>0;
-        i--
-    ){
-
-        countdownEl.textContent=i;
-
-        await wait(1000);
-
-    }
-
-    countdownEl.textContent="♡";
-
-    await wait(250);
-
-    countdownEl.style.opacity=0;
-
-}
-
-
-/* ==============================
+/* =========================================================
    CAPTURE
-============================== */
+========================================================= */
 
-function capturePhoto(){
+document.getElementById("captureBtn").onclick = async function() {
 
-    const w=video.videoWidth;
+  if (!stream) {
+    alert("Please allow camera access first ♡");
+    return;
+  }
 
-    const h=video.videoHeight;
+  resetPhotos();
 
-    canvas.width=w;
+  for (let i = 0; i < state.photoCount; i++) {
 
-    canvas.height=h;
+    await countdown();
 
-    const ctx=canvas.getContext("2d");
+    capturePhoto();
 
-    ctx.save();
+    await wait(450);
 
-    if(state.facingMode==="user"){
+  }
 
-        ctx.translate(w,0);
+  createPhotoElements();
 
-        ctx.scale(-1,1);
-
-    }
-
-    ctx.filter=getFilterCSS();
-
-    ctx.drawImage(
-        video,
-        0,
-        0,
-        w,
-        h
-    );
-
-    ctx.restore();
-
-    addGrain(ctx,w,h);
-
-    return canvas.toDataURL(
-        "image/jpeg",
-        .95
-    );
-
-}
+};
 
 
-function addGrain(ctx,w,h){
+function countdown() {
 
-    if(state.grain<=0)return;
+  return new Promise(resolve => {
 
-    const image=
-        ctx.getImageData(
-            0,
-            0,
-            w,
-            h
-        );
+    const box = document.getElementById("countdown");
 
-    const data=image.data;
+    let number = state.countdown;
 
-    const amount=state.grain/100;
+    box.style.display = "flex";
+    box.textContent = number;
 
-    for(
-        let i=0;
-        i<data.length;
-        i+=4
-    ){
+    const timer = setInterval(() => {
 
-        const noise=
-            (Math.random()-.5)
-            *255
-            *amount;
+      number--;
 
-        data[i]+=noise;
-        data[i+1]+=noise;
-        data[i+2]+=noise;
+      if (number <= 0) {
 
-    }
+        clearInterval(timer);
 
-    ctx.putImageData(image,0,0);
+        box.style.display = "none";
+
+        resolve();
+
+      } else {
+
+        box.textContent = number;
+
+      }
+
+    }, 1000);
+
+  });
 
 }
 
 
-/* ==============================
-   PHOTO SESSION
-============================== */
+function capturePhoto() {
 
-async function takePhotos(){
+  const width = video.videoWidth || 1280;
+  const height = video.videoHeight || 720;
 
-    if(!stream){
+  captureCanvas.width = width;
+  captureCanvas.height = height;
 
-        await startCamera();
+  ctx.save();
 
-    }
+  if (!state.cameraFlipped) {
 
-    photos=[];
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
 
-    document.getElementById("status")
-    .textContent="♡ Get ready...";
+  }
 
-    for(
-        let i=0;
-        i<state.photoCount;
-        i++
-    ){
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    width,
+    height
+  );
 
-        await countdown();
+  ctx.restore();
 
-        flash.style.opacity=1;
+  const data = captureCanvas.toDataURL("image/jpeg", .92);
 
-        setTimeout(
-            ()=>flash.style.opacity=0,
-            150
-        );
+  state.photos.push(data);
 
-        photos.push(
-            capturePhoto()
-        );
+  document.getElementById("flash").classList.remove("active");
 
-        document.getElementById("status")
-        .textContent=
-            `♡ ${i+1}/${state.photoCount}`;
+  void document.getElementById("flash").offsetWidth;
 
-        await wait(600);
-
-    }
-
-    document.getElementById("status")
-    .textContent="● Camera ready";
-
-    createStrip();
+  document.getElementById("flash").classList.add("active");
 
 }
 
 
-/* ==============================
-   IMAGE LOADER
-============================== */
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-function loadImage(src){
 
-    return new Promise(resolve=>{
+function resetPhotos() {
 
-        const img=new Image();
+  state.photos = [];
 
-        img.onload=()=>resolve(img);
+  state.elements = state.elements.filter(
+    e => e.type !== "photo"
+  );
 
-        img.src=src;
+  state.selectedId = null;
+
+  render();
+
+}
+
+
+/* =========================================================
+   CREATE PHOTOS
+========================================================= */
+
+function createPhotoElements() {
+
+  state.elements =
+    state.elements.filter(e => e.type !== "photo");
+
+  const count = state.photos.length;
+
+  if (!count) {
+    render();
+    return;
+  }
+
+  const gap = state.spacing;
+
+  const margin = 35;
+
+  if (state.strip.height > state.strip.width) {
+
+    const photoW =
+      state.strip.width - margin * 2;
+
+    const available =
+      state.strip.height -
+      margin * 2 -
+      gap * (count - 1) -
+      180;
+
+    const photoH =
+      Math.max(
+        100,
+        available / count
+      );
+
+    state.photos.forEach((photo, index) => {
+
+      state.elements.push({
+
+        id: state.nextId++,
+
+        type: "photo",
+
+        photoIndex: index,
+
+        x: margin,
+
+        y: margin + index * (photoH + gap),
+
+        width: photoW,
+
+        height: photoH,
+
+        rotation: 0,
+
+        z: 1
+
+      });
 
     });
 
-}
+  } else {
 
+    const photoW =
+      (state.strip.width -
+       margin * 2 -
+       gap * (count - 1)) / count;
 
-/* ==============================
-   FINAL STRIP
-============================== */
+    const photoH =
+      state.strip.height -
+      margin * 2 -
+      180;
 
-async function createStrip(){
+    state.photos.forEach((photo, index) => {
 
-    if(!photos.length)return;
+      state.elements.push({
 
-    const images=[];
+        id: state.nextId++,
 
-    for(const photo of photos){
+        type: "photo",
 
-        images.push(
-            await loadImage(photo)
-        );
+        photoIndex: index,
 
-    }
+        x: margin + index * (photoW + gap),
 
-    resultCanvas.width=state.width;
+        y: margin,
 
-    resultCanvas.height=state.height;
+        width: photoW,
 
-    const ctx=resultCanvas.getContext("2d");
+        height: photoH,
 
-    /* BACKGROUND */
+        rotation: 0,
 
-    ctx.fillStyle=state.background;
+        z: 1
 
-    ctx.fillRect(
-        0,
-        0,
-        state.width,
-        state.height
-    );
-
-    drawStrip(ctx,images);
-
-    document.getElementById("result")
-    .classList.add("show");
-
-    document
-    .getElementById("result")
-    .scrollIntoView({
-        behavior:"smooth",
-        block:"nearest"
-    });
-
-}
-
-
-/* ==============================
-   STRIP DRAWING
-============================== */
-
-function drawStrip(ctx,images){
-
-    const topSpace=
-        state.margin+
-        80;
-
-    const bottomSpace=
-        state.margin+
-        90;
-
-    drawTitle(
-        ctx,
-        topSpace
-    );
-
-    if(state.arrangement==="grid"){
-
-        drawGrid(
-            ctx,
-            images,
-            topSpace
-        );
-
-    }
-
-    else if(
-        state.arrangement==="horizontal"
-    ){
-
-        drawHorizontal(
-            ctx,
-            images,
-            topSpace
-        );
-
-    }
-
-    else{
-
-        drawVertical(
-            ctx,
-            images,
-            topSpace
-        );
-
-    }
-
-    drawFooter(
-        ctx,
-        state.height-bottomSpace
-    );
-
-}
-
-
-/* ==============================
-   VERTICAL
-============================== */
-
-function drawVertical(
-    ctx,
-    images,
-    startY
-){
-
-    const availableWidth=
-        state.width-
-        state.margin*2;
-
-    const photoW=
-        availableWidth*
-        (state.photoWidth/100);
-
-    const x=
-        (state.width-photoW)/2;
-
-    const availableHeight=
-        state.height-
-        startY-
-        150;
-
-    const eachH=
-        Math.min(
-            availableHeight/
-            images.length,
-            availableHeight*
-            (state.photoHeight/100)
-        );
-
-    let y=startY;
-
-    images.forEach(img=>{
-
-        drawStyledPhoto(
-            ctx,
-            img,
-            x,
-            y,
-            photoW,
-            eachH
-        );
-
-        y+=
-            eachH+
-            state.spacing;
+      });
 
     });
 
+  }
+
+  addDefaultText();
+
+  render();
+
 }
 
 
-/* ==============================
-   GRID
-============================== */
+/* =========================================================
+   DEFAULT TEXT
+========================================================= */
 
-function drawGrid(
-    ctx,
-    images,
-    startY
-){
+function addDefaultText() {
 
-    const gap=state.spacing;
-
-    const totalW=
-        state.width-
-        state.margin*2;
-
-    const size=
-        (totalW-gap)/2;
-
-    const positions=[
-
-        [state.margin,startY],
-
-        [state.margin+size+gap,startY],
-
-        [state.margin,startY+size+gap],
-
-        [
-            state.margin+size+gap,
-            startY+size+gap
-        ]
-
-    ];
-
-    images.forEach(
-        (img,i)=>{
-
-            if(!positions[i])return;
-
-            drawStyledPhoto(
-                ctx,
-                img,
-                positions[i][0],
-                positions[i][1],
-                size,
-                size
-            );
-
-        }
+  state.elements =
+    state.elements.filter(
+      e => e.type !== "text"
     );
 
+  state.elements.push({
+
+    id: state.nextId++,
+
+    type: "text",
+
+    role: "title",
+
+    text: document.getElementById("titleText").value,
+
+    x: state.strip.width / 2 - 100,
+
+    y: state.strip.height - 125,
+
+    width: 200,
+
+    height: 45,
+
+    rotation: 0,
+
+    z: 10,
+
+    fontSize: 28,
+
+    fontFamily: "Playfair Display",
+
+    color: state.colors.text
+
+  });
+
+  state.elements.push({
+
+    id: state.nextId++,
+
+    type: "text",
+
+    role: "caption",
+
+    text: document.getElementById("captionText").value,
+
+    x: state.strip.width / 2 - 70,
+
+    y: state.strip.height - 75,
+
+    width: 140,
+
+    height: 25,
+
+    rotation: 0,
+
+    z: 10,
+
+    fontSize: 14,
+
+    fontFamily: "DM Sans",
+
+    color: state.colors.text
+
+  });
+
 }
 
 
-/* ==============================
-   HORIZONTAL
-============================== */
+/* =========================================================
+   RENDER
+========================================================= */
 
-function drawHorizontal(
-    ctx,
-    images,
-    startY
-){
+function render() {
 
-    const gap=state.spacing;
+  filmstrip.innerHTML = "";
 
-    const totalW=
-        state.width-
-        state.margin*2;
+  filmstrip.style.width =
+    state.strip.width + "px";
 
-    const photoW=
-        (totalW-
-        gap*(images.length-1))
-        /images.length;
+  filmstrip.style.height =
+    state.strip.height + "px";
 
-    const photoH=
-        state.height*
-        .45;
+  filmstrip.style.background =
+    state.colors.background;
 
-    let x=state.margin;
+  filmstrip.style.transform =
+    `scale(${state.zoom})`;
 
-    images.forEach(img=>{
+  state.elements
+    .sort((a,b) => a.z - b.z)
+    .forEach(createElement);
 
-        drawStyledPhoto(
-            ctx,
-            img,
-            x,
-            startY,
-            photoW,
-            photoH
-        );
+}
 
-        x+=photoW+gap;
+
+function createElement(element) {
+
+  const div = document.createElement("div");
+
+  div.className =
+    "editor-element " +
+    (
+      element.type === "photo"
+      ? "photo-element"
+      : element.type === "text"
+      ? "text-element"
+      : "sticker-element"
+    );
+
+  div.dataset.id = element.id;
+
+  div.style.left = element.x + "px";
+  div.style.top = element.y + "px";
+  div.style.width = element.width + "px";
+  div.style.height = element.height + "px";
+  div.style.zIndex = element.z;
+
+  div.style.transform =
+    `rotate(${element.rotation}deg)`;
+
+  if (element.type === "photo") {
+
+    div.style.borderColor =
+      state.colors.border;
+
+    div.style.borderWidth =
+      state.borderWidth + "px";
+
+    div.style.borderRadius =
+      state.radius + "px";
+
+    const img = document.createElement("img");
+
+    img.src = state.photos[element.photoIndex] || "";
+
+    img.style.filter =
+      getFilterCSS();
+
+    div.appendChild(img);
+
+  }
+
+
+  if (element.type === "text") {
+
+    div.style.color = element.color;
+    div.style.fontSize = element.fontSize + "px";
+    div.style.fontFamily = `"${element.fontFamily}", serif`;
+
+    div.style.textAlign = "center";
+
+    const text = document.createElement("div");
+
+    text.className = "text-content";
+
+    text.textContent = element.text;
+
+    div.appendChild(text);
+
+  }
+
+
+  if (element.type === "sticker") {
+
+    div.textContent = element.text;
+
+    div.style.fontSize =
+      element.fontSize + "px";
+
+  }
+
+
+  if (state.selectedId === element.id) {
+
+    div.classList.add("selected");
+
+    addHandles(div);
+
+    updateSelectionPanel(element);
+
+  }
+
+
+  div.addEventListener("pointerdown", function(e) {
+
+    if (
+      e.target.classList.contains("handle") ||
+      e.target.classList.contains("rotate-handle")
+    ) {
+      return;
+    }
+
+    selectElement(element.id);
+
+    startDrag(e, element);
+
+  });
+
+  filmstrip.appendChild(div);
+
+}
+
+
+function addHandles(div) {
+
+  const resizeBR = document.createElement("div");
+
+  resizeBR.className = "handle br";
+
+  resizeBR.addEventListener(
+    "pointerdown",
+    startResize
+  );
+
+  div.appendChild(resizeBR);
+
+
+  const resizeTR = document.createElement("div");
+
+  resizeTR.className = "handle tr";
+
+  resizeTR.addEventListener(
+    "pointerdown",
+    startResizeTop
+  );
+
+  div.appendChild(resizeTR);
+
+
+  const rotate = document.createElement("div");
+
+  rotate.className = "rotate-handle";
+
+  rotate.textContent = "↻";
+
+  rotate.addEventListener(
+    "pointerdown",
+    startRotate
+  );
+
+  div.appendChild(rotate);
+
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+function selectElement(id) {
+
+  state.selectedId = id;
+
+  render();
+
+}
+
+
+filmstrip.addEventListener("pointerdown", function(e) {
+
+  if (e.target === filmstrip) {
+
+    state.selectedId = null;
+
+    render();
+
+  }
+
+});
+
+
+function getSelected() {
+
+  return state.elements.find(
+    e => e.id === state.selectedId
+  );
+
+}
+
+
+/* =========================================================
+   DRAG
+========================================================= */
+
+let dragData = null;
+
+
+function startDrag(e, element) {
+
+  e.preventDefault();
+
+  dragData = {
+
+    element,
+
+    startX: e.clientX,
+
+    startY: e.clientY,
+
+    originalX: element.x,
+
+    originalY: element.y
+
+  };
+
+  document.addEventListener(
+    "pointermove",
+    dragMove
+  );
+
+  document.addEventListener(
+    "pointerup",
+    stopDrag,
+    { once:true }
+  );
+
+}
+
+
+function dragMove(e) {
+
+  if (!dragData) return;
+
+  const dx =
+    (e.clientX - dragData.startX) /
+    state.zoom;
+
+  const dy =
+    (e.clientY - dragData.startY) /
+    state.zoom;
+
+  dragData.element.x =
+    dragData.originalX + dx;
+
+  dragData.element.y =
+    dragData.originalY + dy;
+
+  render();
+
+}
+
+
+function stopDrag() {
+
+  document.removeEventListener(
+    "pointermove",
+    dragMove
+  );
+
+  dragData = null;
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+let resizeData = null;
+
+
+function startResize(e) {
+
+  e.stopPropagation();
+  e.preventDefault();
+
+  const element =
+    getSelected();
+
+  if (!element) return;
+
+  resizeData = {
+
+    element,
+
+    startX: e.clientX,
+
+    startY: e.clientY,
+
+    width: element.width,
+
+    height: element.height
+
+  };
+
+  document.addEventListener(
+    "pointermove",
+    resizeMove
+  );
+
+  document.addEventListener(
+    "pointerup",
+    stopResize,
+    {once:true}
+  );
+
+}
+
+
+function resizeMove(e) {
+
+  if (!resizeData) return;
+
+  const dx =
+    (e.clientX - resizeData.startX) /
+    state.zoom;
+
+  const dy =
+    (e.clientY - resizeData.startY) /
+    state.zoom;
+
+  resizeData.element.width =
+    Math.max(
+      30,
+      resizeData.width + dx
+    );
+
+  resizeData.element.height =
+    Math.max(
+      20,
+      resizeData.height + dy
+    );
+
+  render();
+
+}
+
+
+function startResizeTop(e) {
+
+  e.stopPropagation();
+  e.preventDefault();
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  resizeData = {
+
+    element,
+
+    startX: e.clientX,
+
+    startY: e.clientY,
+
+    width: element.width,
+
+    height: element.height,
+
+    originalX: element.x,
+
+    originalY: element.y
+
+  };
+
+  document.addEventListener(
+    "pointermove",
+    resizeTopMove
+  );
+
+  document.addEventListener(
+    "pointerup",
+    stopResize,
+    {once:true}
+  );
+
+}
+
+
+function resizeTopMove(e) {
+
+  if (!resizeData) return;
+
+  const dx =
+    (e.clientX - resizeData.startX) /
+    state.zoom;
+
+  const dy =
+    (e.clientY - resizeData.startY) /
+    state.zoom;
+
+  resizeData.element.width =
+    Math.max(
+      30,
+      resizeData.width + dx
+    );
+
+  resizeData.element.height =
+    Math.max(
+      20,
+      resizeData.height - dy
+    );
+
+  resizeData.element.y =
+    resizeData.originalY + dy;
+
+  render();
+
+}
+
+
+function stopResize() {
+
+  document.removeEventListener(
+    "pointermove",
+    resizeMove
+  );
+
+  document.removeEventListener(
+    "pointermove",
+    resizeTopMove
+  );
+
+  resizeData = null;
+
+}
+
+
+/* =========================================================
+   ROTATE
+========================================================= */
+
+let rotateData = null;
+
+
+function startRotate(e) {
+
+  e.stopPropagation();
+  e.preventDefault();
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  const rect =
+    e.currentTarget.parentElement.getBoundingClientRect();
+
+  rotateData = {
+
+    element,
+
+    centerX:
+      rect.left + rect.width / 2,
+
+    centerY:
+      rect.top + rect.height / 2
+
+  };
+
+  document.addEventListener(
+    "pointermove",
+    rotateMove
+  );
+
+  document.addEventListener(
+    "pointerup",
+    stopRotate,
+    {once:true}
+  );
+
+}
+
+
+function rotateMove(e) {
+
+  if (!rotateData) return;
+
+  const angle =
+    Math.atan2(
+      e.clientY - rotateData.centerY,
+      e.clientX - rotateData.centerX
+    ) *
+    180 / Math.PI;
+
+  rotateData.element.rotation =
+    Math.round(angle + 90);
+
+  render();
+
+}
+
+
+function stopRotate() {
+
+  document.removeEventListener(
+    "pointermove",
+    rotateMove
+  );
+
+  rotateData = null;
+
+}
+
+
+/* =========================================================
+   SELECTION CONTROLS
+========================================================= */
+
+function updateSelectionPanel(element) {
+
+  document.getElementById(
+    "selectionEmpty"
+  ).style.display = "none";
+
+  document.getElementById(
+    "selectionControls"
+  ).style.display = "block";
+
+  document.getElementById(
+    "selectedX"
+  ).value = Math.round(element.x);
+
+  document.getElementById(
+    "selectedY"
+  ).value = Math.round(element.y);
+
+  document.getElementById(
+    "selectedW"
+  ).value = Math.round(element.width);
+
+  document.getElementById(
+    "selectedH"
+  ).value = Math.round(element.height);
+
+  document.getElementById(
+    "rotation"
+  ).value = element.rotation;
+
+  document.getElementById(
+    "rotationLabel"
+  ).textContent =
+    Math.round(element.rotation) + "°";
+
+}
+
+
+function updateSelectedPosition() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  element.x =
+    Number(document.getElementById("selectedX").value);
+
+  element.y =
+    Number(document.getElementById("selectedY").value);
+
+  render();
+
+}
+
+
+function updateSelectedSize() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  element.width =
+    Number(document.getElementById("selectedW").value);
+
+  element.height =
+    Number(document.getElementById("selectedH").value);
+
+  render();
+
+}
+
+
+function updateSelectedRotation() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  element.rotation =
+    Number(document.getElementById("rotation").value);
+
+  document.getElementById(
+    "rotationLabel"
+  ).textContent =
+    element.rotation + "°";
+
+  render();
+
+}
+
+
+/* =========================================================
+   LAYERS
+========================================================= */
+
+function bringForward() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  const max =
+    Math.max(
+      ...state.elements.map(e => e.z)
+    );
+
+  element.z = max + 1;
+
+  render();
+
+}
+
+
+function sendBackward() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  const min =
+    Math.min(
+      ...state.elements.map(e => e.z)
+    );
+
+  element.z = min - 1;
+
+  render();
+
+}
+
+
+function deleteSelected() {
+
+  if (!state.selectedId) return;
+
+  state.elements =
+    state.elements.filter(
+      e => e.id !== state.selectedId
+    );
+
+  state.selectedId = null;
+
+  render();
+
+}
+
+
+function duplicateSelected() {
+
+  const element = getSelected();
+
+  if (!element) return;
+
+  const copy =
+    JSON.parse(JSON.stringify(element));
+
+  copy.id = state.nextId++;
+
+  copy.x += 20;
+  copy.y += 20;
+  copy.z += 1;
+
+  state.elements.push(copy);
+
+  state.selectedId = copy.id;
+
+  render();
+
+}
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+function addText(text = "new text") {
+
+  const element = {
+
+    id: state.nextId++,
+
+    type: "text",
+
+    role: "custom",
+
+    text,
+
+    x: state.strip.width / 2 - 70,
+
+    y: state.strip.height / 2,
+
+    width: 140,
+
+    height: 35,
+
+    rotation: 0,
+
+    z: 50,
+
+    fontSize: 22,
+
+    fontFamily:
+      document.getElementById("fontSelect").value,
+
+    color:
+      document.getElementById("textColor").value
+
+  };
+
+  state.elements.push(element);
+
+  state.selectedId = element.id;
+
+  render();
+
+}
+
+
+function addDate() {
+
+  const date =
+    new Date().toLocaleDateString(
+      undefined,
+      {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }
+    );
+
+  addText(date);
+
+}
+
+
+function updateText(role, value) {
+
+  const element =
+    state.elements.find(
+      e =>
+        e.type === "text" &&
+        e.role === role
+    );
+
+  if (!element) return;
+
+  element.text = value;
+
+  render();
+
+}
+
+
+function updateTextStyle() {
+
+  const element = getSelected();
+
+  if (!element || element.type !== "text") {
+    return;
+  }
+
+  element.color =
+    document.getElementById("textColor").value;
+
+  element.fontSize =
+    Number(document.getElementById("textSize").value);
+
+  element.fontFamily =
+    document.getElementById("fontSelect").value;
+
+  render();
+
+}
+
+
+/* =========================================================
+   STICKERS
+========================================================= */
+
+function addSticker(symbol) {
+
+  const size =
+    Number(
+      document.getElementById("stickerSize").value
+    );
+
+  const element = {
+
+    id: state.nextId++,
+
+    type: "sticker",
+
+    text: symbol,
+
+    x: state.strip.width / 2 - size / 2,
+
+    y: 30,
+
+    width: size,
+
+    height: size,
+
+    rotation: 0,
+
+    z: 60,
+
+    fontSize: size
+
+  };
+
+  state.elements.push(element);
+
+  state.selectedId = element.id;
+
+  render();
+
+}
+
+
+function updateSelectedSticker() {
+
+  const element = getSelected();
+
+  if (!element || element.type !== "sticker") {
+    return;
+  }
+
+  const size =
+    Number(
+      document.getElementById("stickerSize").value
+    );
+
+  element.width = size;
+  element.height = size;
+  element.fontSize = size;
+
+  render();
+
+}
+
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+function updateAppearance() {
+
+  state.colors.background =
+    document.getElementById("bgColor").value;
+
+  state.colors.border =
+    document.getElementById("borderColor").value;
+
+  state.borderWidth =
+    Number(
+      document.getElementById("borderWidth").value
+    );
+
+  state.radius =
+    Number(
+      document.getElementById("radius").value
+    );
+
+  state.spacing =
+    Number(
+      document.getElementById("photoSpacing").value
+    );
+
+  render();
+
+}
+
+
+/* =========================================================
+   SIZE
+========================================================= */
+
+function setSize(type) {
+
+  const buttons =
+    document.querySelectorAll(
+      ".panel:first-child .choice"
+    );
+
+  buttons.forEach(
+    b => b.classList.remove("active")
+  );
+
+  if (type === "2x6") {
+
+    state.strip.width = 400;
+    state.strip.height = 1200;
+
+  }
+
+  if (type === "4x6") {
+
+    state.strip.width = 800;
+    state.strip.height = 1200;
+
+  }
+
+  if (type === "landscape") {
+
+    state.strip.width = 1200;
+    state.strip.height = 800;
+
+  }
+
+  if (type === "square") {
+
+    state.strip.width = 1000;
+    state.strip.height = 1000;
+
+  }
+
+  document.getElementById("stripWidth").value =
+    state.strip.width;
+
+  document.getElementById("stripHeight").value =
+    state.strip.height;
+
+  createPhotoElementsIfNeeded();
+
+}
+
+
+function updateStripSize() {
+
+  state.strip.width =
+    Number(
+      document.getElementById("stripWidth").value
+    );
+
+  state.strip.height =
+    Number(
+      document.getElementById("stripHeight").value
+    );
+
+  render();
+
+}
+
+
+function createPhotoElementsIfNeeded() {
+
+  if (state.photos.length) {
+
+    createPhotoElements();
+
+  } else {
+
+    render();
+
+  }
+
+}
+
+
+/* =========================================================
+   ARRANGEMENTS
+========================================================= */
+
+function arrangePhotos(type) {
+
+  const photos =
+    state.elements.filter(
+      e => e.type === "photo"
+    );
+
+  if (!photos.length) return;
+
+  const margin = 35;
+  const gap = state.spacing;
+
+  if (type === "vertical") {
+
+    const w =
+      state.strip.width - margin * 2;
+
+    const h =
+      (
+        state.strip.height -
+        margin * 2 -
+        gap * (photos.length - 1) -
+        180
+      ) / photos.length;
+
+    photos.forEach((p,i) => {
+
+      p.x = margin;
+      p.y = margin + i * (h + gap);
+      p.width = w;
+      p.height = h;
+      p.rotation = 0;
 
     });
 
+  }
+
+
+  if (type === "horizontal") {
+
+    const w =
+      (
+        state.strip.width -
+        margin * 2 -
+        gap * (photos.length - 1)
+      ) / photos.length;
+
+    const h =
+      state.strip.height -
+      margin * 2 -
+      180;
+
+    photos.forEach((p,i) => {
+
+      p.x = margin + i * (w + gap);
+      p.y = margin;
+      p.width = w;
+      p.height = h;
+      p.rotation = 0;
+
+    });
+
+  }
+
+
+  if (type === "grid") {
+
+    const cols = 2;
+    const rows = Math.ceil(photos.length / 2);
+
+    const w =
+      (
+        state.strip.width -
+        margin * 2 -
+        gap
+      ) / cols;
+
+    const h =
+      (
+        state.strip.height -
+        margin * 2 -
+        gap * (rows - 1) -
+        180
+      ) / rows;
+
+    photos.forEach((p,i) => {
+
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+
+      p.x = margin + col * (w + gap);
+      p.y = margin + row * (h + gap);
+
+      p.width = w;
+      p.height = h;
+      p.rotation = 0;
+
+    });
+
+  }
+
+  render();
+
 }
 
 
-/* ==============================
-   PHOTO
-============================== */
+/* =========================================================
+   PRESETS
+========================================================= */
 
-function drawStyledPhoto(
-    ctx,
-    img,
-    x,
-    y,
-    w,
-    h
-){
+function applyPreset(name) {
 
-    ctx.save();
+  state.colors.background = "#fff8fa";
+  state.colors.border = "#ffffff";
+  state.borderWidth = 3;
+  state.radius = 8;
+  state.spacing = 20;
 
-    const cx=x+w/2;
+  document.getElementById("bgColor").value =
+    state.colors.background;
 
-    const cy=y+h/2;
+  document.getElementById("borderColor").value =
+    state.colors.border;
 
-    ctx.translate(cx,cy);
+  document.getElementById("borderWidth").value =
+    state.borderWidth;
 
-    ctx.rotate(
-        state.rotation*Math.PI/180
+  document.getElementById("radius").value =
+    state.radius;
+
+  document.getElementById("photoSpacing").value =
+    state.spacing;
+
+
+  if (name === "classic") {
+
+    arrangePhotos("vertical");
+
+  }
+
+
+  if (name === "coquette") {
+
+    state.colors.background = "#fff0f5";
+    state.colors.border = "#ffffff";
+    state.radius = 18;
+    state.spacing = 25;
+
+    arrangePhotos("vertical");
+
+    addSticker("🎀");
+
+  }
+
+
+  if (name === "minimal") {
+
+    state.colors.background = "#ffffff";
+    state.radius = 0;
+    state.spacing = 12;
+
+    arrangePhotos("vertical");
+
+  }
+
+
+  if (name === "polaroid") {
+
+    state.colors.background = "#f8f5f0";
+    state.borderWidth = 9;
+    state.radius = 0;
+    state.spacing = 35;
+
+    arrangePhotos("vertical");
+
+  }
+
+
+  if (name === "dreamy") {
+
+    state.colors.background = "#f4edf8";
+    state.colors.border = "#ffffff";
+    state.radius = 25;
+    state.spacing = 30;
+
+    arrangePhotos("vertical");
+
+    addSticker("✧");
+    addSticker("♡");
+
+  }
+
+
+  if (name === "heart") {
+
+    state.colors.background = "#fff1f5";
+    state.radius = 20;
+    state.spacing = 25;
+
+    arrangePhotos("grid");
+
+    addSticker("♡");
+    addSticker("♡");
+
+  }
+
+
+  document.getElementById("bgColor").value =
+    state.colors.background;
+
+  document.getElementById("borderColor").value =
+    state.colors.border;
+
+  document.getElementById("borderWidth").value =
+    state.borderWidth;
+
+  document.getElementById("radius").value =
+    state.radius;
+
+  document.getElementById("photoSpacing").value =
+    state.spacing;
+
+  render();
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function setFilter(filter, button) {
+
+  state.filter = filter;
+
+  document
+    .querySelectorAll(".filter-btn")
+    .forEach(
+      b => b.classList.remove("active")
     );
 
-    ctx.translate(-cx,-cy);
+  button.classList.add("active");
 
-    /* FRAME */
+  render();
 
-    ctx.fillStyle=state.frameColor;
+}
 
-    roundedRect(
-        ctx,
-        x-state.frame/2,
-        y-state.frame/2,
-        w+state.frame,
-        h+state.frame,
-        state.radius+state.frame
+
+function getFilterCSS() {
+
+  let filters = [];
+
+  switch(state.filter) {
+
+    case "soft":
+      filters.push("brightness(108%)");
+      filters.push("saturate(90%)");
+      filters.push("contrast(92%)");
+      break;
+
+    case "coquette":
+      filters.push("brightness(108%)");
+      filters.push("saturate(90%)");
+      filters.push("contrast(90%)");
+      filters.push("sepia(8%)");
+      break;
+
+    case "film":
+      filters.push("contrast(112%)");
+      filters.push("saturate(88%)");
+      filters.push("sepia(10%)");
+      break;
+
+    case "vintage":
+      filters.push("sepia(35%)");
+      filters.push("contrast(92%)");
+      filters.push("saturate(75%)");
+      break;
+
+    case "dreamy":
+      filters.push("brightness(112%)");
+      filters.push("contrast(88%)");
+      filters.push("saturate(85%)");
+      break;
+
+    case "bw":
+      filters.push("grayscale(100%)");
+      filters.push("contrast(110%)");
+      break;
+
+    case "warm":
+      filters.push("sepia(18%)");
+      filters.push("saturate(115%)");
+      filters.push("brightness(103%)");
+      break;
+
+  }
+
+  filters.push(
+    `brightness(${state.brightness}%)`
+  );
+
+  filters.push(
+    `saturate(${state.saturation}%)`
+  );
+
+  return filters.join(" ");
+
+}
+
+
+function updateImageFilters() {
+
+  state.brightness =
+    Number(
+      document.getElementById("brightness").value
     );
 
-    ctx.fill();
-
-    /* PHOTO */
-
-    ctx.save();
-
-    roundedRect(
-        ctx,
-        x,
-        y,
-        w,
-        h,
-        state.radius
+  state.saturation =
+    Number(
+      document.getElementById("saturation").value
     );
 
-    ctx.clip();
+  state.grain =
+    Number(
+      document.getElementById("grain").value
+    );
 
-    ctx.drawImage(
+  render();
+
+}
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+function updateZoom(value) {
+
+  state.zoom =
+    Number(value) / 100;
+
+  document.getElementById("zoomLabel").textContent =
+    value + "%";
+
+  filmstrip.style.transform =
+    `scale(${state.zoom})`;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetLayout() {
+
+  state.elements = [];
+  state.selectedId = null;
+
+  state.colors.background = "#fff8fa";
+  state.colors.border = "#ffffff";
+  state.borderWidth = 3;
+  state.radius = 8;
+  state.spacing = 20;
+
+  state.filter = "normal";
+  state.brightness = 100;
+  state.saturation = 100;
+  state.grain = 0;
+
+  document.getElementById("bgColor").value =
+    state.colors.background;
+
+  document.getElementById("borderColor").value =
+    state.colors.border;
+
+  document.getElementById("borderWidth").value = 3;
+  document.getElementById("radius").value = 8;
+  document.getElementById("photoSpacing").value = 20;
+
+  document.getElementById("brightness").value = 100;
+  document.getElementById("saturation").value = 100;
+  document.getElementById("grain").value = 0;
+
+  if (state.photos.length) {
+
+    createPhotoElements();
+
+  } else {
+
+    addDefaultText();
+    render();
+
+  }
+
+}
+
+
+/* =========================================================
+   CLEAR PHOTOS
+========================================================= */
+
+function clearPhotos() {
+
+  state.photos = [];
+
+  state.elements =
+    state.elements.filter(
+      e => e.type !== "photo"
+    );
+
+  render();
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+async function downloadDesign() {
+
+  const canvas =
+    document.createElement("canvas");
+
+  canvas.width =
+    state.strip.width * 2;
+
+  canvas.height =
+    state.strip.height * 2;
+
+  const c =
+    canvas.getContext("2d");
+
+  const scale = 2;
+
+  /* background */
+
+  c.fillStyle =
+    state.colors.background;
+
+  c.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  const elements =
+    [...state.elements]
+      .sort((a,b) => a.z - b.z);
+
+
+  for (const element of elements) {
+
+    c.save();
+
+    const centerX =
+      (element.x + element.width / 2) * scale;
+
+    const centerY =
+      (element.y + element.height / 2) * scale;
+
+    c.translate(
+      centerX,
+      centerY
+    );
+
+    c.rotate(
+      element.rotation *
+      Math.PI / 180
+    );
+
+
+    if (element.type === "photo") {
+
+      const img =
+        await loadImage(
+          state.photos[element.photoIndex]
+        );
+
+      c.beginPath();
+
+      roundedRect(
+        c,
+        -element.width * scale / 2,
+        -element.height * scale / 2,
+        element.width * scale,
+        element.height * scale,
+        state.radius * scale
+      );
+
+      c.clip();
+
+      /* cover image */
+
+      const iw = img.width;
+      const ih = img.height;
+
+      const targetW =
+        element.width * scale;
+
+      const targetH =
+        element.height * scale;
+
+      const imageRatio =
+        iw / ih;
+
+      const targetRatio =
+        targetW / targetH;
+
+      let dw;
+      let dh;
+
+      if (imageRatio > targetRatio) {
+
+        dh = targetH;
+        dw = dh * imageRatio;
+
+      } else {
+
+        dw = targetW;
+        dh = dw / imageRatio;
+
+      }
+
+      c.filter =
+        getFilterCSS();
+
+      c.drawImage(
         img,
-        x,
-        y,
-        w,
-        h
-    );
+        -dw / 2,
+        -dh / 2,
+        dw,
+        dh
+      );
 
-    ctx.restore();
+      c.filter = "none";
 
-    ctx.restore();
+      /* border */
 
-}
+      if (state.borderWidth > 0) {
 
+        c.lineWidth =
+          state.borderWidth * scale;
 
-/* ==============================
-   TITLE
-============================== */
+        c.strokeStyle =
+          state.colors.border;
 
-function drawTitle(ctx,y){
+        c.stroke();
 
-    ctx.textAlign="center";
-
-    const font=
-        state.font==="playfair"
-        ?"Playfair Display"
-        :"DM Sans";
-
-    ctx.font=
-        `${state.titleSize}px "${font}"`;
-
-    ctx.fillStyle=state.textColor;
-
-    const x=
-        state.width*
-        (state.textPosition/100);
-
-    ctx.fillText(
-        state.title,
-        x,
-        y
-    );
-
-    drawDecor(
-        ctx,
-        x,
-        y-30
-    );
-
-}
-
-
-/* ==============================
-   FOOTER
-============================== */
-
-function drawFooter(ctx,y){
-
-    ctx.textAlign="center";
-
-    const x=
-        state.width*
-        (state.textPosition/100);
-
-    ctx.font=
-        '23px "DM Sans"';
-
-    ctx.fillStyle=state.textColor;
-
-    ctx.fillText(
-        state.caption,
-        x,
-        y
-    );
-
-    if(state.showDate){
-
-        const date=
-            new Date().toLocaleDateString(
-                "en-US",
-                {
-                    month:"short",
-                    day:"numeric",
-                    year:"numeric"
-                }
-            );
-
-        ctx.font=
-            '14px "DM Sans"';
-
-        ctx.fillStyle="#9d8089";
-
-        ctx.fillText(
-            date,
-            x,
-            y+25
-        );
+      }
 
     }
 
-    drawDecor(
-        ctx,
-        state.width*
-        (state.decorPosition/100),
-        y+55
+
+    if (element.type === "text") {
+
+      c.fillStyle =
+        element.color;
+
+      c.font =
+        `${element.fontSize * scale}px "${element.fontFamily}"`;
+
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+
+      c.fillText(
+        element.text,
+        0,
+        0
+      );
+
+    }
+
+
+    if (element.type === "sticker") {
+
+      c.font =
+        `${element.fontSize * scale}px Arial`;
+
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+
+      c.fillText(
+        element.text,
+        0,
+        0
+      );
+
+    }
+
+    c.restore();
+
+  }
+
+
+  /* grain */
+
+  if (state.grain > 0) {
+
+    addGrain(
+      c,
+      canvas.width,
+      canvas.height,
+      state.grain
     );
+
+  }
+
+
+  const link =
+    document.createElement("a");
+
+  link.download =
+    "whimsy-booth-filmstrip.png";
+
+  link.href =
+    canvas.toDataURL("image/png");
+
+  link.click();
 
 }
 
-
-/* ==============================
-   DECOR
-============================== */
-
-function drawDecor(ctx,x,y){
-
-    if(
-        !state.decor ||
-        state.decor==="none"
-    )return;
-
-    ctx.textAlign="center";
-
-    ctx.font=
-        `${state.decorSize}px serif`;
-
-    ctx.fillText(
-        state.decor,
-        x,
-        y
-    );
-
-}
-
-
-/* ==============================
-   ROUNDED RECT
-============================== */
 
 function roundedRect(
-    ctx,
+  ctx,
+  x,
+  y,
+  width,
+  height,
+  radius
+) {
+
+  radius =
+    Math.min(
+      radius,
+      width / 2,
+      height / 2
+    );
+
+  ctx.moveTo(
+    x + radius,
+    y
+  );
+
+  ctx.arcTo(
+    x + width,
+    y,
+    x + width,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x + width,
+    y + height,
+    x,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x,
+    y + height,
     x,
     y,
-    w,
-    h,
-    r
-){
+    radius
+  );
 
-    r=Math.min(
-        r,
-        w/2,
-        h/2
+  ctx.arcTo(
+    x,
+    y,
+    x + width,
+    y,
+    radius
+  );
+
+  ctx.closePath();
+
+}
+
+
+function loadImage(src) {
+
+  return new Promise(resolve => {
+
+    const img =
+      new Image();
+
+    img.onload =
+      () => resolve(img);
+
+    img.src = src;
+
+  });
+
+}
+
+
+function addGrain(
+  ctx,
+  width,
+  height,
+  amount
+) {
+
+  const imageData =
+    ctx.getImageData(
+      0,
+      0,
+      width,
+      height
     );
 
-    ctx.beginPath();
+  const data =
+    imageData.data;
 
-    ctx.moveTo(x+r,y);
+  for (
+    let i = 0;
+    i < data.length;
+    i += 4
+  ) {
 
-    ctx.arcTo(
-        x+w,
-        y,
-        x+w,
-        y+h,
-        r
-    );
+    const noise =
+      (Math.random() - .5) *
+      amount;
 
-    ctx.arcTo(
-        x+w,
-        y+h,
-        x,
-        y+h,
-        r
-    );
+    data[i] += noise;
+    data[i+1] += noise;
+    data[i+2] += noise;
 
-    ctx.arcTo(
-        x,
-        y+h,
-        x,
-        y,
-        r
-    );
+  }
 
-    ctx.arcTo(
-        x,
-        y,
-        x+w,
-        y,
-        r
-    );
-
-    ctx.closePath();
+  ctx.putImageData(
+    imageData,
+    0,
+    0
+  );
 
 }
 
 
-/* ==============================
-   UPDATE CONTROLS
-============================== */
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
 
-function updateAllControls(){
+document.addEventListener(
+  "keydown",
+  function(e) {
 
-    document.getElementById("stripWidth").value=
-        state.width;
+    const element = getSelected();
 
-    document.getElementById("stripHeight").value=
-        state.height;
+    if (!element) return;
 
-    document.getElementById("margin").value=
-        state.margin;
+    const amount =
+      e.shiftKey ? 10 : 2;
 
-    document.getElementById("spacing").value=
-        state.spacing;
+    if (e.key === "ArrowLeft") {
+      element.x -= amount;
+      render();
+    }
 
-    document.getElementById("stripWidthValue")
-        .textContent=state.width+"px";
+    if (e.key === "ArrowRight") {
+      element.x += amount;
+      render();
+    }
 
-    document.getElementById("stripHeightValue")
-        .textContent=state.height+"px";
+    if (e.key === "ArrowUp") {
+      element.y -= amount;
+      render();
+    }
 
-    document.getElementById("marginValue")
-        .textContent=state.margin+"px";
+    if (e.key === "ArrowDown") {
+      element.y += amount;
+      render();
+    }
 
-    document.getElementById("spacingValue")
-        .textContent=state.spacing+"px";
+    if (
+      e.key === "Delete" ||
+      e.key === "Backspace"
+    ) {
 
-}
+      deleteSelected();
 
+    }
 
-/* ==============================
-   SURPRISE ME
-============================== */
+  }
+);
 
-function surpriseMe(){
 
-    const presetNames=
-        Object.keys(presets);
-
-    const filterNames=[
-        "none",
-        "coquette",
-        "soft",
-        "dreamy",
-        "film",
-        "vintage",
-        "warm",
-        "bw",
-        "flash",
-        "faded"
-    ];
-
-    const decorNames=[
-        "none",
-        "🎀",
-        "♡",
-        "💕",
-        "☆",
-        "✨",
-        "🌷"
-    ];
-
-    const random=
-        arr=>
-        arr[
-            Math.floor(
-                Math.random()*arr.length
-            )
-        ];
-
-    const preset=random(presetNames);
-
-    const p=presets[preset];
-
-    Object.assign(state,p);
-
-    state.filter=random(filterNames);
-
-    state.decor=random(decorNames);
-
-    state.spacing=
-        Math.floor(
-            Math.random()*40
-        );
-
-    state.radius=
-        Math.floor(
-            Math.random()*35
-        );
-
-    state.frame=
-        Math.floor(
-            Math.random()*30
-        );
-
-    state.background=
-        random([
-            "#fff8f6",
-            "#fff0f4",
-            "#f8eef2",
-            "#f5eee8",
-            "#f3edf7"
-        ]);
-
-    document.getElementById("backgroundColor")
-        .value=state.background;
-
-    updateFilterButtons();
-
-    updateDecorButtons();
-
-    updateAllControls();
-
-    applyVideoFilter();
-
-    showToast(
-        "Your surprise strip is ready 🎀"
-    );
-
-}
-
-
-function updateFilterButtons(){
-
-    document
-    .querySelectorAll("[data-filter]")
-    .forEach(b=>{
-
-        b.classList.toggle(
-            "selected",
-            b.dataset.filter===state.filter
-        );
-
-    });
-
-}
-
-
-function updateDecorButtons(){
-
-    document
-    .querySelectorAll("[data-decor]")
-    .forEach(b=>{
-
-        b.classList.toggle(
-            "selected",
-            b.dataset.decor===state.decor
-        );
-
-    });
-
-}
-
-
-/* ==============================
-   DOWNLOAD
-============================== */
-
-function downloadImage(){
-
-    const link=
-        document.createElement("a");
-
-    const date=
-        new Date()
-        .toISOString()
-        .slice(0,10);
-
-    link.download=
-        `whimsy-filmstrip-${date}.png`;
-
-    link.href=
-        resultCanvas.toDataURL(
-            "image/png"
-        );
-
-    link.click();
-
-    showToast(
-        "Filmstrip saved ♡"
-    );
-
-}
-
-
-/* ==============================
-   CLEAR
-============================== */
-
-function clearResult(){
-
-    photos=[];
-
-    document
-    .getElementById("result")
-    .classList.remove("show");
-
-}
-
-
-/* ==============================
-   TOAST
-============================== */
-
-let toastTimer;
-
-function showToast(message){
-
-    toast.textContent=message;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer=
-        setTimeout(
-            ()=>toast.classList.remove("show"),
-            2200
-        );
-
-}
-
-
-/* ==============================
+/* =========================================================
    START
-============================== */
+========================================================= */
 
-startCamera();
+function initialize() {
 
-applyVideoFilter();
+  document.getElementById("stripWidth").value =
+    state.strip.width;
 
-updateAllControls();
+  document.getElementById("stripHeight").value =
+    state.strip.height;
+
+  document.getElementById("photoSpacing").value =
+    state.spacing;
+
+  addDefaultText();
+
+  render();
+
+  startCamera();
+
+}
+
+initialize();
 
 </script>
 
