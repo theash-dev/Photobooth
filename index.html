@@ -9,522 +9,402 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
 
-:root {
-    --pink: #e9a9bd;
-    --dark-pink: #c87998;
-    --cream: #fffaf7;
-    --text: #503b42;
-    --muted: #9b7d86;
-    --border: #ead7dc;
-    --white: #ffffff;
-    --shadow: 0 15px 45px rgba(108, 67, 80, .12);
+:root{
+    --pink:#e6a5bb;
+    --pink-dark:#c77d99;
+    --cream:#fff9f7;
+    --text:#59434c;
+    --muted:#9d8089;
+    --line:#ead8de;
 }
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: "DM Sans", sans-serif;
-    color: var(--text);
+body{
+    margin:0;
     background:
-        radial-gradient(circle at 10% 10%, #ffe7ef 0, transparent 25%),
-        radial-gradient(circle at 90% 90%, #f8dce6 0, transparent 25%),
-        #fff8f6;
+        radial-gradient(circle at 10% 10%,#ffe5ee,transparent 25%),
+        radial-gradient(circle at 90% 90%,#f5dce5,transparent 25%),
+        #fff9f7;
+    color:var(--text);
+    font-family:"DM Sans",sans-serif;
 }
 
-button,
-input,
-select {
-    font: inherit;
+button,input,select{
+    font:inherit;
 }
 
-button {
-    cursor: pointer;
+button{
+    cursor:pointer;
 }
 
-.app {
-    width: min(1400px, 95%);
-    margin: auto;
-    padding: 25px 0 50px;
+.app{
+    width:min(1450px,95%);
+    margin:auto;
+    padding:25px 0 50px;
 }
 
-/* HEADER */
-
-header {
-    text-align: center;
-    margin-bottom: 25px;
+header{
+    text-align:center;
+    margin-bottom:25px;
 }
 
-.logo {
-    font-family: "Playfair Display", serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    margin: 0;
-    color: #5b414a;
+.logo{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(2rem,5vw,3.4rem);
+    margin:0;
 }
 
-.subtitle {
-    color: var(--muted);
-    margin: 5px 0 0;
+.subtitle{
+    color:var(--muted);
+    margin:5px 0 0;
 }
 
-.bow {
-    display: inline-block;
-    animation: float 3s ease-in-out infinite;
+.main{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 430px;
+    gap:25px;
 }
 
-@keyframes float {
-    50% {
-        transform: translateY(-4px) rotate(3deg);
-    }
-}
-
-/* MAIN */
-
-.main {
-    display: grid;
-    grid-template-columns: 1fr 390px;
-    gap: 25px;
-}
-
-@media(max-width: 950px) {
-    .main {
-        grid-template-columns: 1fr;
+@media(max-width:1000px){
+    .main{
+        grid-template-columns:1fr;
     }
 }
 
 /* CAMERA */
 
-.camera-card,
-.editor-card {
-    background: rgba(255,255,255,.82);
-    border: 1px solid var(--border);
-    border-radius: 30px;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(12px);
+.card{
+    background:rgba(255,255,255,.84);
+    border:1px solid var(--line);
+    border-radius:28px;
+    box-shadow:0 18px 50px rgba(90,50,65,.12);
+    backdrop-filter:blur(15px);
 }
 
-.camera-card {
-    padding: 18px;
+.camera-card{
+    padding:18px;
 }
 
-.camera-wrap {
-    position: relative;
-    overflow: hidden;
-    border-radius: 22px;
-    background: #241b1e;
-    aspect-ratio: 4/3;
+.camera{
+    position:relative;
+    background:#241c1e;
+    border-radius:22px;
+    overflow:hidden;
+    aspect-ratio:4/3;
 }
 
-#video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transform: scaleX(-1);
+#video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
 }
 
-#flash {
-    position: absolute;
-    inset: 0;
-    background: white;
-    opacity: 0;
-    pointer-events: none;
+#flash{
+    position:absolute;
+    inset:0;
+    background:white;
+    opacity:0;
+    pointer-events:none;
 }
 
-.camera-status {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(255,255,255,.86);
-    padding: 7px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    color: var(--text);
+.countdown{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:100px;
+    font-family:"Playfair Display",serif;
+    text-shadow:0 4px 20px #0008;
+    opacity:0;
 }
 
-.countdown {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 100px;
-    font-family: "Playfair Display", serif;
-    text-shadow: 0 4px 20px rgba(0,0,0,.35);
-    opacity: 0;
-    pointer-events: none;
+.status{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#ffffffdd;
+    font-size:12px;
 }
 
-.controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
+.controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:14px;
 }
 
-.btn {
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--text);
-    padding: 11px 15px;
-    border-radius: 999px;
-    transition: .2s;
+.btn{
+    border:1px solid var(--line);
+    background:white;
+    color:var(--text);
+    padding:11px 15px;
+    border-radius:999px;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(110,60,80,.12);
+.btn:hover{
+    transform:translateY(-1px);
 }
 
-.btn.primary {
-    background: var(--pink);
-    border-color: var(--pink);
-    color: white;
+.btn.primary{
+    background:var(--pink);
+    border-color:var(--pink);
+    color:white;
 }
 
-.btn.dark {
-    background: #59434c;
-    border-color: #59434c;
-    color: white;
+.btn.dark{
+    background:#59434c;
+    color:white;
 }
 
-.btn.small {
-    padding: 8px 12px;
-    font-size: 13px;
+.photo-count{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:12px;
+}
+
+.photo-count button{
+    border:0;
+    padding:13px;
+    border-radius:14px;
+    background:#f5dce3;
+    color:#694a55;
 }
 
 /* EDITOR */
 
-.editor-card {
-    padding: 18px;
-    max-height: 850px;
-    overflow-y: auto;
+.editor{
+    padding:18px;
+    max-height:900px;
+    overflow-y:auto;
 }
 
-.editor-card::-webkit-scrollbar {
-    width: 6px;
+.editor::-webkit-scrollbar{
+    width:6px;
 }
 
-.editor-card::-webkit-scrollbar-thumb {
-    background: #e7c5ce;
-    border-radius: 20px;
+.editor::-webkit-scrollbar-thumb{
+    background:#e7c4ce;
+    border-radius:20px;
 }
 
-.tabs {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 20px;
+.tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    margin-bottom:20px;
 }
 
-.tab {
-    border: 1px solid var(--border);
-    background: #fff;
-    padding: 10px 5px;
-    border-radius: 12px;
-    font-size: 12px;
-    color: var(--muted);
+.tab{
+    padding:10px 5px;
+    border:1px solid var(--line);
+    background:white;
+    border-radius:12px;
+    font-size:11px;
+    color:var(--muted);
 }
 
-.tab.active {
-    background: #f5d9e1;
-    color: #704b58;
-    border-color: #e6b8c7;
-    font-weight: 700;
+.tab.active{
+    background:#f5d9e1;
+    color:#704c58;
+    border-color:#e0afbf;
+    font-weight:bold;
 }
 
-.panel {
-    display: none;
+.panel{
+    display:none;
 }
 
-.panel.active {
-    display: block;
+.panel.active{
+    display:block;
 }
 
-.section-title {
-    font-family: "Playfair Display", serif;
-    font-size: 21px;
-    margin: 0 0 14px;
+h2{
+    font-family:"Playfair Display",serif;
+    margin:0 0 5px;
 }
 
-.section-subtitle {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: -8px;
-    margin-bottom: 15px;
+.help{
+    color:var(--muted);
+    font-size:11px;
+    margin:0 0 18px;
 }
 
-/* OPTIONS */
+/* PRESETS */
 
-.options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 9px;
+.presets{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-bottom:20px;
 }
 
-.option {
-    border: 1px solid var(--border);
-    background: white;
-    border-radius: 15px;
-    padding: 12px;
-    text-align: left;
-    transition: .2s;
+.preset{
+    border:1px solid var(--line);
+    background:white;
+    border-radius:14px;
+    padding:12px;
+    text-align:left;
 }
 
-.option:hover {
-    transform: translateY(-2px);
+.preset.selected{
+    border-color:var(--pink-dark);
+    background:#fff0f4;
 }
 
-.option.selected {
-    border-color: var(--dark-pink);
-    background: #fff0f4;
-    box-shadow: inset 0 0 0 1px var(--dark-pink);
+.preset strong{
+    display:block;
+    font-size:13px;
 }
 
-.option-name {
-    font-weight: 700;
-    font-size: 13px;
+.preset span{
+    font-size:10px;
+    color:var(--muted);
 }
 
-.option-desc {
-    display: block;
-    color: var(--muted);
-    font-size: 10px;
-    margin-top: 3px;
+/* FIELD */
+
+.field{
+    margin-bottom:16px;
 }
 
-/* FILTER PREVIEWS */
-
-.filter-preview {
-    height: 70px;
-    border-radius: 10px;
-    margin-bottom: 7px;
-    background:
-        linear-gradient(135deg, #e9b0c1, #fff3f5);
+.field label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:6px;
 }
 
-.filter-preview.original {
-    background: linear-gradient(135deg,#d9d9d9,#fff);
+.field input[type=text],
+.field select{
+    width:100%;
+    border:1px solid var(--line);
+    background:white;
+    padding:11px;
+    border-radius:12px;
+    color:var(--text);
+    outline:none;
 }
 
-.filter-preview.coquette {
-    background: linear-gradient(135deg,#f1a9c0,#fff0f5);
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.filter-preview.soft {
-    background: linear-gradient(135deg,#f4c5cf,#fce8ec);
+.color-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #f0e4e7;
+    padding:10px 0;
+    font-size:13px;
 }
 
-.filter-preview.dreamy {
-    background: linear-gradient(135deg,#d9c4e9,#ffdce8);
-}
-
-.filter-preview.film {
-    background: linear-gradient(135deg,#c9a675,#e9d3a7);
-}
-
-.filter-preview.vintage {
-    background: linear-gradient(135deg,#a77f61,#ead4ad);
-}
-
-.filter-preview.warm {
-    background: linear-gradient(135deg,#df9a66,#f5d0a8);
-}
-
-.filter-preview.bw {
-    background: linear-gradient(135deg,#222,#ddd);
-}
-
-.filter-preview.flash {
-    background: linear-gradient(135deg,#fff,#e9e0df);
-}
-
-.filter-preview.faded {
-    background: linear-gradient(135deg,#c6b5ae,#eee4de);
-}
-
-/* COLOR */
-
-.color-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0e4e7;
-}
-
-.color-row label {
-    font-size: 13px;
-}
-
-input[type="color"] {
-    width: 45px;
-    height: 35px;
-    border: none;
-    background: transparent;
-    padding: 0;
-}
-
-/* TEXT */
-
-.field {
-    margin-bottom: 15px;
-}
-
-.field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.field input[type="text"],
-.field select {
-    width: 100%;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    outline: none;
-    background: white;
-    color: var(--text);
-}
-
-.field input[type="text"]:focus,
-.field select:focus {
-    border-color: var(--pink);
-}
-
-.checkbox {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
+input[type=color]{
+    width:45px;
+    height:35px;
+    border:0;
+    background:none;
 }
 
 /* SLIDERS */
 
-.slider {
-    margin-bottom: 18px;
+.slider{
+    margin-bottom:18px;
 }
 
-.slider-head {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    margin-bottom: 7px;
+.slider-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-bottom:6px;
 }
 
-input[type="range"] {
-    width: 100%;
-    accent-color: var(--dark-pink);
+input[type=range]{
+    width:100%;
+    accent-color:var(--pink-dark);
 }
 
 /* STICKERS */
 
-.stickers {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 8px;
+.stickers{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
 }
 
-.sticker {
-    border: 1px solid var(--border);
-    background: white;
-    border-radius: 15px;
-    min-height: 65px;
-    font-size: 25px;
+.sticker{
+    min-height:65px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:white;
+    font-size:25px;
 }
 
-.sticker.selected {
-    background: #fff0f4;
-    border-color: var(--dark-pink);
-}
-
-/* CAPTURE */
-
-.capture-section {
-    margin-top: 15px;
-    border-top: 1px solid #eee1e5;
-    padding-top: 15px;
-}
-
-.capture-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.capture-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 15px;
-    background: var(--pink);
-    color: white;
-    font-weight: 700;
-}
-
-.capture-btn:hover {
-    background: var(--dark-pink);
+.sticker.selected{
+    background:#fff0f4;
+    border-color:var(--pink-dark);
 }
 
 /* RESULT */
 
-.result {
-    display: none;
-    margin-top: 20px;
+.result{
+    margin-top:22px;
+    display:none;
 }
 
-.result.show {
-    display: block;
+.result.show{
+    display:block;
 }
 
-.result h2 {
-    font-family: "Playfair Display", serif;
-    margin: 0 0 10px;
+.result h2{
+    margin-bottom:12px;
 }
 
-#resultCanvas {
-    width: 100%;
-    border-radius: 16px;
-    background: white;
+#resultCanvas{
+    width:100%;
+    max-height:700px;
+    object-fit:contain;
+    border-radius:18px;
+    background:white;
 }
 
-/* TOAST */
-
-.toast {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translate(-50%, 100px);
-    background: #59434c;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    transition: .3s;
-    z-index: 99;
+.result-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
 }
 
-.toast.show {
-    transform: translate(-50%,0);
+#canvas{
+    display:none;
 }
 
-/* HIDDEN */
-
-#canvas {
-    display: none;
+.toast{
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translate(-50%,100px);
+    background:#59434c;
+    color:white;
+    padding:12px 18px;
+    border-radius:999px;
+    font-size:13px;
+    transition:.3s;
+    z-index:100;
 }
 
-.camera-filter {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    mix-blend-mode: normal;
+.toast.show{
+    transform:translate(-50%,0);
 }
 </style>
 </head>
@@ -534,37 +414,35 @@ input[type="range"] {
 <div class="app">
 
 <header>
-    <h1 class="logo">
-        <span class="bow">🎀</span>
-        Whimsy Photobooth
-        <span class="bow">🎀</span>
-    </h1>
-    <p class="subtitle">a tiny little memory maker ♡</p>
+    <h1 class="logo">🎀 Whimsy Photobooth 🎀</h1>
+    <p class="subtitle">make your own little memory ♡</p>
 </header>
 
 <div class="main">
 
 <!-- CAMERA -->
 
-<section class="camera-card">
+<section>
 
-    <div class="camera-wrap">
+<div class="card camera-card">
+
+    <div class="camera">
 
         <video id="video" autoplay playsinline></video>
 
         <div id="flash"></div>
 
-        <div class="camera-status" id="cameraStatus">
+        <div class="countdown" id="countdown"></div>
+
+        <div class="status" id="status">
             ● Camera ready
         </div>
-
-        <div class="countdown" id="countdown"></div>
 
     </div>
 
     <div class="controls">
 
-        <button class="btn primary" onclick="startPhotoSession()">
+        <button class="btn primary" onclick="takePhotos()">
             📸 Take Photos
         </button>
 
@@ -572,8 +450,8 @@ input[type="range"] {
             🔄 Flip
         </button>
 
-        <button class="btn" onclick="toggleCountdown()">
-            ⏱️ <span id="countdownButton">3s</span>
+        <button class="btn" onclick="changeCountdown()">
+            ⏱️ <span id="countdownText">3s</span>
         </button>
 
         <button class="btn" onclick="surpriseMe()">
@@ -582,35 +460,38 @@ input[type="range"] {
 
     </div>
 
-    <div class="capture-section">
+    <div class="photo-count">
 
-        <div class="capture-grid">
+        <button onclick="setPhotoCount(3)">
+            3 Photos
+        </button>
 
-            <button class="capture-btn" onclick="setPhotoCount(3)">
-                3 Photos
-            </button>
-
-            <button class="capture-btn" onclick="setPhotoCount(4)">
-                4 Photos
-            </button>
-
-        </div>
-
-        <p style="font-size:11px;color:#9b7d86;text-align:center;margin:8px 0 0">
-            Current: <span id="photoCountLabel">4 photos</span>
-        </p>
+        <button onclick="setPhotoCount(4)">
+            4 Photos
+        </button>
 
     </div>
 
-    <div class="result" id="result">
+    <p style="text-align:center;color:#9d8089;font-size:11px">
+        Current: <span id="photoCountText">4 photos</span>
+    </p>
 
-        <h2>Your little memory ♡</h2>
+</div>
+
+
+<!-- RESULT -->
+
+<div class="result card" id="result">
+
+    <div style="padding:18px">
+
+        <h2>Your filmstrip ♡</h2>
 
         <canvas id="resultCanvas"></canvas>
 
-        <div class="controls">
+        <div class="result-actions">
 
-            <button class="btn primary" onclick="downloadPhoto()">
+            <button class="btn primary" onclick="downloadImage()">
                 💾 Download PNG
             </button>
 
@@ -622,409 +503,596 @@ input[type="range"] {
 
     </div>
 
+</div>
+
 </section>
 
 
 <!-- EDITOR -->
 
-<aside class="editor-card">
+<aside class="card editor">
 
-    <div class="tabs">
+<div class="tabs">
 
-        <button class="tab active" data-tab="filters">
-            🎞️ FILTERS
-        </button>
+    <button class="tab active" data-tab="filmstrip">
+        🎞️ FILMSTRIP
+    </button>
 
-        <button class="tab" data-tab="strips">
-            🎀 STRIPS
-        </button>
+    <button class="tab" data-tab="photos">
+        🖼️ PHOTOS
+    </button>
 
-        <button class="tab" data-tab="colors">
-            🎨 COLORS
-        </button>
+    <button class="tab" data-tab="colors">
+        🎨 COLORS
+    </button>
 
-        <button class="tab" data-tab="text">
-            ✍️ TEXT
-        </button>
+    <button class="tab" data-tab="text">
+        ✍️ TEXT
+    </button>
 
-        <button class="tab" data-tab="stickers">
-            💕 STICKERS
-        </button>
+    <button class="tab" data-tab="decor">
+        🎀 DECOR
+    </button>
 
-        <button class="tab" data-tab="adjust">
-            ✨ ADJUST
-        </button>
+    <button class="tab" data-tab="filters">
+        ✨ FILTERS
+    </button>
 
+</div>
+
+
+<!-- FILMSTRIP -->
+
+<div class="panel active" id="filmstrip">
+
+<h2>Customize your strip 🎞️</h2>
+
+<p class="help">
+    Start with a size, then customize everything below.
+</p>
+
+<div class="presets">
+
+    <button class="preset selected" data-preset="classic">
+        <strong>2 × 6</strong>
+        <span>classic photobooth</span>
+    </button>
+
+    <button class="preset" data-preset="polaroid">
+        <strong>4 × 6</strong>
+        <span>polaroid style</span>
+    </button>
+
+    <button class="preset" data-preset="square">
+        <strong>Square</strong>
+        <span>cute social style</span>
+    </button>
+
+    <button class="preset" data-preset="wide">
+        <strong>4 × 6 Wide</strong>
+        <span>horizontal strip</span>
+    </button>
+
+</div>
+
+<div class="slider">
+
+    <div class="slider-head">
+        <span>Strip Width</span>
+        <span id="stripWidthValue">600px</span>
     </div>
 
+    <input
+        type="range"
+        id="stripWidth"
+        min="450"
+        max="1000"
+        value="600"
+    >
 
-    <!-- FILTERS -->
+</div>
 
-    <div class="panel active" id="filters">
+<div class="slider">
 
-        <h2 class="section-title">Choose your film ♡</h2>
-
-        <p class="section-subtitle">
-            Pick the mood for your photos.
-        </p>
-
-        <div class="options">
-
-            <button class="option selected" data-filter="original">
-                <div class="filter-preview original"></div>
-                <span class="option-name">Original</span>
-                <span class="option-desc">natural & clean</span>
-            </button>
-
-            <button class="option" data-filter="coquette">
-                <div class="filter-preview coquette"></div>
-                <span class="option-name">Coquette</span>
-                <span class="option-desc">pink & romantic</span>
-            </button>
-
-            <button class="option" data-filter="soft">
-                <div class="filter-preview soft"></div>
-                <span class="option-name">Soft Pink</span>
-                <span class="option-desc">sweet & delicate</span>
-            </button>
-
-            <button class="option" data-filter="dreamy">
-                <div class="filter-preview dreamy"></div>
-                <span class="option-name">Dreamy</span>
-                <span class="option-desc">soft & magical</span>
-            </button>
-
-            <button class="option" data-filter="film">
-                <div class="filter-preview film"></div>
-                <span class="option-name">Film</span>
-                <span class="option-desc">classic analog</span>
-            </button>
-
-            <button class="option" data-filter="vintage">
-                <div class="filter-preview vintage"></div>
-                <span class="option-name">Vintage</span>
-                <span class="option-desc">old camera</span>
-            </button>
-
-            <button class="option" data-filter="warm">
-                <div class="filter-preview warm"></div>
-                <span class="option-name">Warm</span>
-                <span class="option-desc">golden memories</span>
-            </button>
-
-            <button class="option" data-filter="bw">
-                <div class="filter-preview bw"></div>
-                <span class="option-name">B&W</span>
-                <span class="option-desc">timeless</span>
-            </button>
-
-            <button class="option" data-filter="flash">
-                <div class="filter-preview flash"></div>
-                <span class="option-name">Flash</span>
-                <span class="option-desc">party camera</span>
-            </button>
-
-            <button class="option" data-filter="faded">
-                <div class="filter-preview faded"></div>
-                <span class="option-name">Faded Film</span>
-                <span class="option-desc">nostalgic</span>
-            </button>
-
-        </div>
-
+    <div class="slider-head">
+        <span>Strip Height</span>
+        <span id="stripHeightValue">1400px</span>
     </div>
 
+    <input
+        type="range"
+        id="stripHeight"
+        min="600"
+        max="1800"
+        value="1400"
+    >
 
-    <!-- STRIPS -->
+</div>
 
-    <div class="panel" id="strips">
+<div class="slider">
 
-        <h2 class="section-title">Choose your strip 🎞️</h2>
-
-        <p class="section-subtitle">
-            Pick how your memories will be arranged.
-        </p>
-
-        <div class="options">
-
-            <button class="option selected" data-layout="classic">
-                <div class="filter-preview soft"></div>
-                <span class="option-name">Classic</span>
-                <span class="option-desc">vertical filmstrip</span>
-            </button>
-
-            <button class="option" data-layout="polaroid">
-                <div class="filter-preview original"></div>
-                <span class="option-name">Polaroid</span>
-                <span class="option-desc">cute white frame</span>
-            </button>
-
-            <button class="option" data-layout="grid">
-                <div class="filter-preview dreamy"></div>
-                <span class="option-name">2 × 2 Grid</span>
-                <span class="option-desc">four-photo grid</span>
-            </button>
-
-            <button class="option" data-layout="mini">
-                <div class="filter-preview coquette"></div>
-                <span class="option-name">Mini Strip</span>
-                <span class="option-desc">small & cute</span>
-            </button>
-
-            <button class="option" data-layout="wide">
-                <div class="filter-preview film"></div>
-                <span class="option-name">Wide</span>
-                <span class="option-desc">horizontal layout</span>
-            </button>
-
-            <button class="option" data-layout="minimal">
-                <div class="filter-preview faded"></div>
-                <span class="option-name">Minimal</span>
-                <span class="option-desc">clean & simple</span>
-            </button>
-
-        </div>
-
+    <div class="slider-head">
+        <span>Outer Margin</span>
+        <span id="marginValue">35px</span>
     </div>
 
+    <input
+        type="range"
+        id="margin"
+        min="5"
+        max="100"
+        value="35"
+    >
 
-    <!-- COLORS -->
+</div>
 
-    <div class="panel" id="colors">
+<div class="slider">
 
-        <h2 class="section-title">Make it yours 🎨</h2>
-
-        <div class="color-row">
-            <label>Background</label>
-            <input type="color" id="bgColor" value="#fff8f6">
-        </div>
-
-        <div class="color-row">
-            <label>Frame</label>
-            <input type="color" id="frameColor" value="#ffffff">
-        </div>
-
-        <div class="color-row">
-            <label>Accent</label>
-            <input type="color" id="accentColor" value="#e9a9bd">
-        </div>
-
-        <div class="field" style="margin-top:20px">
-            <label>Corner style</label>
-
-            <select id="cornerStyle">
-                <option value="rounded">Very Rounded ♡</option>
-                <option value="soft">Soft Rounded</option>
-                <option value="square">Minimal Square</option>
-            </select>
-
-        </div>
-
-        <div class="slider">
-
-            <div class="slider-head">
-                <span>Frame Thickness</span>
-                <span id="borderValue">18px</span>
-            </div>
-
-            <input
-                type="range"
-                id="borderWidth"
-                min="5"
-                max="50"
-                value="18"
-            >
-
-        </div>
-
+    <div class="slider-head">
+        <span>Photo Spacing</span>
+        <span id="spacingValue">18px</span>
     </div>
 
+    <input
+        type="range"
+        id="spacing"
+        min="0"
+        max="70"
+        value="18"
+    >
 
-    <!-- TEXT -->
+</div>
 
-    <div class="panel" id="text">
+<div class="slider">
 
-        <h2 class="section-title">Add your words ✍️</h2>
-
-        <div class="field">
-
-            <label>Title</label>
-
-            <input
-                type="text"
-                id="titleText"
-                value="whimsy memories"
-                maxlength="30"
-            >
-
-        </div>
-
-        <div class="field">
-
-            <label>Caption</label>
-
-            <input
-                type="text"
-                id="captionText"
-                value="♡ made with love ♡"
-                maxlength="35"
-            >
-
-        </div>
-
-        <label class="checkbox">
-
-            <input type="checkbox" id="showDate" checked>
-
-            Add today's date
-
-        </label>
-
-        <div class="field" style="margin-top:18px">
-
-            <label>Text style</label>
-
-            <select id="textStyle">
-
-                <option value="elegant">Elegant</option>
-                <option value="cute">Cute</option>
-                <option value="minimal">Minimal</option>
-
-            </select>
-
-        </div>
-
+    <div class="slider-head">
+        <span>Photo Corner Radius</span>
+        <span id="radiusValue">18px</span>
     </div>
 
+    <input
+        type="range"
+        id="radius"
+        min="0"
+        max="60"
+        value="18"
+    >
 
-    <!-- STICKERS -->
+</div>
 
-    <div class="panel" id="stickers">
-
-        <h2 class="section-title">Pick a little decoration 💕</h2>
-
-        <p class="section-subtitle">
-            One sticker style will appear on your final strip.
-        </p>
-
-        <div class="stickers">
-
-            <button class="sticker selected" data-sticker="none">
-                ✕
-            </button>
-
-            <button class="sticker" data-sticker="bow">
-                🎀
-            </button>
-
-            <button class="sticker" data-sticker="heart">
-                ♡
-            </button>
-
-            <button class="sticker" data-sticker="hearts">
-                💕
-            </button>
-
-            <button class="sticker" data-sticker="star">
-                ☆
-            </button>
-
-            <button class="sticker" data-sticker="sparkle">
-                ✨
-            </button>
-
-            <button class="sticker" data-sticker="flower">
-                🌷
-            </button>
-
-            <button class="sticker" data-sticker="ribbon">
-                🎗️
-            </button>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- ADJUST -->
+<!-- PHOTOS -->
 
-    <div class="panel" id="adjust">
+<div class="panel" id="photos">
 
-        <h2 class="section-title">Perfect the look ✨</h2>
+<h2>Photo arrangement 🖼️</h2>
 
-        <div class="slider">
+<p class="help">
+    Control how your photos sit inside the strip.
+</p>
 
-            <div class="slider-head">
-                <span>Brightness</span>
-                <span id="brightnessValue">100%</span>
-            </div>
+<div class="field">
 
-            <input
-                type="range"
-                id="brightness"
-                min="70"
-                max="130"
-                value="100"
-            >
+<label>Photo arrangement</label>
 
-        </div>
+<select id="photoArrangement">
 
-        <div class="slider">
+    <option value="vertical">Vertical</option>
+    <option value="grid">2 × 2 Grid</option>
+    <option value="horizontal">Horizontal</option>
 
-            <div class="slider-head">
-                <span>Contrast</span>
-                <span id="contrastValue">100%</span>
-            </div>
+</select>
 
-            <input
-                type="range"
-                id="contrast"
-                min="70"
-                max="140"
-                value="100"
-            >
+</div>
 
-        </div>
+<div class="slider">
 
-        <div class="slider">
+<div class="slider-head">
+<span>Photo Width</span>
+<span id="photoWidthValue">90%</span>
+</div>
 
-            <div class="slider-head">
-                <span>Saturation</span>
-                <span id="saturationValue">100%</span>
-            </div>
+<input
+type="range"
+id="photoWidth"
+min="50"
+max="100"
+value="90"
+>
 
-            <input
-                type="range"
-                id="saturation"
-                min="0"
-                max="160"
-                value="100"
-            >
+</div>
 
-        </div>
+<div class="slider">
 
-        <div class="slider">
+<div class="slider-head">
+<span>Photo Height</span>
+<span id="photoHeightValue">22%</span>
+</div>
 
-            <div class="slider-head">
-                <span>Film Grain</span>
-                <span id="grainValue">12%</span>
-            </div>
+<input
+type="range"
+id="photoHeight"
+min="10"
+max="35"
+value="22"
+>
 
-            <input
-                type="range"
-                id="grain"
-                min="0"
-                max="35"
-                value="12"
-            >
+</div>
 
-        </div>
+<div class="slider">
 
-        <button class="btn" onclick="resetAdjustments()">
-            ↺ Reset adjustments
-        </button>
+<div class="slider-head">
+<span>Photo Rotation</span>
+<span id="rotationValue">0°</span>
+</div>
 
-    </div>
+<input
+type="range"
+id="rotation"
+min="-8"
+max="8"
+value="0"
+>
+
+</div>
+
+</div>
+
+
+<!-- COLORS -->
+
+<div class="panel" id="colors">
+
+<h2>Make it yours 🎨</h2>
+
+<p class="help">
+    Choose your own filmstrip colors.
+</p>
+
+<div class="color-row">
+<span>Background</span>
+<input type="color" id="backgroundColor" value="#fff8f6">
+</div>
+
+<div class="color-row">
+<span>Photo Frame</span>
+<input type="color" id="frameColor" value="#ffffff">
+</div>
+
+<div class="color-row">
+<span>Text</span>
+<input type="color" id="textColor" value="#59434c">
+</div>
+
+<div class="color-row">
+<span>Accent</span>
+<input type="color" id="accentColor" value="#e6a5bb">
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Frame Thickness</span>
+<span id="frameValue">15px</span>
+</div>
+
+<input
+type="range"
+id="frameThickness"
+min="0"
+max="50"
+value="15"
+>
+
+</div>
+
+</div>
+
+
+<!-- TEXT -->
+
+<div class="panel" id="text">
+
+<h2>Add your words ✍️</h2>
+
+<p class="help">
+    Personalize the top and bottom of your strip.
+</p>
+
+<div class="field">
+
+<label>Title</label>
+
+<input
+type="text"
+id="title"
+value="whimsy memories"
+maxlength="30"
+>
+
+</div>
+
+<div class="field">
+
+<label>Caption</label>
+
+<input
+type="text"
+id="caption"
+value="♡ made with love ♡"
+maxlength="40"
+>
+
+</div>
+
+<div class="field">
+
+<label>Font</label>
+
+<select id="font">
+
+<option value="playfair">
+Elegant — Playfair Display
+</option>
+
+<option value="sans">
+Minimal — DM Sans
+</option>
+
+</select>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Title Size</span>
+<span id="titleSizeValue">35px</span>
+</div>
+
+<input
+type="range"
+id="titleSize"
+min="18"
+max="65"
+value="35"
+>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Text Position</span>
+<span id="textPositionValue">center</span>
+</div>
+
+<input
+type="range"
+id="textPosition"
+min="0"
+max="100"
+value="50"
+>
+
+</div>
+
+<label style="font-size:13px">
+
+<input
+type="checkbox"
+id="showDate"
+checked
+>
+
+ Show date
+
+</label>
+
+</div>
+
+
+<!-- DECOR -->
+
+<div class="panel" id="decor">
+
+<h2>Decorate it 🎀</h2>
+
+<p class="help">
+    Choose your favorite little decoration.
+</p>
+
+<div class="stickers">
+
+<button class="sticker selected" data-decor="none">
+✕
+</button>
+
+<button class="sticker" data-decor="🎀">
+🎀
+</button>
+
+<button class="sticker" data-decor="♡">
+♡
+</button>
+
+<button class="sticker" data-decor="💕">
+💕
+</button>
+
+<button class="sticker" data-decor="☆">
+☆
+</button>
+
+<button class="sticker" data-decor="✨">
+✨
+</button>
+
+<button class="sticker" data-decor="🌷">
+🌷
+</button>
+
+<button class="sticker" data-decor="🎗️">
+🎗️
+</button>
+
+</div>
+
+<div class="slider" style="margin-top:20px">
+
+<div class="slider-head">
+<span>Decoration Size</span>
+<span id="decorSizeValue">40px</span>
+</div>
+
+<input
+type="range"
+id="decorSize"
+min="20"
+max="80"
+value="40"
+>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Decoration Position</span>
+<span id="decorPositionValue">50%</span>
+</div>
+
+<input
+type="range"
+id="decorPosition"
+min="0"
+max="100"
+value="50"
+>
+
+</div>
+
+</div>
+
+
+<!-- FILTERS -->
+
+<div class="panel" id="filters">
+
+<h2>Choose your film ✨</h2>
+
+<p class="help">
+    Your chosen filter is applied to every captured photo.
+</p>
+
+<div class="presets">
+
+<button class="preset selected" data-filter="none">
+<strong>Original</strong>
+<span>natural</span>
+</button>
+
+<button class="preset" data-filter="coquette">
+<strong>Coquette</strong>
+<span>pink & romantic</span>
+</button>
+
+<button class="preset" data-filter="soft">
+<strong>Soft Pink</strong>
+<span>delicate</span>
+</button>
+
+<button class="preset" data-filter="dreamy">
+<strong>Dreamy</strong>
+<span>soft glow</span>
+</button>
+
+<button class="preset" data-filter="film">
+<strong>Film</strong>
+<span>analog</span>
+</button>
+
+<button class="preset" data-filter="vintage">
+<strong>Vintage</strong>
+<span>nostalgic</span>
+</button>
+
+<button class="preset" data-filter="warm">
+<strong>Warm</strong>
+<span>golden</span>
+</button>
+
+<button class="preset" data-filter="bw">
+<strong>B&W</strong>
+<span>classic</span>
+</button>
+
+<button class="preset" data-filter="flash">
+<strong>Flash</strong>
+<span>party camera</span>
+</button>
+
+<button class="preset" data-filter="faded">
+<strong>Faded</strong>
+<span>old film</span>
+</button>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Brightness</span>
+<span id="brightnessValue">100%</span>
+</div>
+
+<input
+type="range"
+id="brightness"
+min="70"
+max="130"
+value="100"
+>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Saturation</span>
+<span id="saturationValue">100%</span>
+</div>
+
+<input
+type="range"
+id="saturation"
+min="0"
+max="160"
+value="100"
+>
+
+</div>
+
+<div class="slider">
+
+<div class="slider-head">
+<span>Film Grain</span>
+<span id="grainValue">10%</span>
+</div>
+
+<input
+type="range"
+id="grain"
+min="0"
+max="30"
+value="10"
+>
+
+</div>
+
+</div>
 
 </aside>
 
@@ -1038,663 +1106,795 @@ input[type="range"] {
 
 <script>
 
-/* =========================
+/* ==============================
    STATE
-========================= */
+============================== */
 
-const state = {
+const state={
 
-    filter: "original",
+    width:600,
 
-    layout: "classic",
+    height:1400,
 
-    sticker: "none",
+    margin:35,
 
-    bgColor: "#fff8f6",
+    spacing:18,
 
-    frameColor: "#ffffff",
+    radius:18,
 
-    accentColor: "#e9a9bd",
+    frame:15,
 
-    borderWidth: 18,
+    background:"#fff8f6",
 
-    cornerStyle: "rounded",
+    frameColor:"#ffffff",
 
-    title: "whimsy memories",
+    textColor:"#59434c",
 
-    caption: "♡ made with love ♡",
+    accent:"#e6a5bb",
 
-    showDate: true,
+    arrangement:"vertical",
 
-    textStyle: "elegant",
+    photoWidth:90,
 
-    brightness: 100,
+    photoHeight:22,
 
-    contrast: 100,
+    rotation:0,
 
-    saturation: 100,
+    title:"whimsy memories",
 
-    grain: 12,
+    caption:"♡ made with love ♡",
 
-    countdown: 3,
+    font:"playfair",
 
-    photoCount: 4,
+    titleSize:35,
 
-    facingMode: "user"
+    textPosition:50,
+
+    showDate:true,
+
+    decor:"none",
+
+    decorSize:40,
+
+    decorPosition:50,
+
+    filter:"none",
+
+    brightness:100,
+
+    saturation:100,
+
+    grain:10,
+
+    countdown:3,
+
+    photoCount:4,
+
+    facingMode:"user"
 
 };
 
-let stream = null;
-let photos = [];
+let stream=null;
+
+let photos=[];
 
 
-/* =========================
-   DOM
-========================= */
+/* ==============================
+   ELEMENTS
+============================== */
 
-const video = document.getElementById("video");
+const video=document.getElementById("video");
 
-const canvas = document.getElementById("canvas");
+const canvas=document.getElementById("canvas");
 
-const resultCanvas = document.getElementById("resultCanvas");
+const resultCanvas=document.getElementById("resultCanvas");
 
-const countdownEl = document.getElementById("countdown");
+const flash=document.getElementById("flash");
 
-const flash = document.getElementById("flash");
+const countdownEl=document.getElementById("countdown");
 
-const toast = document.getElementById("toast");
+const toast=document.getElementById("toast");
 
 
-/* =========================
+/* ==============================
    CAMERA
-========================= */
+============================== */
 
-async function startCamera() {
+async function startCamera(){
 
-    try {
+    try{
 
-        if (stream) {
+        if(stream){
 
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(
+                track=>track.stop()
+            );
 
         }
 
-        stream = await navigator.mediaDevices.getUserMedia({
+        stream=
+            await navigator.mediaDevices.getUserMedia({
 
-            video: {
-                facingMode: state.facingMode,
-                width: {
-                    ideal: 1920
+                video:{
+                    facingMode:state.facingMode,
+                    width:{ideal:1920},
+                    height:{ideal:1080}
                 },
-                height: {
-                    ideal: 1080
-                }
-            },
 
-            audio: false
+                audio:false
 
-        });
+            });
 
-        video.srcObject = stream;
+        video.srcObject=stream;
 
-        document.getElementById("cameraStatus").textContent =
-            "● Camera ready";
+        document.getElementById("status")
+            .textContent="● Camera ready";
 
-    } catch (error) {
+    }
 
-        document.getElementById("cameraStatus").textContent =
-            "♡ Camera permission needed";
+    catch(error){
 
-        showToast("Please allow camera access ♡");
+        document.getElementById("status")
+            .textContent="♡ Allow camera access";
 
     }
 
 }
 
 
-async function flipCamera() {
+async function flipCamera(){
 
-    state.facingMode =
-        state.facingMode === "user"
-        ? "environment"
-        : "user";
+    state.facingMode=
+        state.facingMode==="user"
+        ?"environment"
+        :"user";
 
-    await startCamera();
+    startCamera();
 
 }
 
 
-/* =========================
+/* ==============================
    TABS
-========================= */
+============================== */
 
-document.querySelectorAll(".tab").forEach(tab => {
+document.querySelectorAll(".tab")
+.forEach(tab=>{
 
-    tab.addEventListener("click", () => {
+    tab.onclick=()=>{
 
-        document.querySelectorAll(".tab")
-            .forEach(t => t.classList.remove("active"));
+        document
+        .querySelectorAll(".tab")
+        .forEach(t=>t.classList.remove("active"));
 
-        document.querySelectorAll(".panel")
-            .forEach(p => p.classList.remove("active"));
+        document
+        .querySelectorAll(".panel")
+        .forEach(p=>p.classList.remove("active"));
 
         tab.classList.add("active");
 
         document
-            .getElementById(tab.dataset.tab)
-            .classList.add("active");
-
-    });
-
-});
-
-
-/* =========================
-   FILTERS
-========================= */
-
-document.querySelectorAll("[data-filter]").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        document
-            .querySelectorAll("[data-filter]")
-            .forEach(b => b.classList.remove("selected"));
-
-        button.classList.add("selected");
-
-        state.filter = button.dataset.filter;
-
-        applyLiveFilter();
-
-    });
-
-});
-
-
-function filterCSS() {
-
-    const b = state.brightness;
-
-    const c = state.contrast;
-
-    const s = state.saturation;
-
-    const base =
-        `brightness(${b}%)
-         contrast(${c}%)
-         saturate(${s}%)`;
-
-    const filters = {
-
-        original:
-            base,
-
-        coquette:
-            `${base} sepia(8%) saturate(120%) hue-rotate(330deg)`,
-
-        soft:
-            `${base} brightness(108%) saturate(85%) sepia(5%)`,
-
-        dreamy:
-            `${base} brightness(108%) contrast(88%) saturate(90%) blur(.15px)`,
-
-        film:
-            `${base} contrast(110%) saturate(92%) sepia(10%)`,
-
-        vintage:
-            `${base} sepia(28%) contrast(92%) saturate(82%)`,
-
-        warm:
-            `${base} sepia(20%) saturate(125%)`,
-
-        bw:
-            `${base} grayscale(100%) contrast(108%)`,
-
-        flash:
-            `${base} brightness(120%) contrast(110%) saturate(90%)`,
-
-        faded:
-            `${base} brightness(110%) contrast(82%) saturate(75%) sepia(8%)`
+        .getElementById(tab.dataset.tab)
+        .classList.add("active");
 
     };
 
-    return filters[state.filter] || base;
-
-}
+});
 
 
-function applyLiveFilter() {
+/* ==============================
+   FILMSTRIP PRESETS
+============================== */
 
-    video.style.filter = filterCSS();
+const presets={
 
-}
+    classic:{
+        width:600,
+        height:1400,
+        margin:35,
+        spacing:18
+    },
+
+    polaroid:{
+        width:850,
+        height:1500,
+        margin:55,
+        spacing:28
+    },
+
+    square:{
+        width:1000,
+        height:1000,
+        margin:45,
+        spacing:20
+    },
+
+    wide:{
+        width:1500,
+        height:850,
+        margin:40,
+        spacing:25
+    }
+
+};
 
 
-/* =========================
-   LAYOUT
-========================= */
+document
+.querySelectorAll("[data-preset]")
+.forEach(button=>{
 
-document.querySelectorAll("[data-layout]").forEach(button => {
-
-    button.addEventListener("click", () => {
+    button.onclick=()=>{
 
         document
-            .querySelectorAll("[data-layout]")
-            .forEach(b => b.classList.remove("selected"));
+        .querySelectorAll("[data-preset]")
+        .forEach(b=>b.classList.remove("selected"));
 
         button.classList.add("selected");
 
-        state.layout = button.dataset.layout;
+        const p=presets[button.dataset.preset];
 
-    });
+        Object.assign(state,p);
+
+        updateAllControls();
+
+    };
 
 });
 
 
-/* =========================
-   STICKERS
-========================= */
+/* ==============================
+   FILTERS
+============================== */
 
-document.querySelectorAll("[data-sticker]").forEach(button => {
+document
+.querySelectorAll("[data-filter]")
+.forEach(button=>{
 
-    button.addEventListener("click", () => {
+    button.onclick=()=>{
 
         document
-            .querySelectorAll("[data-sticker]")
-            .forEach(b => b.classList.remove("selected"));
+        .querySelectorAll("[data-filter]")
+        .forEach(b=>b.classList.remove("selected"));
 
         button.classList.add("selected");
 
-        state.sticker = button.dataset.sticker;
+        state.filter=button.dataset.filter;
 
-    });
+        applyVideoFilter();
+
+    };
 
 });
 
 
-/* =========================
-   COLORS
-========================= */
+function getFilterCSS(){
 
-document.getElementById("bgColor")
-    .addEventListener("input", e => {
+    let base=
+        `brightness(${state.brightness}%)
+         saturate(${state.saturation}%)`;
 
-        state.bgColor = e.target.value;
+    const filters={
 
-    });
+        none:base,
 
+        coquette:
+            `${base} sepia(5%) hue-rotate(330deg) saturate(125%)`,
 
-document.getElementById("frameColor")
-    .addEventListener("input", e => {
+        soft:
+            `${base} brightness(108%) saturate(85%)`,
 
-        state.frameColor = e.target.value;
+        dreamy:
+            `${base} brightness(108%) contrast(88%) saturate(90%)`,
 
-    });
+        film:
+            `${base} contrast(112%) saturate(90%) sepia(10%)`,
 
+        vintage:
+            `${base} sepia(30%) contrast(90%) saturate(80%)`,
 
-document.getElementById("accentColor")
-    .addEventListener("input", e => {
+        warm:
+            `${base} sepia(18%) saturate(125%)`,
 
-        state.accentColor = e.target.value;
+        bw:
+            `${base} grayscale(100%) contrast(110%)`,
 
-        document.documentElement.style.setProperty(
-            "--pink",
-            state.accentColor
-        );
+        flash:
+            `${base} brightness(120%) contrast(110%)`,
 
-    });
+        faded:
+            `${base} brightness(110%) contrast(82%) saturate(75%)`
 
+    };
 
-document.getElementById("cornerStyle")
-    .addEventListener("change", e => {
+    return filters[state.filter];
 
-        state.cornerStyle = e.target.value;
-
-    });
-
-
-document.getElementById("borderWidth")
-    .addEventListener("input", e => {
-
-        state.borderWidth = Number(e.target.value);
-
-        document.getElementById("borderValue")
-            .textContent = e.target.value + "px";
-
-    });
+}
 
 
-/* =========================
-   TEXT
-========================= */
+function applyVideoFilter(){
 
-document.getElementById("titleText")
-    .addEventListener("input", e => {
+    video.style.filter=getFilterCSS();
 
-        state.title = e.target.value;
-
-    });
+}
 
 
-document.getElementById("captionText")
-    .addEventListener("input", e => {
+/* ==============================
+   GENERIC INPUTS
+============================== */
 
-        state.caption = e.target.value;
+function range(id,property,valueId,suffix){
 
-    });
+    const el=document.getElementById(id);
+
+    el.oninput=()=>{
+
+        state[property]=Number(el.value);
+
+        document.getElementById(valueId)
+        .textContent=
+            el.value+suffix;
+
+        if(
+            property==="brightness" ||
+            property==="saturation"
+        ){
+
+            applyVideoFilter();
+
+        }
+
+    };
+
+}
+
+
+range(
+    "stripWidth",
+    "width",
+    "stripWidthValue",
+    "px"
+);
+
+range(
+    "stripHeight",
+    "height",
+    "stripHeightValue",
+    "px"
+);
+
+range(
+    "margin",
+    "margin",
+    "marginValue",
+    "px"
+);
+
+range(
+    "spacing",
+    "spacing",
+    "spacingValue",
+    "px"
+);
+
+range(
+    "radius",
+    "radius",
+    "radiusValue",
+    "px"
+);
+
+range(
+    "frameThickness",
+    "frame",
+    "frameValue",
+    "px"
+);
+
+range(
+    "photoWidth",
+    "photoWidth",
+    "photoWidthValue",
+    "%"
+);
+
+range(
+    "photoHeight",
+    "photoHeight",
+    "photoHeightValue",
+    "%"
+);
+
+range(
+    "rotation",
+    "rotation",
+    "rotationValue",
+    "°"
+);
+
+range(
+    "titleSize",
+    "titleSize",
+    "titleSizeValue",
+    "px"
+);
+
+range(
+    "textPosition",
+    "textPosition",
+    "textPositionValue",
+    "%"
+);
+
+range(
+    "decorSize",
+    "decorSize",
+    "decorSizeValue",
+    "px"
+);
+
+range(
+    "decorPosition",
+    "decorPosition",
+    "decorPositionValue",
+    "%"
+);
+
+range(
+    "brightness",
+    "brightness",
+    "brightnessValue",
+    "%"
+);
+
+range(
+    "saturation",
+    "saturation",
+    "saturationValue",
+    "%"
+);
+
+range(
+    "grain",
+    "grain",
+    "grainValue",
+    "%"
+);
+
+
+/* ==============================
+   SELECTS / TEXT
+============================== */
+
+document.getElementById("photoArrangement")
+.onchange=e=>{
+
+    state.arrangement=e.target.value;
+
+};
+
+
+document.getElementById("font")
+.onchange=e=>{
+
+    state.font=e.target.value;
+
+};
+
+
+document.getElementById("title")
+.oninput=e=>{
+
+    state.title=e.target.value;
+
+};
+
+
+document.getElementById("caption")
+.oninput=e=>{
+
+    state.caption=e.target.value;
+
+};
 
 
 document.getElementById("showDate")
-    .addEventListener("change", e => {
+.onchange=e=>{
 
-        state.showDate = e.target.checked;
+    state.showDate=e.target.checked;
 
-    });
-
-
-document.getElementById("textStyle")
-    .addEventListener("change", e => {
-
-        state.textStyle = e.target.value;
-
-    });
+};
 
 
-/* =========================
-   ADJUSTMENTS
-========================= */
+/* ==============================
+   COLORS
+============================== */
 
-document.getElementById("brightness")
-    .addEventListener("input", e => {
+document.getElementById("backgroundColor")
+.oninput=e=>state.background=e.target.value;
 
-        state.brightness = Number(e.target.value);
+document.getElementById("frameColor")
+.oninput=e=>state.frameColor=e.target.value;
 
-        document.getElementById("brightnessValue")
-            .textContent = e.target.value + "%";
+document.getElementById("textColor")
+.oninput=e=>state.textColor=e.target.value;
 
-        applyLiveFilter();
+document.getElementById("accentColor")
+.oninput=e=>{
 
-    });
+    state.accent=e.target.value;
 
+    document.documentElement
+    .style.setProperty(
+        "--pink",
+        state.accent
+    );
 
-document.getElementById("contrast")
-    .addEventListener("input", e => {
-
-        state.contrast = Number(e.target.value);
-
-        document.getElementById("contrastValue")
-            .textContent = e.target.value + "%";
-
-        applyLiveFilter();
-
-    });
+};
 
 
-document.getElementById("saturation")
-    .addEventListener("input", e => {
+/* ==============================
+   DECOR
+============================== */
 
-        state.saturation = Number(e.target.value);
+document
+.querySelectorAll("[data-decor]")
+.forEach(button=>{
 
-        document.getElementById("saturationValue")
-            .textContent = e.target.value + "%";
+    button.onclick=()=>{
 
-        applyLiveFilter();
+        document
+        .querySelectorAll("[data-decor]")
+        .forEach(b=>b.classList.remove("selected"));
 
-    });
+        button.classList.add("selected");
 
+        state.decor=button.dataset.decor;
 
-document.getElementById("grain")
-    .addEventListener("input", e => {
+    };
 
-        state.grain = Number(e.target.value);
-
-        document.getElementById("grainValue")
-            .textContent = e.target.value + "%";
-
-    });
+});
 
 
-function resetAdjustments() {
+/* ==============================
+   PHOTO COUNT
+============================== */
 
-    state.brightness = 100;
-    state.contrast = 100;
-    state.saturation = 100;
-    state.grain = 12;
+function setPhotoCount(number){
 
-    document.getElementById("brightness").value = 100;
-    document.getElementById("contrast").value = 100;
-    document.getElementById("saturation").value = 100;
-    document.getElementById("grain").value = 12;
+    state.photoCount=number;
 
-    document.getElementById("brightnessValue").textContent = "100%";
-    document.getElementById("contrastValue").textContent = "100%";
-    document.getElementById("saturationValue").textContent = "100%";
-    document.getElementById("grainValue").textContent = "12%";
-
-    applyLiveFilter();
+    document.getElementById("photoCountText")
+    .textContent=number+" photos";
 
 }
 
 
-/* =========================
+/* ==============================
    COUNTDOWN
-========================= */
+============================== */
 
-function toggleCountdown() {
+function changeCountdown(){
 
-    state.countdown =
-        state.countdown === 3 ? 5 :
-        state.countdown === 5 ? 0 :
-        3;
+    state.countdown=
+        state.countdown===3
+        ?5
+        :state.countdown===5
+        ?0
+        :3;
 
-    document.getElementById("countdownButton")
-        .textContent =
-        state.countdown === 0
-        ? "Off"
-        : state.countdown + "s";
-
-}
-
-
-function wait(ms) {
-
-    return new Promise(resolve => setTimeout(resolve, ms));
+    document.getElementById("countdownText")
+    .textContent=
+        state.countdown===0
+        ?"Off"
+        :state.countdown+"s";
 
 }
 
 
-async function countdown() {
+function wait(ms){
 
-    if (state.countdown === 0) return;
+    return new Promise(
+        resolve=>setTimeout(resolve,ms)
+    );
 
-    countdownEl.style.opacity = 1;
+}
 
-    for (
-        let i = state.countdown;
-        i > 0;
+
+async function countdown(){
+
+    if(state.countdown===0)return;
+
+    countdownEl.style.opacity=1;
+
+    for(
+        let i=state.countdown;
+        i>0;
         i--
-    ) {
+    ){
 
-        countdownEl.textContent = i;
+        countdownEl.textContent=i;
 
         await wait(1000);
 
     }
 
-    countdownEl.textContent = "♡";
+    countdownEl.textContent="♡";
 
     await wait(250);
 
-    countdownEl.style.opacity = 0;
+    countdownEl.style.opacity=0;
 
 }
 
 
-/* =========================
-   PHOTO COUNT
-========================= */
+/* ==============================
+   CAPTURE
+============================== */
 
-function setPhotoCount(number) {
+function capturePhoto(){
 
-    state.photoCount = number;
+    const w=video.videoWidth;
 
-    document.getElementById("photoCountLabel")
-        .textContent = number + " photos";
+    const h=video.videoHeight;
 
-}
+    canvas.width=w;
 
+    canvas.height=h;
 
-/* =========================
-   TAKE PHOTO
-========================= */
-
-function capturePhoto() {
-
-    const width = video.videoWidth;
-
-    const height = video.videoHeight;
-
-    canvas.width = width;
-
-    canvas.height = height;
-
-    const ctx = canvas.getContext("2d");
+    const ctx=canvas.getContext("2d");
 
     ctx.save();
 
-    if (state.facingMode === "user") {
+    if(state.facingMode==="user"){
 
-        ctx.translate(width, 0);
-        ctx.scale(-1, 1);
+        ctx.translate(w,0);
+
+        ctx.scale(-1,1);
 
     }
 
-    ctx.filter = filterCSS();
+    ctx.filter=getFilterCSS();
 
     ctx.drawImage(
         video,
         0,
         0,
-        width,
-        height
+        w,
+        h
     );
 
     ctx.restore();
 
-    applyGrain(ctx, width, height);
+    addGrain(ctx,w,h);
 
-    return canvas.toDataURL("image/jpeg", .95);
+    return canvas.toDataURL(
+        "image/jpeg",
+        .95
+    );
 
 }
 
 
-function applyGrain(ctx, width, height) {
+function addGrain(ctx,w,h){
 
-    if (state.grain <= 0) return;
+    if(state.grain<=0)return;
 
-    const amount = state.grain / 100;
+    const image=
+        ctx.getImageData(
+            0,
+            0,
+            w,
+            h
+        );
 
-    const imageData =
-        ctx.getImageData(0,0,width,height);
+    const data=image.data;
 
-    const data = imageData.data;
+    const amount=state.grain/100;
 
-    for (
-        let i = 0;
-        i < data.length;
-        i += 4
-    ) {
+    for(
+        let i=0;
+        i<data.length;
+        i+=4
+    ){
 
-        const noise =
-            (Math.random() - .5)
-            * 255
-            * amount;
+        const noise=
+            (Math.random()-.5)
+            *255
+            *amount;
 
-        data[i] += noise;
-        data[i+1] += noise;
-        data[i+2] += noise;
+        data[i]+=noise;
+        data[i+1]+=noise;
+        data[i+2]+=noise;
 
     }
 
-    ctx.putImageData(imageData,0,0);
+    ctx.putImageData(image,0,0);
 
 }
 
 
-async function startPhotoSession() {
+/* ==============================
+   PHOTO SESSION
+============================== */
 
-    if (!stream) {
+async function takePhotos(){
+
+    if(!stream){
 
         await startCamera();
 
     }
 
-    photos = [];
+    photos=[];
 
-    document.getElementById("cameraStatus")
-        .textContent = "♡ Get ready...";
+    document.getElementById("status")
+    .textContent="♡ Get ready...";
 
-    for (
-        let i = 0;
-        i < state.photoCount;
+    for(
+        let i=0;
+        i<state.photoCount;
         i++
-    ) {
+    ){
 
         await countdown();
 
-        flash.style.opacity = 1;
+        flash.style.opacity=1;
 
-        setTimeout(() => {
+        setTimeout(
+            ()=>flash.style.opacity=0,
+            150
+        );
 
-            flash.style.opacity = 0;
+        photos.push(
+            capturePhoto()
+        );
 
-        },150);
-
-        photos.push(capturePhoto());
-
-        document.getElementById("cameraStatus")
-            .textContent =
-            `♡ ${i + 1}/${state.photoCount}`;
+        document.getElementById("status")
+        .textContent=
+            `♡ ${i+1}/${state.photoCount}`;
 
         await wait(600);
 
     }
 
-    document.getElementById("cameraStatus")
-        .textContent = "● Camera ready";
+    document.getElementById("status")
+    .textContent="● Camera ready";
 
-    createFinalPhoto();
+    createStrip();
 
 }
 
 
-/* =========================
-   FINAL CANVAS
-========================= */
+/* ==============================
+   IMAGE LOADER
+============================== */
 
-function loadImage(src) {
+function loadImage(src){
 
-    return new Promise(resolve => {
+    return new Promise(resolve=>{
 
-        const img = new Image();
+        const img=new Image();
 
-        img.onload = () => resolve(img);
+        img.onload=()=>resolve(img);
 
-        img.src = src;
+        img.src=src;
 
     });
 
 }
 
 
-async function createFinalPhoto() {
+/* ==============================
+   FINAL STRIP
+============================== */
 
-    if (!photos.length) return;
+async function createStrip(){
 
-    const images = [];
+    if(!photos.length)return;
 
-    for (const photo of photos) {
+    const images=[];
+
+    for(const photo of photos){
 
         images.push(
             await loadImage(photo)
@@ -1702,328 +1902,295 @@ async function createFinalPhoto() {
 
     }
 
-    const W = 1000;
+    resultCanvas.width=state.width;
 
-    let H;
+    resultCanvas.height=state.height;
 
-    const gap = 20;
+    const ctx=resultCanvas.getContext("2d");
 
-    const border = state.borderWidth;
+    /* BACKGROUND */
 
-    const photoW = 820;
+    ctx.fillStyle=state.background;
 
-    const photoH = 615;
-
-    if (state.layout === "classic") {
-
-        H =
-            border * 2 +
-            120 +
-            images.length * (photoH + gap) +
-            140;
-
-    }
-
-    else if (state.layout === "polaroid") {
-
-        H =
-            border * 2 +
-            100 +
-            images.length * (photoH + 70);
-
-    }
-
-    else if (state.layout === "grid") {
-
-        H =
-            border * 2 +
-            100 +
-            2 * 500;
-
-    }
-
-    else if (state.layout === "mini") {
-
-        H =
-            border * 2 +
-            100 +
-            images.length * 300 +
-            100;
-
-    }
-
-    else if (state.layout === "wide") {
-
-        H = 850;
-
-    }
-
-    else {
-
-        H =
-            border * 2 +
-            100 +
-            images.length * 500 +
-            100;
-
-    }
-
-    resultCanvas.width = W;
-    resultCanvas.height = H;
-
-    const ctx = resultCanvas.getContext("2d");
-
-    ctx.fillStyle = state.bgColor;
-
-    ctx.fillRect(0,0,W,H);
-
-    drawLayout(
-        ctx,
-        images,
-        W,
-        H
+    ctx.fillRect(
+        0,
+        0,
+        state.width,
+        state.height
     );
+
+    drawStrip(ctx,images);
 
     document.getElementById("result")
-        .classList.add("show");
+    .classList.add("show");
 
     document
-        .getElementById("result")
-        .scrollIntoView({
-            behavior:"smooth",
-            block:"nearest"
-        });
+    .getElementById("result")
+    .scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
 
 }
 
 
-/* =========================
-   DRAW LAYOUT
-========================= */
+/* ==============================
+   STRIP DRAWING
+============================== */
 
-function drawLayout(ctx, images, W, H) {
+function drawStrip(ctx,images){
 
-    const radius =
-        state.cornerStyle === "rounded"
-        ? 35
-        : state.cornerStyle === "soft"
-        ? 18
-        : 3;
+    const topSpace=
+        state.margin+
+        80;
 
-    drawHeader(
+    const bottomSpace=
+        state.margin+
+        90;
+
+    drawTitle(
         ctx,
-        W
+        topSpace
     );
 
-    if (state.layout === "classic") {
+    if(state.arrangement==="grid"){
 
-        let y = 105;
-
-        images.forEach(img => {
-
-            drawPhoto(
-                ctx,
-                img,
-                90,
-                y,
-                820,
-                615,
-                radius
-            );
-
-            y += 635;
-
-        });
-
-        drawFooter(
+        drawGrid(
             ctx,
-            W,
-            H
+            images,
+            topSpace
         );
 
     }
 
-    else if (state.layout === "polaroid") {
+    else if(
+        state.arrangement==="horizontal"
+    ){
 
-        let y = 110;
-
-        images.forEach(img => {
-
-            drawPhoto(
-                ctx,
-                img,
-                100,
-                y,
-                800,
-                580,
-                radius
-            );
-
-            y += 610;
-
-        });
-
-        drawFooter(ctx,W,H);
-
-    }
-
-    else if (state.layout === "grid") {
-
-        const size = 420;
-
-        drawPhoto(
+        drawHorizontal(
             ctx,
-            images[0],
-            55,
-            110,
-            size,
-            420,
-            radius
+            images,
+            topSpace
         );
 
-        if (images[1]) {
+    }
 
-            drawPhoto(
-                ctx,
-                images[1],
-                525,
-                110,
-                size,
-                420,
-                radius
-            );
+    else{
 
-        }
-
-        if (images[2]) {
-
-            drawPhoto(
-                ctx,
-                images[2],
-                55,
-                550,
-                size,
-                420,
-                radius
-            );
-
-        }
-
-        if (images[3]) {
-
-            drawPhoto(
-                ctx,
-                images[3],
-                525,
-                550,
-                size,
-                420,
-                radius
-            );
-
-        }
-
-        drawFooter(ctx,W,H);
+        drawVertical(
+            ctx,
+            images,
+            topSpace
+        );
 
     }
 
-    else if (state.layout === "mini") {
-
-        let y = 100;
-
-        images.forEach(img => {
-
-            drawPhoto(
-                ctx,
-                img,
-                170,
-                y,
-                660,
-                270,
-                radius
-            );
-
-            y += 290;
-
-        });
-
-        drawFooter(ctx,W,H);
-
-    }
-
-    else if (state.layout === "wide") {
-
-        const size = 430;
-
-        const gap = 30;
-
-        const total =
-            images.length * size +
-            (images.length - 1) * gap;
-
-        let x =
-            (W-total)/2;
-
-        images.forEach(img => {
-
-            drawPhoto(
-                ctx,
-                img,
-                x,
-                170,
-                size,
-                430,
-                radius
-            );
-
-            x += size + gap;
-
-        });
-
-        drawFooter(ctx,W,H);
-
-    }
-
-    else {
-
-        let y = 100;
-
-        images.forEach(img => {
-
-            drawPhoto(
-                ctx,
-                img,
-                120,
-                y,
-                760,
-                490,
-                radius
-            );
-
-            y += 510;
-
-        });
-
-        drawFooter(ctx,W,H);
-
-    }
+    drawFooter(
+        ctx,
+        state.height-bottomSpace
+    );
 
 }
 
 
-/* =========================
-   DRAW PHOTO
-========================= */
+/* ==============================
+   VERTICAL
+============================== */
 
-function drawPhoto(
+function drawVertical(
+    ctx,
+    images,
+    startY
+){
+
+    const availableWidth=
+        state.width-
+        state.margin*2;
+
+    const photoW=
+        availableWidth*
+        (state.photoWidth/100);
+
+    const x=
+        (state.width-photoW)/2;
+
+    const availableHeight=
+        state.height-
+        startY-
+        150;
+
+    const eachH=
+        Math.min(
+            availableHeight/
+            images.length,
+            availableHeight*
+            (state.photoHeight/100)
+        );
+
+    let y=startY;
+
+    images.forEach(img=>{
+
+        drawStyledPhoto(
+            ctx,
+            img,
+            x,
+            y,
+            photoW,
+            eachH
+        );
+
+        y+=
+            eachH+
+            state.spacing;
+
+    });
+
+}
+
+
+/* ==============================
+   GRID
+============================== */
+
+function drawGrid(
+    ctx,
+    images,
+    startY
+){
+
+    const gap=state.spacing;
+
+    const totalW=
+        state.width-
+        state.margin*2;
+
+    const size=
+        (totalW-gap)/2;
+
+    const positions=[
+
+        [state.margin,startY],
+
+        [state.margin+size+gap,startY],
+
+        [state.margin,startY+size+gap],
+
+        [
+            state.margin+size+gap,
+            startY+size+gap
+        ]
+
+    ];
+
+    images.forEach(
+        (img,i)=>{
+
+            if(!positions[i])return;
+
+            drawStyledPhoto(
+                ctx,
+                img,
+                positions[i][0],
+                positions[i][1],
+                size,
+                size
+            );
+
+        }
+    );
+
+}
+
+
+/* ==============================
+   HORIZONTAL
+============================== */
+
+function drawHorizontal(
+    ctx,
+    images,
+    startY
+){
+
+    const gap=state.spacing;
+
+    const totalW=
+        state.width-
+        state.margin*2;
+
+    const photoW=
+        (totalW-
+        gap*(images.length-1))
+        /images.length;
+
+    const photoH=
+        state.height*
+        .45;
+
+    let x=state.margin;
+
+    images.forEach(img=>{
+
+        drawStyledPhoto(
+            ctx,
+            img,
+            x,
+            startY,
+            photoW,
+            photoH
+        );
+
+        x+=photoW+gap;
+
+    });
+
+}
+
+
+/* ==============================
+   PHOTO
+============================== */
+
+function drawStyledPhoto(
     ctx,
     img,
     x,
     y,
     w,
-    h,
-    radius
-) {
+    h
+){
+
+    ctx.save();
+
+    const cx=x+w/2;
+
+    const cy=y+h/2;
+
+    ctx.translate(cx,cy);
+
+    ctx.rotate(
+        state.rotation*Math.PI/180
+    );
+
+    ctx.translate(-cx,-cy);
+
+    /* FRAME */
+
+    ctx.fillStyle=state.frameColor;
+
+    roundedRect(
+        ctx,
+        x-state.frame/2,
+        y-state.frame/2,
+        w+state.frame,
+        h+state.frame,
+        state.radius+state.frame
+    );
+
+    ctx.fill();
+
+    /* PHOTO */
 
     ctx.save();
 
@@ -2033,7 +2200,7 @@ function drawPhoto(
         y,
         w,
         h,
-        radius
+        state.radius
     );
 
     ctx.clip();
@@ -2048,79 +2215,74 @@ function drawPhoto(
 
     ctx.restore();
 
+    ctx.restore();
+
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* ==============================
+   TITLE
+============================== */
 
-function drawHeader(ctx,W) {
+function drawTitle(ctx,y){
 
-    const fontFamily =
-        state.textStyle === "minimal"
-        ? "DM Sans"
-        : "Playfair Display";
+    ctx.textAlign="center";
 
-    ctx.textAlign = "center";
+    const font=
+        state.font==="playfair"
+        ?"Playfair Display"
+        :"DM Sans";
 
-    ctx.fillStyle = state.accentColor;
+    ctx.font=
+        `${state.titleSize}px "${font}"`;
 
-    ctx.font =
-        `600 40px "${fontFamily}"`;
+    ctx.fillStyle=state.textColor;
 
-    ctx.fillText(
-        "🎀",
-        W/2 - 250,
-        55
-    );
-
-    ctx.fillText(
-        "🎀",
-        W/2 + 250,
-        55
-    );
-
-    ctx.fillStyle = "#59434c";
-
-    ctx.font =
-        state.textStyle === "cute"
-        ? '700 42px "DM Sans"'
-        : '600 43px "Playfair Display"';
+    const x=
+        state.width*
+        (state.textPosition/100);
 
     ctx.fillText(
         state.title,
-        W/2,
-        60
+        x,
+        y
+    );
+
+    drawDecor(
+        ctx,
+        x,
+        y-30
     );
 
 }
 
 
-/* =========================
+/* ==============================
    FOOTER
-========================= */
+============================== */
 
-function drawFooter(ctx,W,H) {
+function drawFooter(ctx,y){
 
-    ctx.textAlign = "center";
+    ctx.textAlign="center";
 
-    ctx.fillStyle = "#735761";
+    const x=
+        state.width*
+        (state.textPosition/100);
 
-    ctx.font =
-        state.textStyle === "minimal"
-        ? '500 22px "DM Sans"'
-        : '500 27px "Playfair Display"';
+    ctx.font=
+        '23px "DM Sans"';
+
+    ctx.fillStyle=state.textColor;
 
     ctx.fillText(
         state.caption,
-        W/2,
-        H - 65
+        x,
+        y
     );
 
-    if (state.showDate) {
+    if(state.showDate){
 
-        const date =
+        const date=
             new Date().toLocaleDateString(
                 "en-US",
                 {
@@ -2130,60 +2292,47 @@ function drawFooter(ctx,W,H) {
                 }
             );
 
-        ctx.font =
-            '500 16px "DM Sans"';
+        ctx.font=
+            '14px "DM Sans"';
 
-        ctx.fillStyle = "#a3868e";
+        ctx.fillStyle="#9d8089";
 
         ctx.fillText(
             date,
-            W/2,
-            H - 35
+            x,
+            y+25
         );
 
     }
 
-    drawSticker(
+    drawDecor(
         ctx,
-        W/2,
-        H - 115
+        state.width*
+        (state.decorPosition/100),
+        y+55
     );
 
 }
 
 
-/* =========================
-   STICKER
-========================= */
+/* ==============================
+   DECOR
+============================== */
 
-function drawSticker(ctx,x,y) {
+function drawDecor(ctx,x,y){
 
-    const stickers = {
+    if(
+        !state.decor ||
+        state.decor==="none"
+    )return;
 
-        bow:"🎀",
+    ctx.textAlign="center";
 
-        heart:"♡",
-
-        hearts:"💕",
-
-        star:"☆",
-
-        sparkle:"✦",
-
-        flower:"🌷",
-
-        ribbon:"🎗️"
-
-    };
-
-    if (!stickers[state.sticker]) return;
-
-    ctx.font = "45px serif";
-
-    ctx.textAlign = "center";
+    ctx.font=
+        `${state.decorSize}px serif`;
 
     ctx.fillText(
-        stickers[state.sticker],
+        state.decor,
         x,
         y
     );
@@ -2191,9 +2340,9 @@ function drawSticker(ctx,x,y) {
 }
 
 
-/* =========================
+/* ==============================
    ROUNDED RECT
-========================= */
+============================== */
 
 function roundedRect(
     ctx,
@@ -2202,7 +2351,13 @@ function roundedRect(
     w,
     h,
     r
-) {
+){
+
+    r=Math.min(
+        r,
+        w/2,
+        h/2
+    );
 
     ctx.beginPath();
 
@@ -2245,65 +2400,50 @@ function roundedRect(
 }
 
 
-/* =========================
-   DOWNLOAD
-========================= */
+/* ==============================
+   UPDATE CONTROLS
+============================== */
 
-function downloadPhoto() {
+function updateAllControls(){
 
-    const link =
-        document.createElement("a");
+    document.getElementById("stripWidth").value=
+        state.width;
 
-    const date =
-        new Date()
-        .toISOString()
-        .slice(0,10);
+    document.getElementById("stripHeight").value=
+        state.height;
 
-    link.download =
-        `whimsy-photobooth-${date}.png`;
+    document.getElementById("margin").value=
+        state.margin;
 
-    link.href =
-        resultCanvas.toDataURL(
-            "image/png"
-        );
+    document.getElementById("spacing").value=
+        state.spacing;
 
-    link.click();
+    document.getElementById("stripWidthValue")
+        .textContent=state.width+"px";
 
-    showToast(
-        "Your memory is saved ♡"
-    );
+    document.getElementById("stripHeightValue")
+        .textContent=state.height+"px";
 
-}
+    document.getElementById("marginValue")
+        .textContent=state.margin+"px";
 
-
-/* =========================
-   CLEAR RESULT
-========================= */
-
-function clearResult() {
-
-    photos = [];
-
-    document
-        .getElementById("result")
-        .classList.remove("show");
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    document.getElementById("spacingValue")
+        .textContent=state.spacing+"px";
 
 }
 
 
-/* =========================
+/* ==============================
    SURPRISE ME
-========================= */
+============================== */
 
-function surpriseMe() {
+function surpriseMe(){
 
-    const filters = [
-        "original",
+    const presetNames=
+        Object.keys(presets);
+
+    const filterNames=[
+        "none",
         "coquette",
         "soft",
         "dreamy",
@@ -2315,166 +2455,186 @@ function surpriseMe() {
         "faded"
     ];
 
-    const layouts = [
-        "classic",
-        "polaroid",
-        "grid",
-        "mini",
-        "wide",
-        "minimal"
-    ];
-
-    const stickers = [
+    const decorNames=[
         "none",
-        "bow",
-        "heart",
-        "hearts",
-        "star",
-        "sparkle",
-        "flower",
-        "ribbon"
+        "🎀",
+        "♡",
+        "💕",
+        "☆",
+        "✨",
+        "🌷"
     ];
 
-    const randomFilter =
-        filters[
+    const random=
+        arr=>
+        arr[
             Math.floor(
-                Math.random() *
-                filters.length
+                Math.random()*arr.length
             )
         ];
 
-    const randomLayout =
-        layouts[
-            Math.floor(
-                Math.random() *
-                layouts.length
-            )
-        ];
+    const preset=random(presetNames);
 
-    const randomSticker =
-        stickers[
-            Math.floor(
-                Math.random() *
-                stickers.length
-            )
-        ];
+    const p=presets[preset];
 
-    state.filter = randomFilter;
+    Object.assign(state,p);
 
-    state.layout = randomLayout;
+    state.filter=random(filterNames);
 
-    state.sticker = randomSticker;
+    state.decor=random(decorNames);
 
-    selectOption(
-        "[data-filter]",
-        "filter",
-        randomFilter
-    );
-
-    selectOption(
-        "[data-layout]",
-        "layout",
-        randomLayout
-    );
-
-    selectOption(
-        "[data-sticker]",
-        "sticker",
-        randomSticker
-    );
-
-    const colors = [
-        ["#fff8f6","#ffffff","#e9a9bd"],
-        ["#fff0f4","#ffffff","#d986a4"],
-        ["#f9f2ed","#fffdfb","#c99b7b"],
-        ["#f1edf5","#ffffff","#bba4c8"],
-        ["#f7e8e7","#fffaf7","#d79591"]
-    ];
-
-    const palette =
-        colors[
-            Math.floor(
-                Math.random()*colors.length
-            )
-        ];
-
-    state.bgColor = palette[0];
-    state.frameColor = palette[1];
-    state.accentColor = palette[2];
-
-    document.getElementById("bgColor").value =
-        palette[0];
-
-    document.getElementById("frameColor").value =
-        palette[1];
-
-    document.getElementById("accentColor").value =
-        palette[2];
-
-    document.documentElement
-        .style.setProperty(
-            "--pink",
-            palette[2]
+    state.spacing=
+        Math.floor(
+            Math.random()*40
         );
 
-    applyLiveFilter();
+    state.radius=
+        Math.floor(
+            Math.random()*35
+        );
+
+    state.frame=
+        Math.floor(
+            Math.random()*30
+        );
+
+    state.background=
+        random([
+            "#fff8f6",
+            "#fff0f4",
+            "#f8eef2",
+            "#f5eee8",
+            "#f3edf7"
+        ]);
+
+    document.getElementById("backgroundColor")
+        .value=state.background;
+
+    updateFilterButtons();
+
+    updateDecorButtons();
+
+    updateAllControls();
+
+    applyVideoFilter();
 
     showToast(
-        "A little surprise for you 🎀"
+        "Your surprise strip is ready 🎀"
     );
 
 }
 
 
-function selectOption(
-    selector,
-    dataName,
-    value
-) {
+function updateFilterButtons(){
 
     document
-        .querySelectorAll(selector)
-        .forEach(el => {
+    .querySelectorAll("[data-filter]")
+    .forEach(b=>{
 
-            el.classList.toggle(
-                "selected",
-                el.dataset[dataName] === value
-            );
+        b.classList.toggle(
+            "selected",
+            b.dataset.filter===state.filter
+        );
 
-        });
+    });
 
 }
 
 
-/* =========================
+function updateDecorButtons(){
+
+    document
+    .querySelectorAll("[data-decor]")
+    .forEach(b=>{
+
+        b.classList.toggle(
+            "selected",
+            b.dataset.decor===state.decor
+        );
+
+    });
+
+}
+
+
+/* ==============================
+   DOWNLOAD
+============================== */
+
+function downloadImage(){
+
+    const link=
+        document.createElement("a");
+
+    const date=
+        new Date()
+        .toISOString()
+        .slice(0,10);
+
+    link.download=
+        `whimsy-filmstrip-${date}.png`;
+
+    link.href=
+        resultCanvas.toDataURL(
+            "image/png"
+        );
+
+    link.click();
+
+    showToast(
+        "Filmstrip saved ♡"
+    );
+
+}
+
+
+/* ==============================
+   CLEAR
+============================== */
+
+function clearResult(){
+
+    photos=[];
+
+    document
+    .getElementById("result")
+    .classList.remove("show");
+
+}
+
+
+/* ==============================
    TOAST
-========================= */
+============================== */
 
 let toastTimer;
 
-function showToast(message) {
+function showToast(message){
 
-    toast.textContent = message;
+    toast.textContent=message;
 
     toast.classList.add("show");
 
     clearTimeout(toastTimer);
 
-    toastTimer =
-        setTimeout(() => {
-
-            toast.classList.remove("show");
-
-        },2500);
+    toastTimer=
+        setTimeout(
+            ()=>toast.classList.remove("show"),
+            2200
+        );
 
 }
 
 
-/* =========================
+/* ==============================
    START
-========================= */
+============================== */
 
 startCamera();
+
+applyVideoFilter();
+
+updateAllControls();
 
 </script>
 
