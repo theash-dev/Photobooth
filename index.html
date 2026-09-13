@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whimsy Booth 🎀</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@400;500;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #fffaf9;
+      color: #4c4144;
+      font-family: "DM Sans", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* floating decorations */
+
+    .decor {
+      position: fixed;
+      pointer-events: none;
+      opacity: .6;
+      z-index: 0;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .bow1 {
+      top: 8%;
+      left: 8%;
+      font-size: 45px;
+    }
+
+    .bow2 {
+      bottom: 10%;
+      right: 8%;
+      font-size: 38px;
+      animation-delay: 1s;
+    }
+
+    .sparkle1 {
+      top: 15%;
+      right: 15%;
+      font-size: 22px;
+      animation-delay: 2s;
+    }
+
+    .sparkle2 {
+      bottom: 18%;
+      left: 15%;
+      font-size: 18px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%,100% {
+        transform: translateY(0) rotate(-5deg);
+      }
+      50% {
+        transform: translateY(-12px) rotate(5deg);
+      }
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      background: rgba(255,255,255,.78);
+      border: 1px solid #f1dfdf;
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(130, 90, 100, .08);
+      backdrop-filter: blur(15px);
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .title {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-size: clamp(38px, 6vw, 58px);
+      color: #5a474c;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #a58f94;
+      margin-top: 4px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 25px;
+    }
+
+    /* CAMERA */
+
+    .camera-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .camera-frame {
+      width: 100%;
+      max-width: 650px;
+      aspect-ratio: 4 / 3;
+      background: #eee;
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      border: 7px solid white;
+      box-shadow: 0 10px 30px rgba(80,50,60,.1);
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .camera-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, transparent 50%, rgba(50,30,40,.08));
+    }
+
+    .countdown {
+      position: absolute;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      font-family: "Playfair Display", serif;
+      font-size: 100px;
+      color: white;
+      text-shadow: 0 3px 20px rgba(0,0,0,.3);
+      z-index: 5;
+    }
+
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .flash.active {
+      animation: flash .35s ease;
+    }
+
+    @keyframes flash {
+      0% { opacity: .9; }
+      100% { opacity: 0; }
+    }
+
+    /* CONTROLS */
+
+    .controls {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: #f5e3e5;
+      color: #604b51;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: #edd1d5;
+    }
+
+    .capture {
+      background: #dcaeb7;
+      color: white;
+      padding: 14px 30px;
+      font-size: 15px;
+    }
+
+    .capture:hover {
+      background: #ce98a4;
+    }
+
+    /* FILTERS */
+
+    .side {
+      background: #fff8f8;
+      border-radius: 22px;
+      padding: 20px;
+      border: 1px solid #f3e1e3;
+    }
+
+    .side-title {
+      font-family: "Playfair Display", serif;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .filter {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: #eee;
+    }
+
+    .filter.active {
+      border-color: #d7a5ae;
+    }
+
+    .filter img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .filter-name {
+      position: absolute;
+      bottom: 7px;
+      left: 7px;
+      right: 7px;
+      padding: 5px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.8);
+      font-size: 11px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    /* FILTER PREVIEWS */
+
+    .normal {
+      filter: none;
+    }
+
+    .soft {
+      filter: brightness(1.08) contrast(.9) saturate(.85);
+    }
+
+    .film {
+      filter: contrast(1.08) saturate(.8) sepia(.08);
+    }
+
+    .dreamy {
+      filter: brightness(1.12) contrast(.85) saturate(.75);
+    }
+
+    .vintage {
+      filter: sepia(.35) contrast(.95) saturate(.75);
+    }
+
+    .bw {
+      filter: grayscale(1) contrast(1.05);
+    }
+
+    /* PHOTO STRIP */
+
+    .strip-container {
+      margin-top: 30px;
+      display: none;
+      text-align: center;
+    }
+
+    .strip-container.show {
+      display: block;
+    }
+
+    .strip-title {
+      font-family: "Playfair Display", serif;
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    canvas {
+      max-width: 260px;
+      width: 100%;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 10px 30px rgba(50,30,40,.15);
+    }
+
+    .download {
+      margin-top: 15px;
+      background: #6b555b;
+      color: white;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .side {
+        order: 2;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="decor bow1">🎀</div>
+  <div class="decor bow2">🎀</div>
+  <div class="decor sparkle1">✦</div>
+  <div class="decor sparkle2">♡</div>
+
+  <div class="container">
+
+    <header>
+      <div class="title">Whimsy Booth</div>
+      <div class="subtitle">little moments · forever memories</div>
+    </header>
+
+    <div class="main">
+
+      <!-- CAMERA -->
+
+      <section class="camera-section">
+
+        <div class="camera-frame">
+
+          <video id="video" autoplay playsinline></video>
+
+          <div class="countdown" id="countdown"></div>
+
+          <div class="flash" id="flash"></div>
+
+        </div>
+
+        <div class="controls">
+
+          <button class="capture" onclick="startPhotobooth()">
+            ♡ Take Photos
+          </button>
+
+          <button onclick="flipCamera()">
+            ↔ Flip
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- FILTERS -->
+
+      <aside class="side">
+
+        <div class="side-title">
+          choose your mood ♡
+        </div>
+
+        <div class="filters">
+
+          <div class="filter active" onclick="setFilter('normal', this)">
+            <img id="preview-normal" class="normal">
+            <div class="filter-name">Original</div>
+          </div>
+
+          <div class="filter" onclick="setFilter('soft', this)">
+            <img id="preview-soft" class="soft">
+            <div class="filter-name">Soft</div>
+          </div>
+
+          <div class="filter" onclick="setFilter('film', this)">
+            <img id="preview-film" class="film">
+            <div class="filter-name">Film</div>
+          </div>
+
+          <div class="filter" onclick="setFilter('dreamy', this)">
+            <img id="preview-dreamy" class="dreamy">
+            <div class="filter-name">Dreamy</div>
+          </div>
+
+          <div class="filter" onclick="setFilter('vintage', this)">
+            <img id="preview-vintage" class="vintage">
+            <div class="filter-name">Vintage</div>
+          </div>
+
+          <div class="filter" onclick="setFilter('bw', this)">
+            <img id="preview-bw" class="bw">
+            <div class="filter-name">B&W</div>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- RESULT -->
+
+    <section class="strip-container" id="stripContainer">
+
+      <div class="strip-title">
+        your little memory ♡
+      </div>
+
+      <canvas id="stripCanvas"></canvas>
+
+      <br>
+
+      <button class="download" onclick="downloadStrip()">
+        ♡ Save Photo Strip
+      </button>
+
+    </section>
+
+  </div>
+
+
+<script>
+
+  const video = document.getElementById("video");
+  const countdown = document.getElementById("countdown");
+  const flash = document.getElementById("flash");
+  const canvas = document.getElementById("stripCanvas");
+
+  let currentFilter = "normal";
+  let facingMode = "user";
+  let photos = [];
+
+  /* CAMERA */
+
+  async function startCamera() {
+
+    try {
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: facingMode,
+          width: { ideal: 1280 },
+          height: { ideal: 960 }
+        },
+        audio: false
+      });
+
+      video.srcObject = stream;
+
+      updatePreviews();
+
+    } catch (error) {
+
+      alert(
+        "Please allow camera access to use Whimsy Booth ♡"
+      );
+
+    }
+
+  }
+
+  startCamera();
+
+
+  /* CAMERA FLIP */
+
+  async function flipCamera() {
+
+    facingMode =
+      facingMode === "user"
+        ? "environment"
+        : "user";
+
+    if (video.srcObject) {
+
+      video.srcObject
+        .getTracks()
+        .forEach(track => track.stop());
+
+    }
+
+    startCamera();
+
+  }
+
+
+  /* FILTER */
+
+  function setFilter(filter, element) {
+
+    currentFilter = filter;
+
+    video.className = filter;
+
+    document
+      .querySelectorAll(".filter")
+      .forEach(item => item.classList.remove("active"));
+
+    element.classList.add("active");
+
+  }
+
+
+  /* FILTER PREVIEWS */
+
+  function updatePreviews() {
+
+    const previewCanvas =
+      document.createElement("canvas");
+
+    previewCanvas.width = 200;
+    previewCanvas.height = 200;
+
+    const ctx =
+      previewCanvas.getContext("2d");
+
+    ctx.save();
+
+    if (facingMode === "user") {
+
+      ctx.translate(200, 0);
+      ctx.scale(-1, 1);
+
+    }
+
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      200,
+      200
+    );
+
+    ctx.restore();
+
+    const image =
+      previewCanvas.toDataURL("image/jpeg");
+
+    document
+      .querySelectorAll(".filter img")
+      .forEach(img => {
+
+        img.src = image;
+
+      });
+
+  }
+
+
+  /* COUNTDOWN */
+
+  function wait(ms) {
+
+    return new Promise(
+      resolve => setTimeout(resolve, ms)
+    );
+
+  }
+
+
+  async function doCountdown() {
+
+    countdown.style.display = "flex";
+
+    for (let i = 3; i >= 1; i--) {
+
+      countdown.textContent = i;
+
+      await wait(1000);
+
+    }
+
+    countdown.textContent = "♡";
+
+    await wait(400);
+
+    countdown.style.display = "none";
+
+  }
+
+
+  /* TAKE PHOTO */
+
+  async function takePhoto() {
+
+    await doCountdown();
+
+    flash.classList.add("active");
+
+    setTimeout(() => {
+      flash.classList.remove("active");
+    }, 350);
+
+    const photoCanvas =
+      document.createElement("canvas");
+
+    const width = video.videoWidth;
+    const height = video.videoHeight;
+
+    photoCanvas.width = width;
+    photoCanvas.height = height;
+
+    const ctx =
+      photoCanvas.getContext("2d");
+
+    ctx.save();
+
+    if (facingMode === "user") {
+
+      ctx.translate(width, 0);
+      ctx.scale(-1, 1);
+
+    }
+
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      width,
+      height
+    );
+
+    ctx.restore();
+
+    applyFilterToCanvas(
+      photoCanvas,
+      currentFilter
+    );
+
+    return photoCanvas;
+
+  }
+
+
+  /* APPLY FILTER */
+
+  function applyFilterToCanvas(canvas, filter) {
+
+    const ctx =
+      canvas.getContext("2d");
+
+    const imageData =
+      ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+
+      let r = data[i];
+      let g = data[i + 1];
+      let b = data[i + 2];
+
+      if (filter === "soft") {
+
+        r *= 1.06;
+        g *= 1.02;
+        b *= 1.03;
+
+      }
+
+      if (filter === "film") {
+
+        r *= 1.05;
+        g *= .97;
+        b *= .92;
+
+        r += 8;
+        g += 5;
+
+      }
+
+      if (filter === "dreamy") {
+
+        r *= 1.08;
+        g *= 1.03;
+        b *= 1.04;
+
+      }
+
+      if (filter === "vintage") {
+
+        const tr =
+          .393*r +
+          .769*g +
+          .189*b;
+
+        const tg =
+          .349*r +
+          .686*g +
+          .168*b;
+
+        const tb =
+          .272*r +
+          .534*g +
+          .131*b;
+
+        r = tr;
+        g = tg;
+        b = tb;
+
+      }
+
+      if (filter === "bw") {
+
+        const gray =
+          .299*r +
+          .587*g +
+          .114*b;
+
+        r = gray;
+        g = gray;
+        b = gray;
+
+      }
+
+      data[i] =
+        Math.min(255, r);
+
+      data[i + 1] =
+        Math.min(255, g);
+
+      data[i + 2] =
+        Math.min(255, b);
+
+    }
+
+    ctx.putImageData(
+      imageData,
+      0,
+      0
+    );
+
+  }
+
+
+  /* PHOTOBOOTH */
+
+  async function startPhotobooth() {
+
+    photos = [];
+
+    document.getElementById(
+      "stripContainer"
+    ).classList.remove("show");
+
+    for (let i = 0; i < 4; i++) {
+
+      const photo =
+        await takePhoto();
+
+      photos.push(photo);
+
+      await wait(700);
+
+    }
+
+    createStrip();
+
+  }
+
+
+  /* CREATE PHOTO STRIP */
+
+  function createStrip() {
+
+    const photoWidth = 600;
+
+    const photoHeight = 450;
+
+    const padding = 35;
+
+    const gap = 20;
+
+    const headerHeight = 120;
+
+    const footerHeight = 90;
+
+    canvas.width =
+      photoWidth + padding * 2;
+
+    canvas.height =
+      headerHeight +
+      padding +
+      (photoHeight * 4) +
+      (gap * 3) +
+      footerHeight;
+
+    const ctx =
+      canvas.getContext("2d");
+
+    /* background */
+
+    ctx.fillStyle = "#fffaf9";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    /* title */
+
+    ctx.fillStyle = "#604d54";
+
+    ctx.textAlign = "center";
+
+    ctx.font =
+      "italic 34px Georgia";
+
+    ctx.fillText(
+      "Whimsy Booth ♡",
+      canvas.width / 2,
+      65
+    );
+
+    ctx.font =
+      "18px Arial";
+
+    ctx.fillStyle = "#a58f94";
+
+    ctx.fillText(
+      "little moments",
+      canvas.width / 2,
+      95
+    );
+
+    /* photos */
+
+    photos.forEach((photo, index) => {
+
+      const y =
+        headerHeight +
+        padding +
+        index *
+        (photoHeight + gap);
+
+      ctx.drawImage(
+        photo,
+        padding,
+        y,
+        photoWidth,
+        photoHeight
+      );
+
+    });
+
+    /* footer */
+
+    ctx.fillStyle = "#80666d";
+
+    ctx.font =
+      "20px Georgia";
+
+    ctx.fillText(
+      "♡ made with love ♡",
+      canvas.width / 2,
+      canvas.height - 35
+    );
+
+    document
+      .getElementById("stripContainer")
+      .classList.add("show");
+
+  }
+
+
+  /* DOWNLOAD */
+
+  function downloadStrip() {
+
+    const link =
+      document.createElement("a");
+
+    link.download =
+      "whimsy-booth.png";
+
+    link.href =
+      canvas.toDataURL("image/png");
+
+    link.click();
+
+  }
+
+</script>
+
+</body>
+</html>
