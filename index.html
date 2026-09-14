@@ -8,1035 +8,668 @@
 <title>A Place to Be Heard — Photobooth</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #fff0f5;
-    color: #6f4054;
-}
-
-button,
-select,
-input {
-    font: inherit;
-}
-
-button {
-    border: none;
-    cursor: pointer;
-}
-
-.app {
-    min-height: 100vh;
-    padding: 20px;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 30px;
-    color: #a75c79;
-}
-
-header p {
-    margin: 6px 0 0;
-    color: #b47791;
-}
-
-/* =========================
-   CAMERA
-========================= */
-
-.camera-section {
-    max-width: 1000px;
-    margin: auto;
-}
-
-.camera-box {
-    position: relative;
-    width: 100%;
-    max-width: 700px;
-    aspect-ratio: 4 / 3;
-    margin: auto;
-    overflow: hidden;
-    border-radius: 24px;
-    background: #f8dce6;
-    border: 4px solid white;
-    box-shadow: 0 10px 30px rgba(150, 80, 110, 0.15);
-}
-
-/* CAMERA IS NEVER MIRRORED */
-#video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: none !important;
-}
-
-#flash {
-    position: absolute;
-    inset: 0;
-    background: white;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 10;
-}
-
-#countdown {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 100px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 4px 15px rgba(0,0,0,.4);
-    pointer-events: none;
-    z-index: 5;
-}
-
-.camera-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 15px 0;
-}
-
-.btn {
-    padding: 11px 17px;
-    border-radius: 999px;
-    background: white;
-    color: #9b5774;
-    box-shadow: 0 5px 15px rgba(130,70,100,.12);
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.btn.primary {
-    background: #d99aae;
-    color: white;
-}
-
-.btn.danger {
-    background: #bd7891;
-    color: white;
-}
-
-/* =========================
-   PANELS
-========================= */
-
-.panel {
-    max-width: 1100px;
-    margin: 20px auto;
-    background: rgba(255,255,255,.75);
-    padding: 18px;
-    border-radius: 24px;
-    box-shadow: 0 8px 25px rgba(150,80,110,.08);
-}
-
-.panel h2 {
-    margin-top: 0;
-    font-size: 20px;
-    color: #a75c79;
-}
-
-.controls-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 12px;
-}
-
-.control {
-    background: #fff7fa;
-    padding: 12px;
-    border-radius: 15px;
-}
-
-.control label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 6px;
-    color: #a05d78;
-}
-
-select,
-input[type="text"],
-input[type="number"],
-input[type="color"] {
-    width: 100%;
-    border: 1px solid #ecc8d6;
-    border-radius: 10px;
-    padding: 8px;
-    background: white;
-    color: #6f4054;
-}
-
-input[type="range"] {
-    width: 100%;
-}
-
-/* =========================
-   FILTERS
-========================= */
-
-.filter-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.filter-buttons button {
-    padding: 8px 13px;
-    border-radius: 999px;
-    background: white;
-    color: #9b5774;
-    border: 1px solid #efd0dc;
-}
-
-.filter-buttons button.active {
-    background: #d99aae;
-    color: white;
-}
-
-/* =========================
-   FILMSTRIP EDITOR
-========================= */
-
-.editor-wrap {
-    max-width: 1100px;
-    margin: 20px auto;
-}
-
-.editor-area {
-    min-height: 600px;
-    padding: 25px;
-    border-radius: 25px;
-    background: #ead9df;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-}
-
-#filmCanvas {
-    position: relative;
-    width: 300px;
-    height: 600px;
-    background: #fff0f5;
-    overflow: hidden;
-    box-shadow: 0 12px 35px rgba(0,0,0,.2);
-    transform-origin: center;
-}
-
-.photo-element,
-.text-element,
-.sticker-element {
-    position: absolute;
-    user-select: none;
-}
-
-.photo-element {
-    object-fit: cover;
-    border: 3px solid white;
-    cursor: move;
-}
-
-.text-element {
-    cursor: move;
-    white-space: nowrap;
-}
-
-.sticker-element {
-    cursor: move;
-    font-size: 45px;
-}
-
-.selected {
-    outline: 2px dashed #d99aae;
-    outline-offset: 3px;
-}
-
-/* =========================
-   FILM EFFECTS
-========================= */
-
-#filmOverlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 900;
-}
-
-.overlay-light-leak {
-    background:
-        radial-gradient(
-            circle at 0 0,
-            rgba(255,120,170,.45),
-            transparent 45%
-        );
-}
-
-.overlay-dust {
-    background-image:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.5) 1px,
-            transparent 1px
-        );
-    background-size: 13px 13px;
-    opacity: .4;
-}
-
-.overlay-scratches {
-    background-image:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 7px,
-            rgba(255,255,255,.18) 8px,
-            transparent 9px
-        );
-    opacity: .5;
-}
-
-.overlay-glow {
-    box-shadow:
-        inset 0 0 50px rgba(255,255,255,.7);
-}
-
-.overlay-vhs {
-    background:
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 3px,
-            rgba(255,255,255,.06) 4px
-        );
-}
-
-/* =========================
-   READY SCREEN
-========================= */
-
-.ready-screen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: rgba(255,240,245,.96);
-    z-index: 1000;
-    text-align: center;
-}
-
-.ready-screen.show {
-    display: flex;
-}
-
-.ready-screen h2 {
-    color: #a75c79;
-}
-
-.ready-screen p {
-    color: #b47791;
-}
-
-/* =========================
-   ANIMATIONS
-========================= */
-
-.flash-animation {
-    animation: flash .25s ease;
-}
-
-@keyframes flash {
-    0% {
-        opacity: 0;
+    * {
+        box-sizing: border-box;
     }
 
-    40% {
-        opacity: 1;
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        background:
+            radial-gradient(circle at 10% 10%, #ffe1ed 0 10%, transparent 25%),
+            radial-gradient(circle at 90% 20%, #eadfff 0 8%, transparent 24%),
+            linear-gradient(135deg, #fff7fb, #fff0f6);
+        color: #5d4652;
     }
 
-    100% {
-        opacity: 0;
-    }
-}
-
-.countdown-pop {
-    animation: pop .7s ease;
-}
-
-@keyframes pop {
-    0% {
-        transform: scale(.4);
-        opacity: 0;
-    }
-
-    50% {
-        transform: scale(1.15);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    .app {
-        padding: 10px;
+    header {
+        text-align: center;
+        padding: 25px 15px 10px;
     }
 
     header h1 {
-        font-size: 24px;
+        margin: 0;
+        font-family: Georgia, serif;
+        color: #b76e89;
+        font-size: clamp(28px, 6vw, 48px);
     }
 
-    .editor-area {
-        min-height: 500px;
-        padding: 10px;
+    header p {
+        margin: 8px 0;
+        color: #92727f;
     }
 
-    #filmCanvas {
-        transform: scale(.75);
-        margin: -75px 0;
+    .container {
+        width: min(1100px, 94%);
+        margin: auto;
+        padding-bottom: 50px;
     }
-}
+
+    .card {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid #f2d5df;
+        border-radius: 28px;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 0 15px 35px rgba(170, 110, 135, 0.12);
+    }
+
+    /* CAMERA */
+
+    .camera-section {
+        text-align: center;
+    }
+
+    .camera-box {
+        width: 100%;
+        max-width: 760px;
+        aspect-ratio: 16 / 9;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 25px;
+        background: #f7e8ee;
+        border: 4px solid #f0cbd8;
+        position: relative;
+    }
+
+    #video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        /* IMPORTANT:
+           The camera is NOT mirrored. */
+        transform: none !important;
+    }
+
+    #countdown {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 100px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.35);
+        background: rgba(0,0,0,0.08);
+    }
+
+    .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    button {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: #e8b4c5;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 5px 12px rgba(180, 110, 135, 0.15);
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        background: #d99aae;
+    }
+
+    button.secondary {
+        background: #d9c6e8;
+    }
+
+    button.dark {
+        background: #a9788d;
+    }
+
+    button.green {
+        background: #9fc8ad;
+    }
+
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* FILTERS */
+
+    .section-title {
+        text-align: center;
+        font-family: Georgia, serif;
+        color: #ad7187;
+        margin-top: 5px;
+    }
+
+    .filter-buttons,
+    .template-buttons,
+    .sticker-buttons,
+    .effect-buttons,
+    .size-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .filter-btn,
+    .template-btn,
+    .sticker-btn,
+    .effect-btn,
+    .size-btn {
+        background: #f4dce5;
+        color: #805a69;
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    .filter-btn.active,
+    .template-btn.active,
+    .size-btn.active {
+        background: #bd7891;
+        color: white;
+    }
+
+    /* FILTER PREVIEW */
+
+    #video.soft {
+        filter: brightness(1.05) saturate(0.9) contrast(0.95);
+    }
+
+    #video.coquette {
+        filter: brightness(1.08) saturate(0.85) sepia(0.05);
+    }
+
+    #video.film {
+        filter: contrast(1.12) saturate(0.85) sepia(0.08);
+    }
+
+    #video.vintage {
+        filter: sepia(0.35) contrast(1.05) saturate(0.8);
+    }
+
+    #video.dreamy {
+        filter: brightness(1.1) contrast(0.9) saturate(0.8);
+    }
+
+    #video.bw {
+        filter: grayscale(1);
+    }
+
+    #video.warm {
+        filter: sepia(0.18) saturate(1.2) brightness(1.04);
+    }
+
+    /* RESULT */
+
+    .result-area {
+        text-align: center;
+    }
+
+    #photoCanvas {
+        max-width: 100%;
+        width: auto;
+        border-radius: 18px;
+        display: none;
+        margin: 20px auto;
+        box-shadow: 0 12px 30px rgba(100,60,80,0.2);
+    }
+
+    /* EDITOR */
+
+    .editor {
+        position: relative;
+        margin: 20px auto;
+        background: #fff;
+        border: 2px solid #f0d4df;
+        border-radius: 20px;
+        overflow: hidden;
+        width: min(600px, 100%);
+        min-height: 300px;
+        display: none;
+        touch-action: none;
+    }
+
+    .editor img {
+        display: block;
+        max-width: 100%;
+        max-height: 600px;
+        margin: auto;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .sticker {
+        position: absolute;
+        font-size: 42px;
+        cursor: move;
+        user-select: none;
+        touch-action: none;
+        transform-origin: center;
+    }
+
+    /* FILM EFFECTS */
+
+    .film-preview {
+        position: relative;
+    }
+
+    .film-preview::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .effect-light-leak::after {
+        opacity: 0.35;
+        background:
+            radial-gradient(circle at 0% 40%, #ff8aa9, transparent 35%),
+            radial-gradient(circle at 100% 20%, #ffd5e3, transparent 30%);
+        mix-blend-mode: screen;
+    }
+
+    .effect-dust::after {
+        opacity: 0.25;
+        background-image:
+            radial-gradient(circle, white 1px, transparent 1px);
+        background-size: 19px 19px;
+    }
+
+    .effect-scratches::after {
+        opacity: 0.2;
+        background: repeating-linear-gradient(
+            90deg,
+            transparent 0 12px,
+            rgba(255,255,255,0.8) 13px,
+            transparent 14px 25px
+        );
+    }
+
+    .effect-glow::after {
+        opacity: 0.35;
+        box-shadow: inset 0 0 50px 20px white;
+    }
+
+    .effect-vhs::after {
+        opacity: 0.18;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent 0 5px,
+            rgba(255,255,255,0.5) 6px,
+            transparent 7px
+        );
+    }
+
+    /* FILMSTRIP */
+
+    .filmstrip {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .film-frame {
+        position: relative;
+        background: white;
+        border: 8px solid #171717;
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .film-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .film-frame.small {
+        width: 220px;
+    }
+
+    .film-frame.medium {
+        width: 280px;
+    }
+
+    .film-frame.large {
+        width: 340px;
+    }
+
+    .film-label {
+        text-align: center;
+        font-size: 11px;
+        color: white;
+        background: #171717;
+        padding: 5px;
+    }
+
+    /* READY SCREEN */
+
+    #readyScreen {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 240, 246, 0.96);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        text-align: center;
+        padding: 20px;
+    }
+
+    #readyScreen h2 {
+        font-family: Georgia, serif;
+        font-size: 38px;
+        color: #b76e89;
+        margin-bottom: 8px;
+    }
+
+    #readyScreen p {
+        color: #8f6c79;
+        max-width: 450px;
+        line-height: 1.6;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* TOAST */
+
+    #toast {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #8c6272;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 999px;
+        display: none;
+        z-index: 2000;
+    }
+
+    @media (max-width: 600px) {
+        .card {
+            padding: 14px;
+            border-radius: 20px;
+        }
+
+        .camera-box {
+            aspect-ratio: 16 / 9;
+            border-radius: 18px;
+        }
+
+        #countdown {
+            font-size: 70px;
+        }
+
+        button {
+            padding: 10px 14px;
+        }
+    }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="readyScreen">
+    <h2>♡ A Place to Be Heard ♡</h2>
+    <p>
+        A tiny photobooth for your memories, moods,
+        silly moments, and everything you want to keep.
+    </p>
+
+    <button onclick="enterPhotobooth()">
+        Enter Photobooth ♡
+    </button>
+</div>
 
 <header>
     <h1>♡ A Place to Be Heard ♡</h1>
-    <p>your little whimsical photobooth</p>
+    <p>your little digital photobooth</p>
 </header>
 
+<div class="container">
 
-<!-- =========================
-     CAMERA
-========================= -->
+    <!-- CAMERA -->
+    <div class="card camera-section">
 
-<section class="camera-section">
+        <h2 class="section-title">Take Your Photos</h2>
 
-    <div class="camera-box">
+        <div class="camera-box">
+            <video id="video" autoplay playsinline></video>
+            <div id="countdown"></div>
+        </div>
 
-        <video
-            id="video"
-            autoplay
-            playsinline
-        ></video>
-
-        <div id="countdown"></div>
-
-        <div id="flash"></div>
-
-    </div>
-
-    <div class="camera-controls">
-
-        <button
-            class="btn primary"
-            onclick="takePhotos()"
-        >
-            📸 Take Photos
-        </button>
-
-        <button
-            class="btn"
-            onclick="flipCamera()"
-        >
-            🔄 Flip Camera
-        </button>
-
-        <button
-            class="btn"
-            onclick="clearPhotos()"
-        >
-            🗑 Clear
-        </button>
+        <div class="controls">
+            <button onclick="takePhoto()">📸 Take Photo</button>
+            <button class="secondary" onclick="startFourPhotos()">
+                🎞️ 4 Photos
+            </button>
+            <button class="dark" onclick="flipCamera()">
+                🔄 Flip Camera
+            </button>
+        </div>
 
     </div>
 
-</section>
+    <!-- FILTERS -->
+    <div class="card">
 
+        <h2 class="section-title">Filters</h2>
 
-<!-- =========================
-     PHOTO SETTINGS
-========================= -->
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="setFilter('original', this)">
+                Original
+            </button>
 
-<section class="panel">
+            <button class="filter-btn" onclick="setFilter('soft', this)">
+                Soft
+            </button>
 
-<h2>📸 Photo Settings</h2>
+            <button class="filter-btn" onclick="setFilter('coquette', this)">
+                Coquette
+            </button>
 
-<div class="controls-grid">
+            <button class="filter-btn" onclick="setFilter('film', this)">
+                Film
+            </button>
 
-    <div class="control">
+            <button class="filter-btn" onclick="setFilter('vintage', this)">
+                Vintage
+            </button>
 
-        <label>Number of Photos</label>
+            <button class="filter-btn" onclick="setFilter('dreamy', this)">
+                Dreamy
+            </button>
 
-        <select id="photoCount">
+            <button class="filter-btn" onclick="setFilter('bw', this)">
+                B&W
+            </button>
 
-            <option value="2">
-                2 Photos
-            </option>
-
-            <option value="3">
-                3 Photos
-            </option>
-
-            <option value="4" selected>
-                4 Photos
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <div class="control">
-
-        <label>Countdown</label>
-
-        <select id="countdownTime">
-
-            <option value="0">
-                No Countdown
-            </option>
-
-            <option value="3" selected>
-                3 Seconds
-            </option>
-
-            <option value="5">
-                5 Seconds
-            </option>
-
-            <option value="10">
-                10 Seconds
-            </option>
-
-        </select>
+            <button class="filter-btn" onclick="setFilter('warm', this)">
+                Warm
+            </button>
+        </div>
 
     </div>
 
-</div>
+    <!-- TEMPLATES -->
+    <div class="card">
 
-</section>
+        <h2 class="section-title">Templates</h2>
 
+        <div class="template-buttons">
+            <button class="template-btn active" onclick="setTemplate('coquette', this)">
+                🎀 Coquette
+            </button>
 
-<!-- =========================
-     FILTERS
-========================= -->
+            <button class="template-btn" onclick="setTemplate('kpop', this)">
+                ✦ K-pop
+            </button>
 
-<section class="panel">
+            <button class="template-btn" onclick="setTemplate('y2k', this)">
+                💿 Y2K
+            </button>
 
-<h2>🎀 Filters</h2>
+            <button class="template-btn" onclick="setTemplate('korean', this)">
+                ♡ Korean
+            </button>
 
-<div class="filter-buttons">
+            <button class="template-btn" onclick="setTemplate('vintage', this)">
+                📷 Vintage
+            </button>
 
-    <button
-        onclick="setFilter('none', this)"
-        class="active"
-    >
-        Original
-    </button>
+            <button class="template-btn" onclick="setTemplate('minimal', this)">
+                Minimal
+            </button>
 
-    <button onclick="setFilter('soft', this)">
-        Soft
-    </button>
+            <button class="template-btn" onclick="setTemplate('pink', this)">
+                🌸 Pink Cute
+            </button>
 
-    <button onclick="setFilter('coquette', this)">
-        Coquette
-    </button>
-
-    <button onclick="setFilter('film', this)">
-        Film
-    </button>
-
-    <button onclick="setFilter('vintage', this)">
-        Vintage
-    </button>
-
-    <button onclick="setFilter('dreamy', this)">
-        Dreamy
-    </button>
-
-    <button onclick="setFilter('bw', this)">
-        B&W
-    </button>
-
-    <button onclick="setFilter('warm', this)">
-        Warm
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     FILMSTRIP SETTINGS
-========================= -->
-
-<section class="panel">
-
-<h2>🎞 Filmstrip</h2>
-
-<div class="controls-grid">
-
-    <div class="control">
-
-        <label>Canvas Size</label>
-
-        <select
-            id="canvasSize"
-            onchange="changeCanvasSize()"
-        >
-
-            <option value="2x6" selected>
-                2 × 6
-            </option>
-
-            <option value="4x6">
-                4 × 6 Portrait
-            </option>
-
-            <option value="landscape">
-                4 × 6 Landscape
-            </option>
-
-            <option value="square">
-                Square
-            </option>
-
-        </select>
+            <button class="template-btn" onclick="setTemplate('polaroid', this)">
+                Polaroid
+            </button>
+        </div>
 
     </div>
 
+    <!-- FILMSTRIP SIZE -->
+    <div class="card">
 
-    <div class="control">
+        <h2 class="section-title">Filmstrip Size</h2>
 
-        <label>Arrangement</label>
+        <div class="size-buttons">
 
-        <select
-            id="arrangement"
-            onchange="buildPhotoLayout()"
-        >
+            <button class="size-btn" onclick="setSize('small', this)">
+                Small
+            </button>
 
-            <option value="vertical" selected>
-                Vertical
-            </option>
+            <button class="size-btn active" onclick="setSize('medium', this)">
+                Medium
+            </button>
 
-            <option value="horizontal">
-                Horizontal
-            </option>
+            <button class="size-btn" onclick="setSize('large', this)">
+                Large
+            </button>
 
-            <option value="grid">
-                2 × 2 Grid
-            </option>
-
-        </select>
+        </div>
 
     </div>
 
+    <!-- STICKERS -->
+    <div class="card">
 
-    <div class="control">
+        <h2 class="section-title">Stickers</h2>
 
-        <label>Background</label>
+        <div class="sticker-buttons">
 
-        <input
-            type="color"
-            id="backgroundColor"
-            value="#fff0f5"
-            onchange="updateCanvasStyle()"
-        >
+            <button class="sticker-btn" onclick="addSticker('🎀')">🎀</button>
+            <button class="sticker-btn" onclick="addSticker('♡')">♡</button>
+            <button class="sticker-btn" onclick="addSticker('♥')">♥</button>
+            <button class="sticker-btn" onclick="addSticker('🌸')">🌸</button>
+            <button class="sticker-btn" onclick="addSticker('⭐')">⭐</button>
+            <button class="sticker-btn" onclick="addSticker('✨')">✨</button>
+            <button class="sticker-btn" onclick="addSticker('🦋')">🦋</button>
+            <button class="sticker-btn" onclick="addSticker('☁️')">☁️</button>
+            <button class="sticker-btn" onclick="addSticker('✧')">✧</button>
+            <button class="sticker-btn" onclick="addSticker('♡̷̷̷')">♡̷̷̷</button>
 
-    </div>
-
-
-    <div class="control">
-
-        <label>Photo Border</label>
-
-        <input
-            type="color"
-            id="borderColor"
-            value="#ffffff"
-            onchange="updatePhotoStyle()"
-        >
+        </div>
 
     </div>
 
+    <!-- FILM EFFECTS -->
+    <div class="card">
 
-    <div class="control">
+        <h2 class="section-title">Film Effects</h2>
 
-        <label>Border Width</label>
+        <div class="effect-buttons">
 
-        <input
-            type="range"
-            id="borderWidth"
-            min="0"
-            max="20"
-            value="3"
-            onchange="updatePhotoStyle()"
-        >
+            <button class="effect-btn" onclick="setEffect('none')">
+                None
+            </button>
 
-    </div>
+            <button class="effect-btn" onclick="setEffect('light-leak')">
+                Light Leak
+            </button>
 
+            <button class="effect-btn" onclick="setEffect('dust')">
+                Dust
+            </button>
 
-    <div class="control">
+            <button class="effect-btn" onclick="setEffect('scratches')">
+                Scratches
+            </button>
 
-        <label>Corner Radius</label>
+            <button class="effect-btn" onclick="setEffect('glow')">
+                Soft Glow
+            </button>
 
-        <input
-            type="range"
-            id="radius"
-            min="0"
-            max="40"
-            value="8"
-            onchange="updatePhotoStyle()"
-        >
+            <button class="effect-btn" onclick="setEffect('vhs')">
+                VHS
+            </button>
 
-    </div>
-
-
-    <div class="control">
-
-        <label>Zoom</label>
-
-        <input
-            type="range"
-            id="editorZoom"
-            min="50"
-            max="150"
-            value="100"
-            oninput="updateZoom()"
-        >
+        </div>
 
     </div>
 
-</div>
+    <!-- RESULT -->
+    <div class="card result-area">
 
-</section>
+        <h2 class="section-title">Your Photo</h2>
 
-
-<!-- =========================
-     TEMPLATES
-========================= -->
-
-<section class="panel">
-
-<h2>💗 Templates</h2>
-
-<div class="filter-buttons">
-
-    <button onclick="applyTemplate('coquette')">
-        🎀 Coquette
-    </button>
-
-    <button onclick="applyTemplate('kpop')">
-        ✨ K-pop
-    </button>
-
-    <button onclick="applyTemplate('y2k')">
-        💿 Y2K
-    </button>
-
-    <button onclick="applyTemplate('korean')">
-        🌸 Korean
-    </button>
-
-    <button onclick="applyTemplate('vintage')">
-        🎞 Vintage
-    </button>
-
-    <button onclick="applyTemplate('minimal')">
-        🤍 Minimal
-    </button>
-
-    <button onclick="applyTemplate('pink')">
-        💕 Pink Cute
-    </button>
-
-    <button onclick="applyTemplate('polaroid')">
-        📷 Polaroid
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     TEXT
-========================= -->
-
-<section class="panel">
-
-<h2>💌 Text</h2>
-
-<div class="controls-grid">
-
-    <div class="control">
-
-        <label>Title</label>
-
-        <input
-            type="text"
-            id="titleText"
-            placeholder="my little memories"
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <label>Caption</label>
-
-        <input
-            type="text"
-            id="captionText"
-            placeholder="♡"
-        >
-
-    </div>
-
-</div>
-
-<div class="camera-controls">
-
-    <button
-        class="btn"
-        onclick="addTitle()"
-    >
-        Add Title
-    </button>
-
-    <button
-        class="btn"
-        onclick="addCaption()"
-    >
-        Add Caption
-    </button>
-
-    <button
-        class="btn"
-        onclick="addDate()"
-    >
-        Add Date
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     STICKERS
-========================= -->
-
-<section class="panel">
-
-<h2>🎀 Stickers</h2>
-
-<div class="filter-buttons">
-
-    <button onclick="addSticker('🎀')">
-        🎀
-    </button>
-
-    <button onclick="addSticker('♡')">
-        ♡
-    </button>
-
-    <button onclick="addSticker('♥')">
-        ♥
-    </button>
-
-    <button onclick="addSticker('✿')">
-        ✿
-    </button>
-
-    <button onclick="addSticker('✧')">
-        ✧
-    </button>
-
-    <button onclick="addSticker('☆')">
-        ☆
-    </button>
-
-    <button onclick="addSticker('✨')">
-        ✨
-    </button>
-
-    <button onclick="addSticker('🦋')">
-        🦋
-    </button>
-
-    <button onclick="addSticker('☁')">
-        ☁
-    </button>
-
-    <button onclick="addSticker('୨୧')">
-        ୨୧
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     FILM EFFECTS
-========================= -->
-
-<section class="panel">
-
-<h2>🎞 Film Effects</h2>
-
-<div class="filter-buttons">
-
-    <button onclick="setFilmEffect('none')">
-        None
-    </button>
-
-    <button onclick="setFilmEffect('light')">
-        Light Leak
-    </button>
-
-    <button onclick="setFilmEffect('dust')">
-        Dust
-    </button>
-
-    <button onclick="setFilmEffect('scratches')">
-        Scratches
-    </button>
-
-    <button onclick="setFilmEffect('glow')">
-        Soft Glow
-    </button>
-
-    <button onclick="setFilmEffect('vhs')">
-        VHS
-    </button>
-
-    <button onclick="setDateStamp()">
-        Date Stamp
-    </button>
-
-</div>
-
-<div class="camera-controls">
-
-    <button
-        class="btn"
-        onclick="toggleSound()"
-    >
-        🔊 Shutter Sound
-    </button>
-
-    <button
-        class="btn"
-        onclick="toggleAnimations()"
-    >
-        ✨ Animations
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     EDITOR
-========================= -->
-
-<section class="editor-wrap">
-
-<div class="panel">
-
-<h2>🎀 Filmstrip Editor</h2>
-
-<p>
-Drag photos, text and stickers around your filmstrip.
-Double-click an item to rotate it.
-</p>
-
-<div class="camera-controls">
-
-    <button
-        class="btn"
-        onclick="resetEditor()"
-    >
-        ↩ Reset
-    </button>
-
-    <button
-        class="btn danger"
-        onclick="deleteSelected()"
-    >
-        Delete Selected
-    </button>
-
-    <button
-        class="btn"
-        onclick="duplicateSelected()"
-    >
-        Duplicate
-    </button>
-
-    <button
-        class="btn primary"
-        onclick="downloadFilmstrip()"
-    >
-        💾 Download PNG
-    </button>
-
-</div>
-
-
-<div class="editor-area">
-
-    <div id="filmCanvas">
-
-        <div id="filmOverlay"></div>
+        <canvas id="photoCanvas"></canvas>
 
         <div
-            id="readyScreen"
-            class="ready-screen"
+            id="editor"
+            class="editor"
         >
+            <img id="editorImage">
 
-            <h2>
-                ♡ Your photos are ready! ♡
-            </h2>
+            <div id="stickerLayer"></div>
+        </div>
 
-            <p>
-                Download your little memories
-            </p>
+        <div class="controls">
+
+            <button class="green" onclick="downloadPhoto()">
+                💾 Download PNG
+            </button>
+
+            <button onclick="clearPhoto()">
+                🗑️ Clear
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FILMSTRIP -->
+    <div class="card result-area">
+
+        <h2 class="section-title">Filmstrip</h2>
+
+        <div id="filmstrip" class="filmstrip"></div>
+
+        <div class="controls">
+
+            <button class="green" onclick="downloadFilmstrip()">
+                🎞️ Download Filmstrip
+            </button>
 
         </div>
 
@@ -1044,364 +677,194 @@ Double-click an item to rotate it.
 
 </div>
 
-</div>
-
-</section>
-
-</div>
-
+<div id="toast"></div>
 
 <script>
 
-/* =====================================================
-   CAMERA VARIABLES
-===================================================== */
+let video = document.getElementById("video");
+let canvas = document.getElementById("photoCanvas");
+let ctx = canvas.getContext("2d");
 
-const video =
-    document.getElementById("video");
+let editor = document.getElementById("editor");
+let editorImage = document.getElementById("editorImage");
+let stickerLayer = document.getElementById("stickerLayer");
 
-let stream = null;
+let countdown = document.getElementById("countdown");
 
-let facingMode = "user";
+let currentFacingMode = "user";
+let currentFilter = "original";
+let currentTemplate = "coquette";
+let currentSize = "medium";
+let currentEffect = "none";
 
-let currentFilter = "none";
-
-let capturedPhotos = [];
-
-let selectedElement = null;
-
-let soundEnabled = true;
-
-let animationsEnabled = true;
-
-let currentFilmEffect = "none";
-
-let dateStampEnabled = false;
+let photos = [];
 
 
-/* =====================================================
-   START CAMERA
-===================================================== */
+/* =========================
+   CAMERA
+========================= */
 
 async function startCamera() {
 
     try {
 
-        if (stream) {
-
-            stream
-                .getTracks()
-                .forEach(track =>
-                    track.stop()
-                );
-
+        if (video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
         }
 
-        stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
-
-                    video: {
-                        facingMode: facingMode
-                    },
-
-                    audio: false
-
-                });
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: currentFacingMode
+            },
+            audio: false
+        });
 
         video.srcObject = stream;
 
         /*
-         * IMPORTANT:
-         * The preview is ALWAYS normal.
-         * There is NO scaleX(-1).
-         */
-
-        video.style.transform =
-            "none";
+         IMPORTANT:
+         Never mirror the camera.
+         The image stays in its natural orientation.
+        */
+        video.style.transform = "none";
 
     } catch (error) {
 
-        alert(
-            "Camera could not be accessed. Please allow camera permission."
-        );
-
         console.error(error);
 
+        showToast(
+            "Camera permission is needed to use the photobooth."
+        );
     }
-
 }
 
 
-/* =====================================================
+/* =========================
+   ENTER
+========================= */
+
+function enterPhotobooth() {
+
+    document.getElementById("readyScreen").classList.add("hidden");
+
+    startCamera();
+}
+
+
+/* =========================
    FLIP CAMERA
-===================================================== */
+========================= */
 
 function flipCamera() {
 
-    facingMode =
-        facingMode === "user"
+    currentFacingMode =
+        currentFacingMode === "user"
             ? "environment"
             : "user";
 
-    /*
-     * NEVER mirror the camera.
-     */
-
-    video.style.transform =
-        "none";
-
     startCamera();
-
 }
 
 
-/* =====================================================
-   FILTERS
-===================================================== */
+/* =========================
+   FILTER
+========================= */
 
-function setFilter(
-    filter,
-    button
-) {
+function setFilter(filter, button) {
 
-    currentFilter =
-        filter;
+    currentFilter = filter;
 
     document
-        .querySelectorAll(
-            ".filter-buttons button"
-        )
-        .forEach(btn =>
-            btn.classList.remove(
-                "active"
-            )
-        );
+        .querySelectorAll(".filter-btn")
+        .forEach(btn => btn.classList.remove("active"));
 
-    if (button) {
+    button.classList.add("active");
 
-        button.classList.add(
-            "active"
-        );
+    video.className = "";
 
+    if (filter !== "original") {
+        video.classList.add(filter);
     }
-
-    updateVideoFilter();
-
 }
 
 
-function updateVideoFilter() {
-
-    const filters = {
-
-        none:
-            "none",
-
-        soft:
-            "brightness(1.08) saturate(.85) contrast(.95)",
-
-        coquette:
-            "brightness(1.08) saturate(.75) contrast(.95)",
-
-        film:
-            "contrast(1.1) saturate(.8)",
-
-        vintage:
-            "sepia(.35) contrast(1.05) saturate(.75)",
-
-        dreamy:
-            "brightness(1.12) saturate(.7) blur(.2px)",
-
-        bw:
-            "grayscale(1) contrast(1.1)",
-
-        warm:
-            "sepia(.2) saturate(1.3) brightness(1.03)"
-
-    };
-
-    video.style.filter =
-        filters[currentFilter] ||
-        "none";
-
-}
-
-
-/* =====================================================
-   TAKE PHOTOS
-===================================================== */
-
-async function takePhotos() {
-
-    const count =
-        parseInt(
-            document.getElementById(
-                "photoCount"
-            ).value
-        );
-
-    const countdown =
-        parseInt(
-            document.getElementById(
-                "countdownTime"
-            ).value
-        );
-
-    capturedPhotos = [];
-
-    clearPhotoElements();
-
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
-
-        if (countdown > 0) {
-
-            await runCountdown(
-                countdown
-            );
-
-        }
-
-        captureSingle();
-
-        await sleep(500);
-
-    }
-
-    buildPhotoLayout();
-
-    document
-        .getElementById(
-            "readyScreen"
-        )
-        .classList.add(
-            "show"
-        );
-
-}
-
-
-/* =====================================================
+/* =========================
    COUNTDOWN
-===================================================== */
+========================= */
 
-function runCountdown(
-    seconds
-) {
+function runCountdown(seconds = 3) {
 
-    return new Promise(
-        resolve => {
+    return new Promise(resolve => {
 
-            const countdown =
-                document.getElementById(
-                    "countdown"
-                );
+        countdown.style.display = "flex";
 
-            let remaining =
-                seconds;
+        let number = seconds;
 
-            countdown.textContent =
-                remaining;
+        countdown.textContent = number;
 
-            countdown.classList.add(
-                "countdown-pop"
-            );
+        const timer = setInterval(() => {
 
-            const timer =
-                setInterval(
-                    () => {
+            number--;
 
-                        remaining--;
+            if (number <= 0) {
 
-                        if (
-                            remaining <= 0
-                        ) {
+                clearInterval(timer);
 
-                            clearInterval(
-                                timer
-                            );
+                countdown.textContent = "♡";
 
-                            countdown.textContent =
-                                "";
+                setTimeout(() => {
 
-                            countdown.classList.remove(
-                                "countdown-pop"
-                            );
+                    countdown.style.display = "none";
 
-                            resolve();
+                    resolve();
 
-                        } else {
+                }, 400);
 
-                            countdown.textContent =
-                                remaining;
+            } else {
 
-                            countdown.classList.remove(
-                                "countdown-pop"
-                            );
+                countdown.textContent = number;
 
-                            void countdown
-                                .offsetWidth;
+            }
 
-                            countdown.classList.add(
-                                "countdown-pop"
-                            );
+        }, 1000);
 
-                        }
-
-                    },
-                    1000
-                );
-
-        }
-    );
-
+    });
 }
 
 
-/* =====================================================
-   CAPTURE PHOTO
-===================================================== */
+/* =========================
+   CAPTURE
+========================= */
 
 function captureSingle() {
 
-    const canvas =
-        document.createElement(
-            "canvas"
-        );
+    const width = video.videoWidth;
+    const height = video.videoHeight;
 
-    const width =
-        video.videoWidth;
+    if (!width || !height) {
 
-    const height =
-        video.videoHeight;
+        showToast("Camera is not ready yet.");
+        return null;
+    }
 
-    canvas.width =
-        width;
-
-    canvas.height =
-        height;
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
+    canvas.width = width;
+    canvas.height = height;
 
     /*
-     * IMPORTANT:
-     *
-     * We do NOT flip the canvas.
-     * The saved image is therefore
-     * exactly the same orientation as
-     * the normal camera preview.
-     */
+     IMPORTANT:
+     Draw the video directly.
 
-    drawFilteredVideo(
-        ctx,
+     There is NO:
+     ctx.scale(-1, 1)
+     ctx.translate(...)
+     rotate(...)
+
+     This keeps the photo NOT MIRRORED.
+    */
+
+    ctx.filter = getCanvasFilter();
+
+    ctx.drawImage(
         video,
         0,
         0,
@@ -1409,2037 +872,685 @@ function captureSingle() {
         height
     );
 
-    const image =
-        canvas.toDataURL(
-            "image/png"
-        );
+    ctx.filter = "none";
 
-    capturedPhotos.push(
-        image
-    );
+    canvas.style.display = "block";
 
-    flashScreen();
-
-    if (soundEnabled) {
-
-        playShutterSound();
-
-    }
-
+    return canvas.toDataURL("image/png");
 }
 
 
-/* =====================================================
-   DRAW FILTERED VIDEO
-===================================================== */
+/* =========================
+   CANVAS FILTER
+========================= */
 
-function drawFilteredVideo(
-    ctx,
-    source,
-    x,
-    y,
-    width,
-    height
-) {
+function getCanvasFilter() {
 
-    ctx.save();
-
-    switch (
-        currentFilter
-    ) {
+    switch (currentFilter) {
 
         case "soft":
-
-            ctx.filter =
-                "brightness(1.08) saturate(.85) contrast(.95)";
-
-            break;
+            return "brightness(1.05) saturate(.9) contrast(.95)";
 
         case "coquette":
-
-            ctx.filter =
-                "brightness(1.08) saturate(.75) contrast(.95)";
-
-            break;
+            return "brightness(1.08) saturate(.85) sepia(.05)";
 
         case "film":
-
-            ctx.filter =
-                "contrast(1.1) saturate(.8)";
-
-            break;
+            return "contrast(1.12) saturate(.85) sepia(.08)";
 
         case "vintage":
-
-            ctx.filter =
-                "sepia(.35) contrast(1.05) saturate(.75)";
-
-            break;
+            return "sepia(.35) contrast(1.05) saturate(.8)";
 
         case "dreamy":
-
-            ctx.filter =
-                "brightness(1.12) saturate(.7)";
-
-            break;
+            return "brightness(1.1) contrast(.9) saturate(.8)";
 
         case "bw":
-
-            ctx.filter =
-                "grayscale(1) contrast(1.1)";
-
-            break;
+            return "grayscale(1)";
 
         case "warm":
-
-            ctx.filter =
-                "sepia(.2) saturate(1.3) brightness(1.03)";
-
-            break;
+            return "sepia(.18) saturate(1.2) brightness(1.04)";
 
         default:
-
-            ctx.filter =
-                "none";
-
+            return "none";
     }
-
-    /*
-     * Normal draw.
-     * NO translate().
-     * NO scale(-1,1).
-     */
-
-    ctx.drawImage(
-        source,
-        x,
-        y,
-        width,
-        height
-    );
-
-    ctx.restore();
-
 }
 
 
-/* =====================================================
-   FLASH
-===================================================== */
+/* =========================
+   TAKE PHOTO
+========================= */
 
-function flashScreen() {
+async function takePhoto() {
 
-    if (!animationsEnabled) {
+    await runCountdown(3);
+
+    const image = captureSingle();
+
+    if (!image) return;
+
+    photos = [image];
+
+    showEditor(image);
+
+    showToast("Photo captured ♡");
+}
+
+
+/* =========================
+   FOUR PHOTOS
+========================= */
+
+async function startFourPhotos() {
+
+    photos = [];
+
+    showToast("Get ready! 4 photos coming up ♡");
+
+    for (let i = 0; i < 4; i++) {
+
+        await runCountdown(3);
+
+        const image = captureSingle();
+
+        if (image) {
+            photos.push(image);
+        }
+
+        await new Promise(resolve =>
+            setTimeout(resolve, 600)
+        );
+    }
+
+    if (photos.length) {
+
+        createFilmstrip();
+
+        showToast("Your filmstrip is ready 🎀");
+    }
+}
+
+
+/* =========================
+   EDITOR
+========================= */
+
+function showEditor(image) {
+
+    editor.style.display = "block";
+
+    editorImage.src = image;
+
+    stickerLayer.innerHTML = "";
+
+    document
+        .getElementById("filmstrip")
+        .innerHTML = "";
+}
+
+
+/* =========================
+   ADD STICKER
+========================= */
+
+function addSticker(symbol) {
+
+    if (!editorImage.src) {
+
+        showToast("Take a photo first ♡");
         return;
     }
 
-    const flash =
-        document.getElementById(
-            "flash"
-        );
+    const sticker = document.createElement("div");
 
-    flash.classList.remove(
-        "flash-animation"
-    );
+    sticker.className = "sticker";
 
-    void flash.offsetWidth;
+    sticker.textContent = symbol;
 
-    flash.classList.add(
-        "flash-animation"
-    );
+    sticker.style.left = "45%";
+    sticker.style.top = "45%";
 
-}
-
-
-/* =====================================================
-   SLEEP
-===================================================== */
-
-function sleep(ms) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
-    );
-
-}
-
-
-/* =====================================================
-   CLEAR PHOTOS
-===================================================== */
-
-function clearPhotos() {
-
-    capturedPhotos = [];
-
-    clearPhotoElements();
-
-    document
-        .getElementById(
-            "readyScreen"
-        )
-        .classList.remove(
-            "show"
-        );
-
-}
-
-
-/* =====================================================
-   CLEAR PHOTO ELEMENTS
-===================================================== */
-
-function clearPhotoElements() {
-
-    document
-        .querySelectorAll(
-            ".photo-element"
-        )
-        .forEach(
-            el => el.remove()
-        );
-
-}
-
-
-/* =====================================================
-   CANVAS SIZE
-===================================================== */
-
-function changeCanvasSize() {
-
-    const canvas =
-        document.getElementById(
-            "filmCanvas"
-        );
-
-    const size =
-        document.getElementById(
-            "canvasSize"
-        ).value;
-
-    if (size === "2x6") {
-
-        canvas.style.width =
-            "300px";
-
-        canvas.style.height =
-            "600px";
-
-    }
-
-    if (size === "4x6") {
-
-        canvas.style.width =
-            "400px";
-
-        canvas.style.height =
-            "600px";
-
-    }
-
-    if (
-        size === "landscape"
-    ) {
-
-        canvas.style.width =
-            "600px";
-
-        canvas.style.height =
-            "400px";
-
-    }
-
-    if (size === "square") {
-
-        canvas.style.width =
-            "500px";
-
-        canvas.style.height =
-            "500px";
-
-    }
-
-    buildPhotoLayout();
-
-}
-
-
-/* =====================================================
-   BUILD PHOTO LAYOUT
-===================================================== */
-
-function buildPhotoLayout() {
-
-    clearPhotoElements();
-
-    if (
-        capturedPhotos.length === 0
-    ) {
-        return;
-    }
-
-    const canvas =
-        document.getElementById(
-            "filmCanvas"
-        );
-
-    const arrangement =
-        document.getElementById(
-            "arrangement"
-        ).value;
-
-    const canvasWidth =
-        canvas.clientWidth;
-
-    const canvasHeight =
-        canvas.clientHeight;
-
-    const gap = 10;
-
-    capturedPhotos.forEach(
-        (src, index) => {
-
-            const img =
-                document.createElement(
-                    "img"
-                );
-
-            img.src = src;
-
-            img.className =
-                "photo-element";
-
-            img.draggable =
-                false;
-
-            let width;
-            let height;
-            let left;
-            let top;
-
-            if (
-                arrangement ===
-                "vertical"
-            ) {
-
-                width =
-                    canvasWidth * .82;
-
-                height =
-                    canvasHeight /
-                    capturedPhotos.length
-                    - gap;
-
-                left =
-                    (canvasWidth -
-                        width) / 2;
-
-                top =
-                    index *
-                    (height + gap);
-
-            }
-
-            if (
-                arrangement ===
-                "horizontal"
-            ) {
-
-                width =
-                    canvasWidth /
-                    capturedPhotos.length
-                    - gap;
-
-                height =
-                    canvasHeight * .72;
-
-                left =
-                    index *
-                    (width + gap);
-
-                top =
-                    (canvasHeight -
-                        height) / 2;
-
-            }
-
-            if (
-                arrangement ===
-                "grid"
-            ) {
-
-                const cols = 2;
-
-                const rows =
-                    Math.ceil(
-                        capturedPhotos.length /
-                        2
-                    );
-
-                width =
-                    canvasWidth /
-                    cols -
-                    gap * 1.5;
-
-                height =
-                    canvasHeight /
-                    rows -
-                    gap * 1.5;
-
-                left =
-                    (index % cols) *
-                    (width + gap) +
-                    gap / 2;
-
-                top =
-                    Math.floor(
-                        index / cols
-                    ) *
-                    (height + gap) +
-                    gap / 2;
-
-            }
-
-            img.style.width =
-                width + "px";
-
-            img.style.height =
-                height + "px";
-
-            img.style.left =
-                left + "px";
-
-            img.style.top =
-                top + "px";
-
-            img.style.objectFit =
-                "cover";
-
-            img.dataset.rotation =
-                "0";
-
-            makeDraggable(
-                img
-            );
-
-            img.ondblclick =
-                () => {
-
-                    let rotation =
-                        parseFloat(
-                            img.dataset.rotation ||
-                            0
-                        );
-
-                    rotation += 15;
-
-                    img.dataset.rotation =
-                        rotation;
-
-                    img.style.transform =
-                        `rotate(${rotation}deg)`;
-
-                };
-
-            canvas.appendChild(
-                img
-            );
-
+    sticker.addEventListener(
+        "dblclick",
+        () => {
+            sticker.style.transform =
+                "rotate(" +
+                (Math.random() * 30 - 15) +
+                "deg)";
         }
     );
 
-    updatePhotoStyle();
+    makeDraggable(sticker);
 
+    stickerLayer.appendChild(sticker);
 }
 
 
-/* =====================================================
-   PHOTO STYLE
-===================================================== */
+/* =========================
+   DRAG STICKER
+========================= */
 
-function updatePhotoStyle() {
-
-    const border =
-        document.getElementById(
-            "borderColor"
-        ).value;
-
-    const borderWidth =
-        document.getElementById(
-            "borderWidth"
-        ).value;
-
-    const radius =
-        document.getElementById(
-            "radius"
-        ).value;
-
-    document
-        .querySelectorAll(
-            ".photo-element"
-        )
-        .forEach(
-            img => {
-
-                img.style.border =
-                    `${borderWidth}px solid ${border}`;
-
-                img.style.borderRadius =
-                    radius + "px";
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   CANVAS BACKGROUND
-===================================================== */
-
-function updateCanvasStyle() {
-
-    document
-        .getElementById(
-            "filmCanvas"
-        )
-        .style.background =
-        document.getElementById(
-            "backgroundColor"
-        ).value;
-
-}
-
-
-/* =====================================================
-   ZOOM
-===================================================== */
-
-function updateZoom() {
-
-    const zoom =
-        document.getElementById(
-            "editorZoom"
-        ).value;
-
-    document
-        .getElementById(
-            "filmCanvas"
-        )
-        .style.transform =
-        `scale(${zoom / 100})`;
-
-}
-
-
-/* =====================================================
-   DRAG ELEMENT
-===================================================== */
-
-function makeDraggable(
-    element
-) {
-
-    let startX = 0;
-
-    let startY = 0;
-
-    let originalLeft = 0;
-
-    let originalTop = 0;
+function makeDraggable(element) {
 
     let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function start(e) {
+
+        dragging = true;
+
+        const point =
+            e.touches
+                ? e.touches[0]
+                : e;
+
+        const rect =
+            element.getBoundingClientRect();
+
+        offsetX =
+            point.clientX - rect.left;
+
+        offsetY =
+            point.clientY - rect.top;
+
+        e.preventDefault();
+    }
+
+    function move(e) {
+
+        if (!dragging) return;
+
+        const point =
+            e.touches
+                ? e.touches[0]
+                : e;
+
+        const parent =
+            element.parentElement.getBoundingClientRect();
+
+        element.style.left =
+            (point.clientX -
+             parent.left -
+             offsetX) + "px";
+
+        element.style.top =
+            (point.clientY -
+             parent.top -
+             offsetY) + "px";
+    }
+
+    function end() {
+
+        dragging = false;
+    }
 
     element.addEventListener(
-        "pointerdown",
-        function(e) {
-
-            dragging = true;
-
-            selectedElement =
-                element;
-
-            document
-                .querySelectorAll(
-                    ".selected"
-                )
-                .forEach(
-                    el =>
-                        el.classList.remove(
-                            "selected"
-                        )
-                );
-
-            element.classList.add(
-                "selected"
-            );
-
-            startX =
-                e.clientX;
-
-            startY =
-                e.clientY;
-
-            originalLeft =
-                parseFloat(
-                    element.style.left
-                ) || 0;
-
-            originalTop =
-                parseFloat(
-                    element.style.top
-                ) || 0;
-
-            element.setPointerCapture(
-                e.pointerId
-            );
-
-        }
+        "mousedown",
+        start
     );
 
-    element.addEventListener(
-        "pointermove",
-        function(e) {
+    document.addEventListener(
+        "mousemove",
+        move
+    );
 
-            if (!dragging) {
-                return;
-            }
-
-            const dx =
-                e.clientX -
-                startX;
-
-            const dy =
-                e.clientY -
-                startY;
-
-            element.style.left =
-                originalLeft +
-                dx +
-                "px";
-
-            element.style.top =
-                originalTop +
-                dy +
-                "px";
-
-        }
+    document.addEventListener(
+        "mouseup",
+        end
     );
 
     element.addEventListener(
-        "pointerup",
-        function() {
-
-            dragging = false;
-
-        }
+        "touchstart",
+        start,
+        { passive: false }
     );
 
+    document.addEventListener(
+        "touchmove",
+        move,
+        { passive: false }
+    );
+
+    document.addEventListener(
+        "touchend",
+        end
+    );
 }
 
 
-/* =====================================================
-   TEXT
-===================================================== */
+/* =========================
+   TEMPLATE
+========================= */
 
-function addTitle() {
+function setTemplate(template, button) {
 
-    const text =
-        document.getElementById(
-            "titleText"
-        ).value ||
-        "my little memories";
-
-    addTextElement(
-        text,
-        20,
-        20,
-        24
-    );
-
-}
-
-
-function addCaption() {
-
-    const text =
-        document.getElementById(
-            "captionText"
-        ).value ||
-        "♡";
-
-    addTextElement(
-        text,
-        30,
-        550,
-        20
-    );
-
-}
-
-
-function addDate() {
-
-    const date =
-        new Date()
-            .toLocaleDateString();
-
-    addTextElement(
-        date,
-        20,
-        570,
-        14
-    );
-
-}
-
-
-function addTextElement(
-    text,
-    left,
-    top,
-    size
-) {
-
-    const el =
-        document.createElement(
-            "div"
-        );
-
-    el.className =
-        "text-element";
-
-    el.textContent =
-        text;
-
-    el.style.left =
-        left + "px";
-
-    el.style.top =
-        top + "px";
-
-    el.style.fontSize =
-        size + "px";
-
-    el.style.color =
-        "#a75c79";
-
-    el.style.fontWeight =
-        "bold";
-
-    el.dataset.rotation =
-        "0";
-
-    makeDraggable(
-        el
-    );
-
-    el.ondblclick =
-        () => {
-
-            let rotation =
-                parseFloat(
-                    el.dataset.rotation ||
-                    0
-                );
-
-            rotation += 15;
-
-            el.dataset.rotation =
-                rotation;
-
-            el.style.transform =
-                `rotate(${rotation}deg)`;
-
-        };
+    currentTemplate = template;
 
     document
-        .getElementById(
-            "filmCanvas"
-        )
-        .appendChild(el);
-
-}
-
-
-/* =====================================================
-   STICKERS
-===================================================== */
-
-function addSticker(
-    symbol
-) {
-
-    const el =
-        document.createElement(
-            "div"
+        .querySelectorAll(".template-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
         );
 
-    el.className =
-        "sticker-element";
+    button.classList.add("active");
 
-    el.textContent =
-        symbol;
-
-    el.style.left =
-        "30px";
-
-    el.style.top =
-        "30px";
-
-    el.dataset.rotation =
-        "0";
-
-    makeDraggable(
-        el
-    );
-
-    el.ondblclick =
-        () => {
-
-            let rotation =
-                parseFloat(
-                    el.dataset.rotation ||
-                    0
-                );
-
-            rotation += 15;
-
-            el.dataset.rotation =
-                rotation;
-
-            el.style.transform =
-                `rotate(${rotation}deg)`;
-
-        };
-
-    document
-        .getElementById(
-            "filmCanvas"
-        )
-        .appendChild(el);
-
+    createFilmstrip();
 }
 
 
-/* =====================================================
-   DELETE
-===================================================== */
+/* =========================
+   SIZE
+========================= */
 
-function deleteSelected() {
+function setSize(size, button) {
 
-    if (!selectedElement) {
+    currentSize = size;
+
+    document
+        .querySelectorAll(".size-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    createFilmstrip();
+}
+
+
+/* =========================
+   EFFECT
+========================= */
+
+function setEffect(effect) {
+
+    currentEffect = effect;
+
+    const box =
+        document.querySelector(".camera-box");
+
+    box.classList.remove(
+        "film-preview",
+        "effect-light-leak",
+        "effect-dust",
+        "effect-scratches",
+        "effect-glow",
+        "effect-vhs"
+    );
+
+    if (effect !== "none") {
+
+        box.classList.add(
+            "film-preview",
+            "effect-" + effect
+        );
+    }
+}
+
+
+/* =========================
+   FILMSTRIP
+========================= */
+
+function createFilmstrip() {
+
+    const container =
+        document.getElementById("filmstrip");
+
+    container.innerHTML = "";
+
+    if (!photos.length) return;
+
+    const strip =
+        document.createElement("div");
+
+    strip.className =
+        "filmstrip " + currentTemplate;
+
+    photos.forEach((photo, index) => {
+
+        const frame =
+            document.createElement("div");
+
+        frame.className =
+            "film-frame " + currentSize;
+
+        const img =
+            document.createElement("img");
+
+        img.src = photo;
+
+        frame.appendChild(img);
+
+        strip.appendChild(frame);
+    });
+
+    const label =
+        document.createElement("div");
+
+    label.className = "film-label";
+
+    label.textContent =
+        "A PLACE TO BE HEARD ♡";
+
+    strip.appendChild(label);
+
+    container.appendChild(strip);
+}
+
+
+/* =========================
+   DOWNLOAD SINGLE PHOTO
+========================= */
+
+function downloadPhoto() {
+
+    if (!editorImage.src) {
+
+        showToast("Take a photo first ♡");
         return;
     }
 
-    selectedElement.remove();
+    const downloadCanvas =
+        document.createElement("canvas");
 
-    selectedElement =
-        null;
+    const image =
+        new Image();
 
+    image.onload = function() {
+
+        downloadCanvas.width =
+            image.naturalWidth;
+
+        downloadCanvas.height =
+            image.naturalHeight;
+
+        const downloadCtx =
+            downloadCanvas.getContext("2d");
+
+        /*
+         The original photo is drawn normally.
+         No mirroring is applied.
+        */
+
+        downloadCtx.drawImage(
+            image,
+            0,
+            0
+        );
+
+        /*
+         Add stickers to the exported image.
+        */
+
+        const stickers =
+            document.querySelectorAll(
+                ".sticker"
+            );
+
+        const editorRect =
+            editor.getBoundingClientRect();
+
+        const scaleX =
+            image.naturalWidth /
+            editorRect.width;
+
+        const scaleY =
+            image.naturalHeight /
+            editorRect.height;
+
+        stickers.forEach(sticker => {
+
+            const rect =
+                sticker.getBoundingClientRect();
+
+            const x =
+                (rect.left -
+                 editorRect.left) *
+                scaleX;
+
+            const y =
+                (rect.top -
+                 editorRect.top) *
+                scaleY;
+
+            const size =
+                rect.width *
+                scaleX;
+
+            downloadCtx.font =
+                size + "px Arial";
+
+            downloadCtx.fillText(
+                sticker.textContent,
+                x,
+                y + size
+            );
+        });
+
+        const link =
+            document.createElement("a");
+
+        link.download =
+            "a-place-to-be-heard.png";
+
+        link.href =
+            downloadCanvas.toDataURL(
+                "image/png"
+            );
+
+        link.click();
+
+        showToast("Downloaded ♡");
+    };
+
+    image.src =
+        editorImage.src;
 }
 
 
-/* =====================================================
-   DUPLICATE
-===================================================== */
+/* =========================
+   DOWNLOAD FILMSTRIP
+========================= */
 
-function duplicateSelected() {
+function downloadFilmstrip() {
 
-    if (!selectedElement) {
+    if (!photos.length) {
+
+        showToast("Take 4 photos first ♡");
         return;
     }
 
-    const clone =
-        selectedElement.cloneNode(
-            true
-        );
+    const imagePromises =
+        photos.map(src => {
 
-    clone.style.left =
-        (
-            parseFloat(
-                selectedElement.style.left
-            ) + 20
-        ) + "px";
+            return new Promise(resolve => {
 
-    clone.style.top =
-        (
-            parseFloat(
-                selectedElement.style.top
-            ) + 20
-        ) + "px";
-
-    makeDraggable(
-        clone
-    );
-
-    document
-        .getElementById(
-            "filmCanvas"
-        )
-        .appendChild(
-            clone
-        );
-
-}
-
-
-/* =====================================================
-   RESET
-===================================================== */
-
-function resetEditor() {
-
-    document
-        .querySelectorAll(
-            ".text-element, .sticker-element"
-        )
-        .forEach(
-            el => el.remove()
-        );
-
-    buildPhotoLayout();
-
-}
-
-
-/* =====================================================
-   TEMPLATES
-===================================================== */
-
-function applyTemplate(
-    template
-) {
-
-    const bg =
-        document.getElementById(
-            "backgroundColor"
-        );
-
-    const border =
-        document.getElementById(
-            "borderColor"
-        );
-
-    if (
-        template ===
-        "coquette"
-    ) {
-
-        bg.value =
-            "#fff0f5";
-
-        border.value =
-            "#ffffff";
-
-        document
-            .getElementById(
-                "arrangement"
-            ).value =
-            "vertical";
-
-        addSticker("🎀");
-
-        addSticker("♡");
-
-    }
-
-    if (
-        template ===
-        "kpop"
-    ) {
-
-        bg.value =
-            "#f5efff";
-
-        border.value =
-            "#ffffff";
-
-        addSticker("✧");
-
-        addSticker("✨");
-
-    }
-
-    if (
-        template ===
-        "y2k"
-    ) {
-
-        bg.value =
-            "#eaf8ff";
-
-        border.value =
-            "#ffffff";
-
-        addSticker("☆");
-
-        addSticker("💿");
-
-    }
-
-    if (
-        template ===
-        "korean"
-    ) {
-
-        bg.value =
-            "#fffaf3";
-
-        border.value =
-            "#ffffff";
-
-        addSticker("🌸");
-
-        addSticker("♡");
-
-    }
-
-    if (
-        template ===
-        "vintage"
-    ) {
-
-        bg.value =
-            "#efe4d0";
-
-        border.value =
-            "#f5eee2";
-
-        addSticker("✿");
-
-    }
-
-    if (
-        template ===
-        "minimal"
-    ) {
-
-        bg.value =
-            "#ffffff";
-
-        border.value =
-            "#eeeeee";
-
-    }
-
-    if (
-        template ===
-        "pink"
-    ) {
-
-        bg.value =
-            "#ffe1ec";
-
-        border.value =
-            "#ffffff";
-
-        addSticker("♥");
-
-        addSticker("🎀");
-
-    }
-
-    if (
-        template ===
-        "polaroid"
-    ) {
-
-        bg.value =
-            "#ffffff";
-
-        border.value =
-            "#ffffff";
-
-        document
-            .getElementById(
-                "arrangement"
-            ).value =
-            "vertical";
-
-    }
-
-    updateCanvasStyle();
-
-    buildPhotoLayout();
-
-}
-
-
-/* =====================================================
-   FILM EFFECT
-===================================================== */
-
-function setFilmEffect(
-    effect
-) {
-
-    currentFilmEffect =
-        effect;
-
-    const overlay =
-        document.getElementById(
-            "filmOverlay"
-        );
-
-    overlay.className = "";
-
-    if (
-        effect ===
-        "light"
-    ) {
-
-        overlay.classList.add(
-            "overlay-light-leak"
-        );
-
-    }
-
-    if (
-        effect ===
-        "dust"
-    ) {
-
-        overlay.classList.add(
-            "overlay-dust"
-        );
-
-    }
-
-    if (
-        effect ===
-        "scratches"
-    ) {
-
-        overlay.classList.add(
-            "overlay-scratches"
-        );
-
-    }
-
-    if (
-        effect ===
-        "glow"
-    ) {
-
-        overlay.classList.add(
-            "overlay-glow"
-        );
-
-    }
-
-    if (
-        effect ===
-        "vhs"
-    ) {
-
-        overlay.classList.add(
-            "overlay-vhs"
-        );
-
-    }
-
-}
-
-
-function setDateStamp() {
-
-    dateStampEnabled =
-        !dateStampEnabled;
-
-}
-
-
-/* =====================================================
-   SOUND
-===================================================== */
-
-function toggleSound() {
-
-    soundEnabled =
-        !soundEnabled;
-
-}
-
-
-function playShutterSound() {
-
-    try {
-
-        const audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-
-        const oscillator =
-            audioContext
-                .createOscillator();
-
-        const gain =
-            audioContext
-                .createGain();
-
-        oscillator.type =
-            "square";
-
-        oscillator
-            .frequency
-            .setValueAtTime(
-                800,
-                audioContext.currentTime
-            );
-
-        oscillator
-            .frequency
-            .exponentialRampToValueAtTime(
-                100,
-                audioContext.currentTime +
-                .12
-            );
-
-        gain.gain.setValueAtTime(
-            .15,
-            audioContext.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            .01,
-            audioContext.currentTime +
-            .12
-        );
-
-        oscillator.connect(
-            gain
-        );
-
-        gain.connect(
-            audioContext.destination
-        );
-
-        oscillator.start();
-
-        oscillator.stop(
-            audioContext.currentTime +
-            .12
-        );
-
-    } catch (e) {
-
-        console.log(e);
-
-    }
-
-}
-
-
-/* =====================================================
-   ANIMATIONS
-===================================================== */
-
-function toggleAnimations() {
-
-    animationsEnabled =
-        !animationsEnabled;
-
-}
-
-
-/* =====================================================
-   DOWNLOAD
-===================================================== */
-
-async function downloadFilmstrip() {
-
-    const sourceCanvas =
-        document.getElementById(
-            "filmCanvas"
-        );
-
-    const width =
-        sourceCanvas.clientWidth;
-
-    const height =
-        sourceCanvas.clientHeight;
-
-    const scale = 2;
-
-    const output =
-        document.createElement(
-            "canvas"
-        );
-
-    output.width =
-        width * scale;
-
-    output.height =
-        height * scale;
-
-    const ctx =
-        output.getContext(
-            "2d"
-        );
-
-    ctx.scale(
-        scale,
-        scale
-    );
-
-
-    /* BACKGROUND */
-
-    ctx.fillStyle =
-        getComputedStyle(
-            sourceCanvas
-        ).backgroundColor;
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /* PHOTOS */
-
-    const elements =
-        Array.from(
-            sourceCanvas.children
-        ).filter(
-            el =>
-                el.classList.contains(
-                    "photo-element"
-                )
-        );
-
-    for (
-        const img of elements
-    ) {
-
-        const x =
-            parseFloat(
-                img.style.left
-            ) || 0;
-
-        const y =
-            parseFloat(
-                img.style.top
-            ) || 0;
-
-        const w =
-            parseFloat(
-                img.style.width
-            );
-
-        const h =
-            parseFloat(
-                img.style.height
-            );
-
-        const rotation =
-            parseFloat(
-                img.dataset.rotation ||
-                0
-            );
-
-        ctx.save();
-
-        ctx.translate(
-            x + w / 2,
-            y + h / 2
-        );
-
-        ctx.rotate(
-            rotation *
-            Math.PI /
-            180
-        );
-
-        const borderWidth =
-            parseFloat(
-                getComputedStyle(img)
-                    .borderLeftWidth
-            ) || 0;
-
-        const radius =
-            parseFloat(
-                getComputedStyle(img)
-                    .borderRadius
-            ) || 0;
-
-
-        /* BORDER */
-
-        ctx.fillStyle =
-            getComputedStyle(img)
-                .borderLeftColor;
-
-        roundedRect(
-            ctx,
-            -w / 2,
-            -h / 2,
-            w,
-            h,
-            radius
-        );
-
-        ctx.fill();
-
-
-        /* IMAGE */
-
-        ctx.save();
-
-        roundedRect(
-            ctx,
-            -w / 2 +
-                borderWidth,
-            -h / 2 +
-                borderWidth,
-            w -
-                borderWidth * 2,
-            h -
-                borderWidth * 2,
-            Math.max(
-                0,
-                radius -
-                borderWidth
-            )
-        );
-
-        ctx.clip();
-
-        await drawImageAsync(
-            ctx,
-            img,
-            -w / 2 +
-                borderWidth,
-            -h / 2 +
-                borderWidth,
-            w -
-                borderWidth * 2,
-            h -
-                borderWidth * 2
-        );
-
-        ctx.restore();
-
-        ctx.restore();
-
-    }
-
-
-    /* TEXT */
-
-    const textElements =
-        Array.from(
-            sourceCanvas.children
-        ).filter(
-            el =>
-                el.classList.contains(
-                    "text-element"
-                )
-        );
-
-    textElements.forEach(
-        el => {
-
-            const x =
-                parseFloat(
-                    el.style.left
-                ) || 0;
-
-            const y =
-                parseFloat(
-                    el.style.top
-                ) || 0;
-
-            const size =
-                parseFloat(
-                    getComputedStyle(el)
-                        .fontSize
-                );
-
-            const rotation =
-                parseFloat(
-                    el.dataset.rotation ||
-                    0
-                );
-
-            ctx.save();
-
-            ctx.translate(
-                x,
-                y + size
-            );
-
-            ctx.rotate(
-                rotation *
-                Math.PI /
-                180
-            );
-
-            ctx.font =
-                `${getComputedStyle(el).fontWeight} ${size}px Arial`;
-
-            ctx.fillStyle =
-                getComputedStyle(el)
-                    .color;
-
-            ctx.fillText(
-                el.textContent,
-                0,
-                0
-            );
-
-            ctx.restore();
-
-        }
-    );
-
-
-    /* STICKERS */
-
-    const stickers =
-        Array.from(
-            sourceCanvas.children
-        ).filter(
-            el =>
-                el.classList.contains(
-                    "sticker-element"
-                )
-        );
-
-    stickers.forEach(
-        el => {
-
-            const x =
-                parseFloat(
-                    el.style.left
-                ) || 0;
-
-            const y =
-                parseFloat(
-                    el.style.top
-                ) || 0;
-
-            const size =
-                parseFloat(
-                    getComputedStyle(el)
-                        .fontSize
-                );
-
-            const rotation =
-                parseFloat(
-                    el.dataset.rotation ||
-                    0
-                );
-
-            ctx.save();
-
-            ctx.translate(
-                x,
-                y + size
-            );
-
-            ctx.rotate(
-                rotation *
-                Math.PI /
-                180
-            );
-
-            ctx.font =
-                `${size}px Arial`;
-
-            ctx.fillText(
-                el.textContent,
-                0,
-                0
-            );
-
-            ctx.restore();
-
-        }
-    );
-
-
-    /* FILM EFFECT */
-
-    drawFilmEffect(
-        ctx,
-        width,
-        height
-    );
-
-
-    /* DATE */
-
-    if (
-        dateStampEnabled
-    ) {
-
-        ctx.font =
-            "bold 14px Arial";
-
-        ctx.fillStyle =
-            "rgba(255,255,255,.85)";
-
-        ctx.fillText(
-            new Date()
-                .toLocaleDateString(),
-            width - 100,
-            height - 15
-        );
-
-    }
-
-
-    /* DOWNLOAD */
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-    link.download =
-        "a-place-to-be-heard-photobooth.png";
-
-    link.href =
-        output.toDataURL(
-            "image/png"
-        );
-
-    link.click();
-
-}
-
-
-/* =====================================================
-   FILM EFFECT EXPORT
-===================================================== */
-
-function drawFilmEffect(
-    ctx,
-    width,
-    height
-) {
-
-    if (
-        currentFilmEffect ===
-        "light"
-    ) {
-
-        const gradient =
-            ctx.createRadialGradient(
-                0,
-                0,
-                0,
-                0,
-                0,
-                width * .7
-            );
-
-        gradient.addColorStop(
-            0,
-            "rgba(255,120,170,.45)"
-        );
-
-        gradient.addColorStop(
-            1,
-            "rgba(255,120,170,0)"
-        );
-
-        ctx.fillStyle =
-            gradient;
-
-        ctx.fillRect(
-            0,
-            0,
-            width,
-            height
-        );
-
-    }
-
-
-    if (
-        currentFilmEffect ===
-        "dust"
-    ) {
-
-        for (
-            let i = 0;
-            i < 250;
-            i++
-        ) {
-
-            const x =
-                Math.random() *
-                width;
-
-            const y =
-                Math.random() *
-                height;
-
-            const size =
-                Math.random() *
-                2 +
-                .5;
-
-            ctx.fillStyle =
-                "rgba(255,255,255,.35)";
-
-            ctx.fillRect(
-                x,
-                y,
-                size,
-                size
-            );
-
-        }
-
-    }
-
-
-    if (
-        currentFilmEffect ===
-        "scratches"
-    ) {
-
-        ctx.strokeStyle =
-            "rgba(255,255,255,.18)";
-
-        for (
-            let i = 0;
-            i < 25;
-            i++
-        ) {
-
-            const x =
-                Math.random() *
-                width;
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                x,
-                0
-            );
-
-            ctx.lineTo(
-                x +
-                Math.random() *
-                10 -
-                5,
-                height
-            );
-
-            ctx.stroke();
-
-        }
-
-    }
-
-
-    if (
-        currentFilmEffect ===
-        "glow"
-    ) {
-
-        const gradient =
-            ctx.createRadialGradient(
-                width / 2,
-                height / 2,
-                30,
-                width / 2,
-                height / 2,
-                width * .7
-            );
-
-        gradient.addColorStop(
-            0,
-            "rgba(255,255,255,0)"
-        );
-
-        gradient.addColorStop(
-            1,
-            "rgba(255,255,255,.45)"
-        );
-
-        ctx.fillStyle =
-            gradient;
-
-        ctx.fillRect(
-            0,
-            0,
-            width,
-            height
-        );
-
-    }
-
-
-    if (
-        currentFilmEffect ===
-        "vhs"
-    ) {
-
-        ctx.fillStyle =
-            "rgba(255,255,255,.04)";
-
-        for (
-            let y = 0;
-            y < height;
-            y += 5
-        ) {
-
-            ctx.fillRect(
-                0,
-                y,
-                width,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   ROUNDED RECTANGLE
-===================================================== */
-
-function roundedRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    radius
-) {
-
-    radius =
-        Math.min(
-            radius,
-            width / 2,
-            height / 2
-        );
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x + radius,
-        y
-    );
-
-    ctx.lineTo(
-        x + width - radius,
-        y
-    );
-
-    ctx.quadraticCurveTo(
-        x + width,
-        y,
-        x + width,
-        y + radius
-    );
-
-    ctx.lineTo(
-        x + width,
-        y + height - radius
-    );
-
-    ctx.quadraticCurveTo(
-        x + width,
-        y + height,
-        x + width - radius,
-        y + height
-    );
-
-    ctx.lineTo(
-        x + radius,
-        y + height
-    );
-
-    ctx.quadraticCurveTo(
-        x,
-        y + height,
-        x,
-        y + height - radius
-    );
-
-    ctx.lineTo(
-        x,
-        y + radius
-    );
-
-    ctx.quadraticCurveTo(
-        x,
-        y,
-        x + radius,
-        y
-    );
-
-    ctx.closePath();
-
-}
-
-
-/* =====================================================
-   IMAGE DRAW HELPER
-===================================================== */
-
-function drawImageAsync(
-    ctx,
-    img,
-    x,
-    y,
-    width,
-    height
-) {
-
-    return new Promise(
-        resolve => {
-
-            if (img.complete) {
-
-                ctx.drawImage(
-                    img,
-                    x,
-                    y,
-                    width,
-                    height
-                );
-
-                resolve();
-
-            } else {
+                const img =
+                    new Image();
 
                 img.onload =
-                    () => {
+                    () => resolve(img);
 
-                        ctx.drawImage(
-                            img,
-                            x,
-                            y,
-                            width,
-                            height
-                        );
+                img.src = src;
+            });
 
-                        resolve();
+        });
 
-                    };
+    Promise.all(imagePromises)
+        .then(images => {
 
-            }
+            const width =
+                currentSize === "small"
+                    ? 500
+                    : currentSize === "large"
+                        ? 800
+                        : 650;
 
-        }
-    );
+            const frameHeight =
+                Math.round(
+                    width * 0.75
+                );
 
+            const padding = 35;
+
+            const labelHeight = 70;
+
+            const totalHeight =
+                padding +
+                images.length *
+                (frameHeight + 25) +
+                labelHeight +
+                padding;
+
+            const stripCanvas =
+                document.createElement("canvas");
+
+            stripCanvas.width = width;
+
+            stripCanvas.height =
+                totalHeight;
+
+            const stripCtx =
+                stripCanvas.getContext("2d");
+
+            stripCtx.fillStyle =
+                "#171717";
+
+            stripCtx.fillRect(
+                0,
+                0,
+                width,
+                totalHeight
+            );
+
+            let y = padding;
+
+            images.forEach(img => {
+
+                const frameWidth =
+                    width - padding * 2;
+
+                stripCtx.fillStyle =
+                    "#ffffff";
+
+                stripCtx.fillRect(
+                    padding,
+                    y,
+                    frameWidth,
+                    frameHeight
+                );
+
+                stripCtx.drawImage(
+                    img,
+                    padding + 8,
+                    y + 8,
+                    frameWidth - 16,
+                    frameHeight - 16
+                );
+
+                y += frameHeight + 25;
+            });
+
+            stripCtx.fillStyle =
+                "#ffffff";
+
+            stripCtx.font =
+                "bold 22px Arial";
+
+            stripCtx.textAlign =
+                "center";
+
+            stripCtx.fillText(
+                "A PLACE TO BE HEARD ♡",
+                width / 2,
+                y + 25
+            );
+
+            const link =
+                document.createElement("a");
+
+            link.download =
+                "a-place-to-be-heard-filmstrip.png";
+
+            link.href =
+                stripCanvas.toDataURL(
+                    "image/png"
+                );
+
+            link.click();
+
+            showToast(
+                "Filmstrip downloaded ♡"
+            );
+        });
 }
 
 
-/* =====================================================
-   KEYBOARD CONTROLS
-===================================================== */
+/* =========================
+   CLEAR
+========================= */
 
-document.addEventListener(
-    "keydown",
-    function(e) {
+function clearPhoto() {
 
-        if (!selectedElement) {
-            return;
-        }
+    photos = [];
 
-        const amount = 3;
+    canvas.style.display =
+        "none";
 
-        let left =
-            parseFloat(
-                selectedElement.style.left
-            ) || 0;
+    editor.style.display =
+        "none";
 
-        let top =
-            parseFloat(
-                selectedElement.style.top
-            ) || 0;
+    editorImage.src = "";
 
-        if (
-            e.key ===
-            "ArrowLeft"
-        ) {
+    stickerLayer.innerHTML = "";
 
-            selectedElement.style.left =
-                left -
-                amount +
-                "px";
+    document
+        .getElementById("filmstrip")
+        .innerHTML = "";
 
-        }
+    showToast("Cleared ♡");
+}
 
-        if (
-            e.key ===
-            "ArrowRight"
-        ) {
 
-            selectedElement.style.left =
-                left +
-                amount +
-                "px";
+/* =========================
+   TOAST
+========================= */
 
-        }
+function showToast(message) {
 
-        if (
-            e.key ===
-            "ArrowUp"
-        ) {
+    const toast =
+        document.getElementById("toast");
 
-            selectedElement.style.top =
-                top -
-                amount +
-                "px";
+    toast.textContent =
+        message;
 
-        }
+    toast.style.display =
+        "block";
 
-        if (
-            e.key ===
-            "ArrowDown"
-        ) {
+    setTimeout(() => {
 
-            selectedElement.style.top =
-                top +
-                amount +
-                "px";
+        toast.style.display =
+            "none";
 
-        }
+    }, 2500);
+}
 
-        if (
-            e.key ===
-            "Delete"
-        ) {
 
-            deleteSelected();
+/* =========================
+   START CAMERA
+========================= */
 
-        }
+window.addEventListener(
+    "load",
+    () => {
 
+        /*
+         Camera starts after pressing
+         Enter Photobooth so the browser
+         can request permission properly.
+        */
     }
 );
-
-
-/* =====================================================
-   INITIALIZE
-===================================================== */
-
-startCamera();
-
-updateVideoFilter();
-
-changeCanvasSize();
 
 </script>
 
